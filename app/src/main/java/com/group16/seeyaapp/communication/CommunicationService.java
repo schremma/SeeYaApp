@@ -75,16 +75,29 @@ public class CommunicationService extends Service {
                 }
             }
 
-
-            // TODO: writing to and reading from server here
-            // now, we just sleep for 3 seconds as a test.
             try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                // Restore interrupt status.
-                Thread.currentThread().interrupt();
+                dis = new DataInputStream(socket.getInputStream());
+                dos = new DataOutputStream(socket.getOutputStream());
+
+                dos.writeUTF(jsonString);
+                response = dis.readUTF();
+
+            } catch (IOException e) {
+                Log.d(TAG, "Error sending json to server: " + e.getMessage());
+            } finally {
+                if (dis != null) {
+                    try {
+                        dis.close();
+                    } catch (IOException e) {
+                    }
+                }
+                if (dos != null) {
+                    try {
+                        dos.close();
+                    } catch (IOException e) {
+                    }
+                }
             }
-            response = "test response";
 
 
             return response;
