@@ -3,14 +3,14 @@ package com.group16.seeyaapp.model;
 /**
  * Created by Andrea on 10/04/16.
  */
-public class Register {
+public class Account {
 
     private String username;
     private String password;
     private String email;
     private boolean emailPublic;
 
-    public Register(String username, String password, String email) {
+    public Account(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
