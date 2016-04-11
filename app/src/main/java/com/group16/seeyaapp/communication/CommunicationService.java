@@ -27,7 +27,9 @@ public class CommunicationService extends Service {
     private Socket socket;
     private String ip = "10.0.2.2"; //localhost from emulator
     private int port = 12346;
-    private boolean connected = false;
+
+    private DataInputStream dis;
+    private DataOutputStream dos;
 
     private static final String TAG = "CommunicationService";
 
@@ -35,8 +37,6 @@ public class CommunicationService extends Service {
     // Handler that receives messages from the thread
     private final class ServiceHandler extends Handler {
 
-        private DataInputStream dis;
-        private DataOutputStream dos;
 
         public ServiceHandler(Looper looper) {
             super(looper);
@@ -67,38 +67,34 @@ public class CommunicationService extends Service {
         private String sendStringToServer(String jsonString) {
             String response = null;
 
-            if (!connected || socket == null) {
-                try {
-                    connectToServer();
-                } catch (IOException e) {
-                    Log.d(TAG, e.getMessage());
-                }
+            try {
+                connectToServer();
+            } catch (IOException e) {
+                Log.d(TAG, e.getMessage());
             }
 
-            try {
-                dis = new DataInputStream(socket.getInputStream());
-                dos = new DataOutputStream(socket.getOutputStream());
 
+            try {
                 dos.writeUTF(jsonString);
                 response = dis.readUTF();
 
             } catch (IOException e) {
                 Log.d(TAG, "Error sending json to server: " + e.getMessage());
-            } finally {
+            }
+            finally {
                 if (dis != null) {
                     try {
                         dis.close();
-                    } catch (IOException e) {
+                    } catch (IOException ex) {
                     }
                 }
                 if (dos != null) {
                     try {
                         dos.close();
-                    } catch (IOException e) {
+                    } catch (IOException ex) {
                     }
                 }
             }
-
 
             return response;
         }
@@ -143,13 +139,15 @@ public class CommunicationService extends Service {
     private void connectToServer() throws IOException {
 
         socket = new Socket(ip, port);
-        connected = true;
+        dis = new DataInputStream(socket.getInputStream());
+        dos = new DataOutputStream(socket.getOutputStream());
+
+
         Log.i(TAG, "Connected to server at ip " + ip);
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: provide binding
         return null;
     }
 

@@ -20,9 +20,9 @@ public final class JsonConverter {
         try
         {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put(Integer.toString(ComConstants.TYPE), ComConstants.LOGIN);
-            jsonObject.put(Integer.toString(ComConstants.USERNAME), login.getUserName());
-            jsonObject.put(Integer.toString(ComConstants.PASSWORD), login.getPassword());
+            jsonObject.put(ComConstants.TYPE, ComConstants.LOGIN);
+            jsonObject.put(ComConstants.USERNAME, login.getUserName());
+            jsonObject.put(ComConstants.PASSWORD, login.getPassword());
             json = jsonObject.toString();
         }
         catch (JSONException e) {
@@ -36,10 +36,10 @@ public final class JsonConverter {
         try
         {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put(Integer.toString(ComConstants.TYPE), ComConstants.NEWUSER);
-            jsonObject.put(Integer.toString(ComConstants.USERNAME), account.getUserName());
-            jsonObject.put(Integer.toString(ComConstants.PASSWORD), account.getPassword());
-            jsonObject.put(Integer.toString(ComConstants.EMAIL), account.getEmail());
+            jsonObject.put(ComConstants.TYPE, ComConstants.NEWUSER);
+            jsonObject.put(ComConstants.USERNAME, account.getUserName());
+            jsonObject.put(ComConstants.PASSWORD, account.getPassword());
+            jsonObject.put(ComConstants.EMAIL, account.getEmail());
             json = jsonObject.toString();
         }
         catch (JSONException e) {

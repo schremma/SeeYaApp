@@ -92,10 +92,10 @@ public class LoginPresenterImpl extends BasePresenter<LoginView, Login> implemen
 
         try {
             JSONObject jsonObject = new JSONObject(loginResultJson);
-            int msgType = (int)jsonObject.get(Integer.toString(ComConstants.TYPE));
+            String msgType = (String)jsonObject.get(ComConstants.TYPE);
 
-            if (msgType == ComConstants.CONFIRMATION) {
-                String confirmationType = (String)jsonObject.get(Integer.toString(ComConstants.CONFIRMATION_TYPE));
+            if (msgType.equals(ComConstants.CONFIRMATION)) {
+                String confirmationType = (String)jsonObject.get(ComConstants.CONFIRMATION_TYPE);
                 if (confirmationType.equals("OK")) {
 
                     // on success, it would also contain an auth token (?) that we would save in shared preferences
@@ -110,7 +110,7 @@ public class LoginPresenterImpl extends BasePresenter<LoginView, Login> implemen
                 }
             }
             else {
-                String message =  (String)jsonObject.get(Integer.toString(ComConstants.MESSAGE));
+                String message =  (String)jsonObject.get(ComConstants.MESSAGE);
                 loginFail(message);
             }
         }
