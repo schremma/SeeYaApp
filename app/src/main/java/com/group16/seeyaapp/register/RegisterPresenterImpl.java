@@ -23,6 +23,7 @@ public class RegisterPresenterImpl extends CommunicatingPresenter<RegisterView, 
     }
 
 
+
     @Override
     public void registerNewUser(String username, String email, String password) {
 

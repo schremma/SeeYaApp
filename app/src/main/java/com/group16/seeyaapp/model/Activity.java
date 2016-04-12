@@ -29,7 +29,7 @@ public class Activity {
         return (today.after(date));
     }
 
-    //region Getters and setters
+    //region Getters and setters for all fields
     public String getOwner() {
         return owner;
     }
