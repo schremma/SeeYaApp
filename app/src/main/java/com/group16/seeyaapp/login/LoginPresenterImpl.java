@@ -1,18 +1,10 @@
 package com.group16.seeyaapp.login;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.group16.seeyaapp.BasePresenter;
 import com.group16.seeyaapp.communication.ComConstants;
-import com.group16.seeyaapp.communication.ComResultReceiver;
-import com.group16.seeyaapp.communication.CommunicationService;
+import com.group16.seeyaapp.communication.CommunicatingPresenter;
 import com.group16.seeyaapp.communication.JsonConverter;
 import com.group16.seeyaapp.model.Login;
 
@@ -22,11 +14,9 @@ import org.json.JSONObject;
 /**
  * Created by Andrea on 10/04/16.
  */
-public class LoginPresenterImpl extends BasePresenter<LoginView, Login> implements LoginPresenter, ComResultReceiver.Receiver {
+public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, Login> implements LoginPresenter {
 
-    private ComResultReceiver mReceiver;
     private boolean loading = false;
-    private Context ctx; //TODO: inject instead?
 
     private static final String TAG = "LoginPresenter";
 
@@ -50,13 +40,6 @@ public class LoginPresenterImpl extends BasePresenter<LoginView, Login> implemen
     public void bindView(@NonNull LoginView view) {
         super.bindView(view);
 
-        if (ctx == null) {
-            if (view instanceof Activity)
-                ctx = ((Activity) view).getApplicationContext();
-            else if (view instanceof Fragment)
-                ctx = ((Fragment) view).getActivity().getApplicationContext();
-        }
-
         if (loading) {
             // load data
             if (view() != null) {
@@ -72,22 +55,13 @@ public class LoginPresenterImpl extends BasePresenter<LoginView, Login> implemen
         if (loginJson == null)
             throw new IllegalArgumentException("json string is null");
 
-        mReceiver = new ComResultReceiver(new Handler());
-        mReceiver.setReceiver(this);
-        Intent intent = new Intent(ctx, CommunicationService.class);
+        sendJsonString(loginJson);
 
-        intent.putExtra("receiver", mReceiver);
-        intent.putExtra("json", loginJson);
-        intent.putExtra("requestId", 101);
-
-        loading = true;
-        ctx.startService(intent);
     }
 
-    @Override
-    public void onReceiveResult(int resultCode, Bundle resultData) {
 
-        String loginResultJson = resultData.getString("result");
+    @Override
+    protected void communicationResult(String loginResultJson) {
         Log.i(TAG, loginResultJson);
 
         try {
@@ -114,7 +88,11 @@ public class LoginPresenterImpl extends BasePresenter<LoginView, Login> implemen
                 loginFail(message);
             }
         }
-        catch(JSONException e) {Log.i(TAG, e.getMessage());}
+        catch(JSONException e)
+        {
+            Log.i(TAG, e.getMessage());
+            loginFail("Login failed");
+        }
     }
 
     private void loginSuccess() {
