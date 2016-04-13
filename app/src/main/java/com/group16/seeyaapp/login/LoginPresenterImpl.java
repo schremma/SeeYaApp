@@ -27,12 +27,15 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, Login>
 
     @Override
     public void validateCredentials(String username, String password) {
-        if (view() != null) {
-            view().showLoading();
-        }
+        model = new Login(username, password);
 
-        Login login = new Login(username, password);
-        startLogIn(login);
+        if (model.ValidateFormat()) {
+            view().showLoading();
+            startLogIn();
+        }
+        else
+            view().setError("Please fill in both your username and password");
+
 
     }
 
@@ -49,9 +52,9 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, Login>
         }
     }
 
-    private void startLogIn(Login login) {
+    private void startLogIn() {
 
-        String loginJson = JsonConverter.jsonify(login);
+        String loginJson = JsonConverter.jsonify(model);
         if (loginJson == null)
             throw new IllegalArgumentException("json string is null");
 
@@ -91,7 +94,11 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, Login>
         catch(JSONException e)
         {
             Log.i(TAG, e.getMessage());
-            loginFail("Login failed");
+            String failMsg = "Login failed";
+            if (loginResultJson != null)
+                failMsg +=" : " + loginResultJson;
+
+            loginFail(failMsg);
         }
     }
 

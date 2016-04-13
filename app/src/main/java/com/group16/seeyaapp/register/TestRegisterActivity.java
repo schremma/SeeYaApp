@@ -50,7 +50,7 @@ public class TestRegisterActivity extends AppCompatActivity implements RegisterV
 
     @Override
     public void onClick(View v) {
-        presenter.registerNewUser(username.getText().toString(), password.getText().toString(), email.getText().toString());
+        presenter.registerNewUser(username.getText().toString(), email.getText().toString(), password.getText().toString());
     }
 
     @Override

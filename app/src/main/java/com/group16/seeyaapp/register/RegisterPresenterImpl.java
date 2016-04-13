@@ -30,9 +30,25 @@ public class RegisterPresenterImpl extends CommunicatingPresenter<RegisterView, 
         //TODO: local validation first
         model = new Account(username, password, email);
 
-        // if local validation checks out:
-        String regJson = JsonConverter.jsonify(model);
-        sendJsonString(regJson);
+        boolean emailOk = model.validateEmail();
+        boolean passwordOk = model.validatePassword();
+        boolean userOk = model.validateUserName();
+
+        if (emailOk && passwordOk) {
+            String regJson = JsonConverter.jsonify(model);
+            sendJsonString(regJson);
+        }
+        else {
+            if (!userOk) {
+                view().showUserNameError("Invalid user name format");
+            }
+            if (!emailOk) {
+                view().showEmailError("Invalid email format");
+            }
+            if (!passwordOk) {
+                view().showPasswordError("Invalid password format");
+            }
+        }
 
     }
 
@@ -58,7 +74,11 @@ public class RegisterPresenterImpl extends CommunicatingPresenter<RegisterView, 
         }
         catch(JSONException e) {
             Log.i(TAG, e.getMessage());
-            registerFail("Registration error");
+            String failMsg = "Registration error";
+            if (registerResultJson != null) {
+                failMsg +=" : " + registerResultJson;
+            }
+            registerFail(failMsg);
         }
     }
 

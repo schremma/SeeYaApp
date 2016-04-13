@@ -38,7 +38,7 @@ public class Account {
             //This just checks for the @ to be present
             String regex = "^(.+)@(.+)$";
             Pattern pattern = Pattern.compile(regex);
-            if (pattern.matcher(regex).matches()) {
+            if (pattern.matcher(email).matches()) {
                 return true;
             }
         }
@@ -48,5 +48,9 @@ public class Account {
     //Now it just checks if psw is not empty
     public boolean validatePassword() {
         return (password != null && !password.isEmpty());
+    }
+
+    public boolean validateUserName() {
+        return (username != null && !username.isEmpty());
     }
 }

@@ -71,6 +71,7 @@ public class CommunicationService extends Service {
                 connectToServer();
             } catch (IOException e) {
                 Log.d(TAG, e.getMessage());
+                return "Could not connect to server";
             }
 
 
