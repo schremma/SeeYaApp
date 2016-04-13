@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:hint="user_name"
+        android:hint="user name"
         android:drawablePadding="8dp"
         />
     <EditText
