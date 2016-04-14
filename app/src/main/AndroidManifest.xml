@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.MainActivity">
+        <activity android:name=".activity.TestCategoriesActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +21,9 @@
         <service android:name=".communication.CommunicationService" />
 
         <activity android:name=".login.TestLoginActivity" />
-        <activity android:name=".register.TestRegisterActivity"></activity>
+        <activity android:name=".register.TestRegisterActivity" />
+        <!--<activity android:name=".activity.TestCategoriesActivity"></activity>-->
+        <activity android:name=".main.MainActivity"/>
     </application>
 
 </manifest>

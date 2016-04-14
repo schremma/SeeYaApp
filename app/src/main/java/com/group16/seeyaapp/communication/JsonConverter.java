@@ -90,4 +90,20 @@ public final class JsonConverter {
 
         return json;
     }
+
+    public static String getCategoriesJson(int versionNbr) {
+        String json = null;
+        try
+        {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(ComConstants.TYPE, ComConstants.ACTIVITY_CATEGORIES);
+            jsonObject.put(ComConstants.VERSION_NBR, versionNbr);
+
+            json = jsonObject.toString();
+        }
+        catch (JSONException e) {
+            Log.d(TAG, e.getMessage());}
+
+        return json;
+    }
 }

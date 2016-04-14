@@ -14,7 +14,7 @@ public class Activity {
     private Date date;
     private Date time;
     private String message;
-    private  String headline;
+    private String headline;
     private int minNbrOfParticipants;
     private int maxNbrOfParticipants;
 

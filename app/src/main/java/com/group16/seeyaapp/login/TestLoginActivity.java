@@ -80,6 +80,7 @@ public class TestLoginActivity extends AppCompatActivity implements LoginView, V
 
 
     public void navigateToHome() {
+
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
 
