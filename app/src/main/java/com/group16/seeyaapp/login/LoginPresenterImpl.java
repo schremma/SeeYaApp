@@ -73,9 +73,8 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, Login>
 
             if (msgType.equals(ComConstants.CONFIRMATION)) {
                 String confirmationType = (String)jsonObject.get(ComConstants.CONFIRMATION_TYPE);
-                if (confirmationType.equals("OK")) {
 
-                    // on success, it would also contain an auth token (?) that we would save in shared preferences
+                // on success, it would also contain an auth token (?) that we would save in shared preferences
                     /*String mockAuthToken = "whatever";
 
                     final SharedPreferences prefs = new ObscuredSharedPreferences(
@@ -83,8 +82,7 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, Login>
 
                     prefs.edit().putString("authToken", mockAuthToken).commit();*/
 
-                    loginSuccess();
-                }
+                loginSuccess();
             }
             else {
                 String message =  (String)jsonObject.get(ComConstants.MESSAGE);

@@ -22,8 +22,9 @@
 
         <activity android:name=".login.TestLoginActivity" />
         <activity android:name=".register.TestRegisterActivity" />
-        <!--<activity android:name=".activity.TestCategoriesActivity"></activity>-->
-        <activity android:name=".main.MainActivity"/>
+        <!-- <activity android:name=".activity.TestCategoriesActivity"></activity> -->
+        <activity android:name=".main.MainActivity" />
+        <activity android:name=".activity.TestNewActivity"></activity>
     </application>
 
 </manifest>

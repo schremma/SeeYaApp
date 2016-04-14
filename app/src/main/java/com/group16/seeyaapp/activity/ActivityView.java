@@ -13,4 +13,7 @@ public interface ActivityView {
 
     void displayActivityDetails(Activity activity);
 
+    void showOnSuccess(String message);
+    void showOnError(String errorMessage);
+
 }

@@ -61,8 +61,10 @@ public final class JsonConverter {
             jsonObject.put(ComConstants.SUBCATEGORY, activity.getSubcategory());
             jsonObject.put(ComConstants.MAX_NBROF_PARTICIPANTS, activity.getMaxNbrOfParticipants());
             jsonObject.put(ComConstants.MIN_NBR_OF_PARTICIPANTS, activity.getMinNbrOfParticipants());
-            jsonObject.put(ComConstants.DATE, activity.getDate());
-            jsonObject.put(ComConstants.TIME, activity.getTime());
+
+            //TODO: fix this
+            jsonObject.put(ComConstants.DATE, "2016-04-30");
+            jsonObject.put(ComConstants.TIME, "10:00:00");
             jsonObject.put(ComConstants.MESSAGE, activity.getMessage());
             jsonObject.put(ComConstants.HEADLINE, activity.getHeadline());
 

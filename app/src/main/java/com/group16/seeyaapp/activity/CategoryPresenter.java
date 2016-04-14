@@ -6,6 +6,6 @@ package com.group16.seeyaapp.activity;
 public interface CategoryPresenter {
 
     void mainCategorySelected(String mainCategory);
-    void pressedNext();
+    void pressedNext(String selectedSubcategory);
 
 }

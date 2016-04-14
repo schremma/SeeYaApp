@@ -21,12 +21,14 @@ import java.util.List;
  */
 public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, HashMap<String, List<Category>>> implements CategoryPresenter {
     private static final String TAG = "CategoryPresenter";
+    private String currentMainCat;
 
     @Override
     public void mainCategorySelected(String mainCategory) {
         List<Category> subcats = model.get(mainCategory);
 
         if (subcats != null) {
+            currentMainCat = mainCategory;
             String[] subArr = new String[subcats.size()];
             for(int i = 0; i < subcats.size(); i++) {
                 subArr[i] = subcats.get(i).getName();
@@ -37,7 +39,19 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
     }
 
     @Override
-    public void pressedNext() {
+    public void pressedNext(String selectedSubcategory) {
+        List<Category> subcats = model.get(currentMainCat);
+        int id = -1;
+        for (int i = 0; i < subcats.size() &&  id == -1; i++) {
+            if (subcats.get(i).getName().equals(selectedSubcategory))
+                id = subcats.get(i).getId();
+        }
+
+        if (id != -1) {
+            view().navigateToCreateActivityDetails(id);
+        }
+        else
+            view().showError("Select a main and a subcategory");
 
     }
 
@@ -55,8 +69,6 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
 
                 int mainCatId = mainCat.getInt(ComConstants.ID);
                 String mainCatName = mainCat.getString(ComConstants.NAME);
-
-                //Category mCategory = new Category(mainCatId, mainCatName);
                 model.put(mainCatName, new ArrayList<Category>());
 
 
@@ -106,7 +118,8 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
     @Override
     public void bindView(@NonNull CategoryView view) {
         super.bindView(view);
-        retrieveCategories();
+        if (model == null)
+            retrieveCategories();
     }
 
     @Override

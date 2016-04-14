@@ -7,5 +7,5 @@ import com.group16.seeyaapp.model.Activity;
  */
 public interface ActivityPresenter {
 
-    void onCreate(Activity activty);
+    void onCreate(Activity activity);
 }
