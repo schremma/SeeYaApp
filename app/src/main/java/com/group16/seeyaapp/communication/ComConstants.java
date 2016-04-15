@@ -12,7 +12,7 @@ public final class ComConstants {
     public static final String TYPE = "1";
     public static final String NEWUSER = "2";
     public static final String LOGIN ="3";
-    public static final String ACTIVITIES = "4";
+    public static final String ACTIVITIY = "4";
     public static final String ACTIVITY_HEADLINES = "5";
     public static final String USERNAME = "6";
     public static final String PASSWORD = "7";
@@ -40,6 +40,9 @@ public final class ComConstants {
     public static final String VERSION_NBR = "29";
     public static final String ARRAY_SUBCATEGORY = "30";
     public static final String ARRAY_MAINCATEGORY = "31";
+    public static final String ARRAY_HEADLINE = "32";
+    public static final String NBR_OF_SIGNEDUP = "33";
+    public static final String MY_ACTIVITIES = "34";
 
     public static final String LOG_INFO = "100";
     public static final String LOG_ERROR = "101";

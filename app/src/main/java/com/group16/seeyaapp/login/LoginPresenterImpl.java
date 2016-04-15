@@ -1,5 +1,7 @@
 package com.group16.seeyaapp.login;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -27,11 +29,13 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, Login>
 
     @Override
     public void validateCredentials(String username, String password) {
-        model = new Login(username, password);
+        Login login = new Login(username, password);
+        model = new Login();
+        model.setUsername(username);
 
-        if (model.ValidateFormat()) {
+        if (login.ValidateFormat()) {
             view().showLoading();
-            startLogIn();
+            startLogIn(login);
         }
         else
             view().setError("Please fill in both your username and password");
@@ -52,9 +56,9 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, Login>
         }
     }
 
-    private void startLogIn() {
+    private void startLogIn(Login login) {
 
-        String loginJson = JsonConverter.jsonify(model);
+        String loginJson = JsonConverter.jsonify(login);
         if (loginJson == null)
             throw new IllegalArgumentException("json string is null");
 
@@ -81,6 +85,10 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, Login>
                             ctx, ctx.getSharedPreferences("ObscuredSharedPreferences", Context.MODE_PRIVATE) );
 
                     prefs.edit().putString("authToken", mockAuthToken).commit();*/
+
+                // And store username also for later use
+                final SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
+                preferences.edit().putString("currentUser", model.getUserName()).commit();
 
                 loginSuccess();
             }

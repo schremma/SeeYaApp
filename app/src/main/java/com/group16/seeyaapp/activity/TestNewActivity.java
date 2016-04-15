@@ -4,15 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
 import com.group16.seeyaapp.model.Activity;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -21,6 +20,7 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
 
     private ActivityPresenterImpl presenter;
     private Activity activity;
+    private Spinner spinnerLocations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +38,9 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
         activity = new Activity();
         activity.setSubcategory(subCatId);
 
+
+        spinnerLocations = (Spinner)findViewById(R.id.spinnerMain);
+
         findViewById(R.id.btnCreateActivity).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,23 +51,16 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
                 activity.setMinNbrOfParticipants(4);
                 activity.setMaxNbrOfParticipants(12);
 
-                try {
-                    DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-                    Date date = new GregorianCalendar(2016, 04, 30).getTime();
-                    Date dateWithZeroTime = formatter.parse(formatter.format(date));
-                    activity.setDate(dateWithZeroTime);
+                Date date = new GregorianCalendar(2016, 04, 30).getTime();
+                activity.setDate(date);
 
                     Calendar cal = Calendar.getInstance();
                     cal.set(Calendar.HOUR_OF_DAY, 10);
                     Date time = cal.getTime();
 
-                    formatter = new SimpleDateFormat("hh:mm:ss");
-                    Date timeWithZeroDate = formatter.parse(formatter.format(time));
-                    activity.setTime(timeWithZeroDate);
 
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                    activity.setTime(time);
+
 
                 presenter.onCreate(activity);
 
@@ -89,6 +85,9 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
 
     @Override
     public void setLocationList(String[] locations) {
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, locations);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerLocations.setAdapter(spinnerArrayAdapter);
 
     }
 

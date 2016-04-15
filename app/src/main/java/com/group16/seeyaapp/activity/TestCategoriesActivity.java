@@ -71,8 +71,6 @@ public class TestCategoriesActivity extends AppCompatActivity implements Categor
 
     @Override
     public void setMainCategories(String[] mainCategories) {
-        Toast toast = Toast.makeText(this, mainCategories.toString(), Toast.LENGTH_SHORT);
-        toast.show();
 
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mainCategories);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

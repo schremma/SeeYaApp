@@ -1,5 +1,7 @@
 package com.group16.seeyaapp.register;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.group16.seeyaapp.communication.ComConstants;
@@ -27,7 +29,6 @@ public class RegisterPresenterImpl extends CommunicatingPresenter<RegisterView, 
     @Override
     public void registerNewUser(String username, String email, String password) {
 
-        //TODO: local validation first
         model = new Account(username, password, email);
 
         boolean emailOk = model.validateEmail();
@@ -64,6 +65,9 @@ public class RegisterPresenterImpl extends CommunicatingPresenter<RegisterView, 
                 String confirmationType = (String)jsonObject.get(ComConstants.CONFIRMATION_TYPE);
                 if (confirmationType.equals("OK")) {
 
+                    // Store username for later use
+                    final SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
+                    preferences.edit().putString("currentUser", model.getUserName()).commit();
                     registerSuccess();
                 }
             }

@@ -60,6 +60,7 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
 
         model = new HashMap<String, List<Category>>();
 
+        //TODO: check message type first
         try {
             JSONObject jsonObject = new JSONObject(json);
             JSONArray mainArr = jsonObject.getJSONArray(ComConstants.ARRAY_MAINCATEGORY);
@@ -118,7 +119,7 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
     @Override
     public void bindView(@NonNull CategoryView view) {
         super.bindView(view);
-        if (model == null)
+        if (model == null)      // or shoudl we always check version number with the server?
             retrieveCategories();
     }
 
