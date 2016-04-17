@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.group16.seeyaapp.R;
-import com.group16.seeyaapp.activity.TestListActivity;
+import com.group16.seeyaapp.activity.list.TestListActivity;
 
 public class DemoPage extends AppCompatActivity {
 

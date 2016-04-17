@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.group16.seeyaapp.R;
-import com.group16.seeyaapp.activity.TestCategoriesActivity;
+import com.group16.seeyaapp.activity.categories.TestCategoriesActivity;
 
 public class TestCreatePage extends AppCompatActivity {
 

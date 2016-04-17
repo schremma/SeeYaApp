@@ -1,4 +1,4 @@
-package com.group16.seeyaapp.activity;
+package com.group16.seeyaapp.activity.categories;
 
 import android.support.annotation.NonNull;
 import android.util.Log;

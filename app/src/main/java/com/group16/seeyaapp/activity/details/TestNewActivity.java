@@ -1,4 +1,4 @@
-package com.group16.seeyaapp.activity;
+package com.group16.seeyaapp.activity.details;
 
 import android.content.Intent;
 import android.os.Bundle;

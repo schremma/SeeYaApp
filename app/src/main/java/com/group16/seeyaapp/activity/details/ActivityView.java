@@ -1,4 +1,4 @@
-package com.group16.seeyaapp.activity;
+package com.group16.seeyaapp.activity.details;
 
 import com.group16.seeyaapp.model.Activity;
 

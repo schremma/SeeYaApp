@@ -1,4 +1,4 @@
-package com.group16.seeyaapp.activity;
+package com.group16.seeyaapp.activity.list;
 
 /**
  * Created by Andrea on 15/04/16.

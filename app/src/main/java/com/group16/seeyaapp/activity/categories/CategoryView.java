@@ -1,4 +1,4 @@
-package com.group16.seeyaapp.activity;
+package com.group16.seeyaapp.activity.categories;
 
 /**
  * Created by Andrea on 12/04/16.

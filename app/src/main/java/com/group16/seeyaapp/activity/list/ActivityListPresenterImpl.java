@@ -1,4 +1,4 @@
-package com.group16.seeyaapp.activity;
+package com.group16.seeyaapp.activity.list;
 
 import android.content.Context;
 import android.content.SharedPreferences;
