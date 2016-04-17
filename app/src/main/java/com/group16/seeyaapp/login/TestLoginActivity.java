@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
-import com.group16.seeyaapp.main.MainActivity;
+import com.group16.seeyaapp.navigation.DemoPage;
 
 public class TestLoginActivity extends AppCompatActivity implements LoginView, View.OnClickListener {
 
@@ -81,7 +81,8 @@ public class TestLoginActivity extends AppCompatActivity implements LoginView, V
 
     public void navigateToHome() {
 
-        Intent intent = new Intent(this, MainActivity.class);
+        // TODO go to a home page instead
+        Intent intent = new Intent(this, DemoPage.class);
         startActivity(intent);
 
         finish();

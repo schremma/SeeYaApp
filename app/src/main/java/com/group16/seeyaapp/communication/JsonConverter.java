@@ -2,16 +2,13 @@ package com.group16.seeyaapp.communication;
 
 import android.util.Log;
 
+import com.group16.seeyaapp.helpers.DateHelper;
 import com.group16.seeyaapp.model.Account;
 import com.group16.seeyaapp.model.Activity;
 import com.group16.seeyaapp.model.Login;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by Andrea on 10/04/16.
@@ -65,8 +62,8 @@ public final class JsonConverter {
             jsonObject.put(ComConstants.SUBCATEGORY, activity.getSubcategory());
             jsonObject.put(ComConstants.MAX_NBROF_PARTICIPANTS, activity.getMaxNbrOfParticipants());
             jsonObject.put(ComConstants.MIN_NBR_OF_PARTICIPANTS, activity.getMinNbrOfParticipants());
-            jsonObject.put(ComConstants.DATE, DateToDateOnlyString(activity.getDate()));
-            jsonObject.put(ComConstants.TIME, DateToTimeOnlyString(activity.getTime()));
+            jsonObject.put(ComConstants.DATE, DateHelper.DateToDateOnlyString(activity.getDate()));
+            jsonObject.put(ComConstants.TIME, DateHelper.DateToTimeOnlyString(activity.getTime()));
             jsonObject.put(ComConstants.MESSAGE, activity.getMessage());
             jsonObject.put(ComConstants.HEADLINE, activity.getHeadline());
 
@@ -78,14 +75,14 @@ public final class JsonConverter {
         return json;
     }
 
-    public static String publishActivityJson(int activityId) {
+    public static String publishActivityJson(long activityId) {
         String json = null;
         try
         {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put(ComConstants.TYPE, ComConstants.PUBLISH_ACTIVITY);
 
-            jsonObject.put(ComConstants.NAME, activityId);
+            jsonObject.put(ComConstants.ID, activityId);
 
             json = jsonObject.toString();
         }
@@ -132,7 +129,9 @@ public final class JsonConverter {
         try
         {
             JSONObject jsonObject = new JSONObject();
-            //jsonObject.put(ComConstants.TYPE, ComConstants.ACTIVITY_CATEGORIES);
+
+            //TODO check if it is right
+            jsonObject.put(ComConstants.TYPE, ComConstants.ACTIVITIY);
             jsonObject.put(ComConstants.ID, activityId);
 
             json = jsonObject.toString();
@@ -140,9 +139,7 @@ public final class JsonConverter {
         catch (JSONException e) {
             Log.d(TAG, e.getMessage());}
 
-        throw new UnsupportedOperationException();
-
-        //return json;
+        return json;
     }
 
     public static String getOwnActivityHeadlinesJson(String ownerUserName) {
@@ -161,13 +158,5 @@ public final class JsonConverter {
         return json;
     }
 
-    public static String DateToDateOnlyString(Date date) {
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        return formatter.format(date);
-    }
 
-    public static String DateToTimeOnlyString(Date time) {
-        DateFormat formatter = new SimpleDateFormat("hh:mm:ss");
-        return formatter.format(time);
-    }
 }

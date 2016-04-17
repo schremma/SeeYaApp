@@ -23,6 +23,12 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
     private static final String TAG = "CategoryPresenter";
     private String currentMainCat;
 
+    /**
+     * When the user has selected a main catgory,
+     * a list with all the subcategories under this main category
+     * is sent to the view.
+     * @param mainCategory
+     */
     @Override
     public void mainCategorySelected(String mainCategory) {
         List<Category> subcats = model.get(mainCategory);
@@ -55,38 +61,49 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
 
     }
 
+    /**
+     * The json String returned form the server might be:
+     * 1. ARRAY_MAINCATEGORY: a list with up-t-date main and subcategories
+     * 2. a confirmation that we already have the right version of categories
+     * @param json
+     */
     @Override
     protected void communicationResult(String json) {
 
         model = new HashMap<String, List<Category>>();
 
-        //TODO: check message type first
+        //TODO: check message type - if it is just a confirmation that we have the right version of categories
         try {
             JSONObject jsonObject = new JSONObject(json);
-            JSONArray mainArr = jsonObject.getJSONArray(ComConstants.ARRAY_MAINCATEGORY);
+            String msgType = (String)jsonObject.get(ComConstants.TYPE);
 
-            for (int i = 0; i < mainArr.length(); i++) {
-                JSONObject mainCat = mainArr.getJSONObject(i);
+            if (msgType.equals(ComConstants.ACTIVITY_CATEGORIES)) {
+                JSONArray mainArr = jsonObject.getJSONArray(ComConstants.ARRAY_MAINCATEGORY);
 
-                int mainCatId = mainCat.getInt(ComConstants.ID);
-                String mainCatName = mainCat.getString(ComConstants.NAME);
-                model.put(mainCatName, new ArrayList<Category>());
+                for (int i = 0; i < mainArr.length(); i++) {
+                    JSONObject mainCat = mainArr.getJSONObject(i);
+
+                    int mainCatId = mainCat.getInt(ComConstants.ID);
+                    String mainCatName = mainCat.getString(ComConstants.NAME);
+                    model.put(mainCatName, new ArrayList<Category>());
 
 
-                JSONArray subArr = mainCat.getJSONArray(ComConstants.ARRAY_SUBCATEGORY);
+                    JSONArray subArr = mainCat.getJSONArray(ComConstants.ARRAY_SUBCATEGORY);
 
-                for (int y = 0; y < subArr.length(); y++) {
-                    JSONObject subCat = subArr.getJSONObject(y);
+                    for (int y = 0; y < subArr.length(); y++) {
+                        JSONObject subCat = subArr.getJSONObject(y);
 
-                    int subCatId = subCat.getInt(ComConstants.ID);
-                    String subCatName = subCat.getString(ComConstants.NAME);
+                        int subCatId = subCat.getInt(ComConstants.ID);
+                        String subCatName = subCat.getString(ComConstants.NAME);
 
-                    Category sCategory = new Category(subCatId, subCatName);
-                    model.get(mainCatName).add(sCategory);
+                        Category sCategory = new Category(subCatId, subCatName);
+                        model.get(mainCatName).add(sCategory);
+                    }
+
                 }
-
+                //TODO store somewehere the retrived categories with the version number
+                onRetrievalSuccess();
             }
-            onRetrievalSuccess();
         }
         catch (JSONException e)
         {
@@ -119,7 +136,7 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
     @Override
     public void bindView(@NonNull CategoryView view) {
         super.bindView(view);
-        if (model == null)      // or shoudl we always check version number with the server?
+        if (model == null)      // TODO or should we always check version number with the server?
             retrieveCategories();
     }
 

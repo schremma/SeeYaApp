@@ -5,7 +5,9 @@ package com.group16.seeyaapp.activity;
  */
 public interface CategoryPresenter {
 
+    // The user has selected one of the main categories from the list
     void mainCategorySelected(String mainCategory);
+
     void pressedNext(String selectedSubcategory);
 
 }

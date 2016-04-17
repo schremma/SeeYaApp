@@ -8,41 +8,98 @@ import android.util.Log;
 import com.group16.seeyaapp.communication.ComConstants;
 import com.group16.seeyaapp.communication.CommunicatingPresenter;
 import com.group16.seeyaapp.communication.JsonConverter;
+import com.group16.seeyaapp.helpers.DateHelper;
 import com.group16.seeyaapp.model.Activity;
 import com.group16.seeyaapp.model.Location;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 /**
  * Created by Andrea on 14/04/16.
+ * If the presenter is to display a specific activity: it gets the whole activity from server
+ * using the provided id
+ * if it is to create a new activity, it gets the list of locations and sends it to the view.
+ * The view communicates to the presenter which if these two scenarios are to take place,
+ * by calling the aboutTOPublishActivity() or aboutToCreateActivity(), just before it is displayed.
  */
 public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, Activity> implements ActivityPresenter {
     private static final String TAG = "ActivityPresenter";
     private HashMap<String, List<Location>> locations;
+    private boolean editing;
+    private ActionType actionType;
 
     @Override
-    public void onCreate(Activity activity) {
+    public void onCreateActivity(Activity activity) {
         if (activity != null) {
             model = activity;
 
-            // TODO: validate activity contents
+            if (activity.validateActivity()) {
 
-            final SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
-            String currentUser = preferences.getString("currentUser", null);
-            model.setOwner(currentUser);
+                final SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
+                String currentUser = preferences.getString("currentUser", null);
+                model.setOwner(currentUser);
 
-            String json = JsonConverter.jsonify(model);
-            sendJsonString(json);
+                String json = JsonConverter.jsonify(model);
+                actionType = ActionType.CreateNew;
+                sendJsonString(json);
+            }
+            else {
+                String errorMsg = activity.getValidationErrorMessage();
+                if (errorMsg == null)
+                    errorMsg = "Validation error";
+                view().showOnError(errorMsg);
+            }
         }
 
     }
 
+    @Override
+    public void onPublishActivity(long activityId) {
+        String json = JsonConverter.publishActivityJson(activityId);
+        actionType = ActionType.Publish;
+        sendJsonString(json);
+    }
+
+    @Override
+    public void aboutToDisplayActivity(int activityId) {
+        editing = false;
+        String json = JsonConverter.getActivityJson(activityId);
+
+        //TODO get json from server instead:
+        //sendJsonString(json);
+
+        // Test activity for now
+        model = new Activity();
+        model.setId(activityId);
+        model.setHeadline("Test activity");
+        view().displayActivityDetails(model);
+    }
+
+    @Override
+    public void aboutToCreateActivity() {
+        editing = true;
+        if (locations == null)
+            retrieveLocations();
+    }
+
+    /**
+     * The json response could be:
+     * 1. CONFIRMATION
+     *      1a: confirmation that an activity has been created
+     *      1b: confirmation that an activity has been published
+     * 2. LOCATIONS
+     *      2a: an array with locations
+     *      2b: a confirmation that we already have the right version
+     * 3. ACTIVITY: an already created activity that is to be displayed
+     * @param json
+     */
     @Override
     protected void communicationResult(String json) {
 
@@ -51,16 +108,22 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
             String msgType = (String)jsonObject.get(ComConstants.TYPE);
 
             if (msgType.equals(ComConstants.CONFIRMATION)) {
-                String confirmationType = (String)jsonObject.get(ComConstants.CONFIRMATION_TYPE);
+                // This could be a confirmation for both creating an activity or for publishing an activity
 
-                onCreationSuccess();
+                String confirmationType = (String)jsonObject.get(ComConstants.CONFIRMATION_TYPE);
+                String message =  (String)jsonObject.get(ComConstants.MESSAGE);
+
+                onActionSuccess(message);
             }
             else if (msgType.equals(ComConstants.LOCATIONS)) {
                 updateLocationList(json);
             }
+            else if (msgType.equals(ComConstants.ACTIVITIY)) {
+                setActivity(json);
+            }
             else {
                 String message =  (String)jsonObject.get(ComConstants.MESSAGE);
-                onCreationFail(message);
+                onActionFail(message);
             }
         }
         catch(JSONException e)
@@ -70,16 +133,63 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
             if (json != null)
                 failMsg +=" : " + json;
 
-            onCreationFail(failMsg);
+            onActionFail(failMsg);
         }
 
     }
 
-    private void onCreationSuccess() {
-        view().showOnSuccess("Activity has been created");
+    private void setActivity(String json) {
+
+        // TODO: test this with server
+        model = new Activity();
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            model.setId(jsonObject.getLong(ComConstants.ID));
+            model.setSubcategoryString(jsonObject.getString(ComConstants.SUBCATEGORY));
+            model.setMaxNbrOfParticipants(jsonObject.getInt(ComConstants.MAX_NBROF_PARTICIPANTS));
+            model.setMinNbrOfParticipants(jsonObject.getInt(ComConstants.MIN_NBR_OF_PARTICIPANTS));
+
+            model.setMessage(jsonObject.getString(ComConstants.MESSAGE));
+            model.setOwner(jsonObject.getString(ComConstants.ACTIVITY_OWNER));
+            model.setHeadline(jsonObject.getString(ComConstants.HEADLINE));
+            model.setNbrSignedUp(jsonObject.getLong(ComConstants.NBR_OF_SIGNEDUP));
+
+            //TODO server: send date published as well to be able to get if it is published or not
+
+            try {
+                Date date = DateHelper.StringDateToDate(jsonObject.getString(ComConstants.DATE));
+                Date time = DateHelper.StringTimeToDate(jsonObject.getString(ComConstants.TIME));
+                model.setDate(date);
+                model.setTime(time);
+
+                view().displayActivityDetails(model);
+
+            }catch (ParseException e) {
+                Log.i(TAG, e.getMessage());
+
+                onRetrievalError("Could not display the activity: invalid date format");
+            }
+        }
+        catch (JSONException e)
+        {
+            Log.i(TAG, e.getMessage());
+            String failMsg = "Cannot get activity";
+            if (json != null)
+                failMsg +=" : " + json;
+
+            onRetrievalError(failMsg);
+        }
     }
 
-    private void onCreationFail(String error) {
+    private void onActionSuccess(String message) {
+        if (actionType.equals(ActionType.Publish))
+            view().updatePublishedStatus(true);
+        else if (actionType.equals(ActionType.CreateNew)) {
+            view().updateCreateStatus(true);
+        }
+    }
+
+    private void onActionFail(String error) {
         view().showOnError(error);
     }
 
@@ -94,7 +204,16 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
     private void updateLocationList(String json) {
         locations = new HashMap<String, List<Location>>();
 
-        try {
+        // TODO server: send locations
+        // now as test
+        List<Location> l = new ArrayList<Location>();
+        l.add(new Location(1, "Malmö"));
+        l.add(new Location(2, "Lund"));
+        locations.put("Skane", l);
+        onLocationsRetrievalSuccess();
+
+        // TODO this instead of test values
+       /* try {
             JSONObject jsonObject = new JSONObject(json);
             JSONArray mainArr = jsonObject.getJSONArray(ComConstants.ARRAY_MAINCATEGORY);
 
@@ -119,23 +238,33 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
                 }
 
             }
-            onRetrievalSuccess();
+            //TODO store retrieved locations with version number somewhere locally
+            onLocationsRetrievalSuccess();
         }
         catch (JSONException e)
         {
             Log.i(TAG, e.getMessage());
-            String failMsg = "Cannot get categories";
+            String failMsg = "Cannot get locations";
             if (json != null)
                 failMsg +=" : " + json;
 
             onRetrievalError(failMsg);
-        }
+        }*/
     }
 
 
-    private void onRetrievalSuccess() {
-        String[] keyArray = locations.keySet().toArray(new String[locations.keySet().size()]);
-        view().setLocationList(keyArray);
+    // TODO now locations are only shown as simple list of specific location
+    // changed it so that it is an embedded list with 'Landskap' and 'stad'
+    private void onLocationsRetrievalSuccess() {
+        List<String> loc = new ArrayList<String>();
+        for (String k : locations.keySet()) {
+            for (Location l : locations.get(k)) {
+                loc.add(l.getName());
+            }
+        }
+
+        String[] locationArr = loc.toArray(new String[locations.keySet().size()]);
+        view().setLocationList(locationArr);
     }
 
     private void onRetrievalError(String error) {
@@ -145,7 +274,9 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
     @Override
     public void bindView(@NonNull ActivityView view) {
         super.bindView(view);
-        if (locations == null)      // or shoudl we always check version number with the server?
+
+        //we do not need to retrieve locations if the activity is just displayed without editing
+        if (editing && locations == null)
             retrieveLocations();
     }
 
@@ -153,5 +284,11 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
     @Override
     protected void updateView() {
 
+    }
+
+    private enum ActionType {
+        CreateNew,
+        Publish,
+        Edit
     }
 }

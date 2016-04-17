@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".login.TestLoginActivity">
+        <activity android:name=".main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,11 +20,14 @@
 
         <service android:name=".communication.CommunicationService" />
 
-        <!--<activity android:name=".login.TestLoginActivity" />-->
+        <activity android:name=".login.TestLoginActivity" />
         <activity android:name=".register.TestRegisterActivity" />
-         <activity android:name=".activity.TestCategoriesActivity"></activity>
-        <activity android:name=".main.MainActivity" />
-        <activity android:name=".activity.TestNewActivity"></activity>
+        <activity android:name=".activity.TestCategoriesActivity" />
+        <!--<activity android:name=".main.MainActivity" />-->
+        <activity android:name=".activity.TestNewActivity" />
+         <activity android:name=".activity.TestListActivity"></activity>
+        <activity android:name=".navigation.TestCreatePage" />
+        <activity android:name=".navigation.DemoPage"></activity>
     </application>
 
 </manifest>

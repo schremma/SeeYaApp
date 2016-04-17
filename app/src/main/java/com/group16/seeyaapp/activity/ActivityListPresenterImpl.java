@@ -32,29 +32,39 @@ public class ActivityListPresenterImpl extends CommunicatingPresenter<ActivityLi
 
     @Override
     public void onActivitySelected(int activityId) {
-
+        view().navigateToActivityDisplay(activityId);
     }
 
+    /**
+     * Json string can be
+     * 1: an array with activity headlines.
+     * @param json
+     */
     @Override
     protected void communicationResult(String json) {
 
-        //TODO: check message type first
         try {
             JSONObject jsonObject = new JSONObject(json);
-            JSONArray arr = jsonObject.getJSONArray(ComConstants.ARRAY_HEADLINE);
+            String msgType = (String)jsonObject.get(ComConstants.TYPE);
 
-            ids = new ArrayList<Integer>();
+            if (msgType.equals(ComConstants.ACTIVITY_HEADLINES)) {
+                JSONArray arr = jsonObject.getJSONArray(ComConstants.ARRAY_HEADLINE);
+
+                ids = new ArrayList<Integer>();
+                headlines = new ArrayList<String>();
+                dates = new ArrayList<String>();
 
 
-            for (int i = 0; i < arr.length(); i++) {
-                JSONObject headline = arr.getJSONObject(i);
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject headline = arr.getJSONObject(i);
 
-                ids.add(headline.getInt(ComConstants.ID));
-                headlines.add(headline.getString(ComConstants.HEADLINE));
-                dates.add(headline.getString(ComConstants.DATE));
+                    ids.add(headline.getInt(ComConstants.ID));
+                    headlines.add(headline.getString(ComConstants.HEADLINE));
+                    dates.add(headline.getString(ComConstants.DATE));
 
+                }
+                onRetrievalSuccess();
             }
-            onRetrievalSuccess();
         }
         catch (JSONException e)
         {
@@ -77,23 +87,27 @@ public class ActivityListPresenterImpl extends CommunicatingPresenter<ActivityLi
         view().setHeadlineList(headlines.toArray(new String[0]), dates.toArray(new String[0]), Ints.toArray(ids));
     }
 
-    @Override
-    protected void updateView() {
-
-    }
 
     @Override
     public void bindView(@NonNull ActivityListView view) {
         super.bindView(view);
-        if (ids == null)      // or should we always check version number with the server first?
+
+        if (ids == null)
             retrieveHeadlines();
     }
 
     private void retrieveHeadlines() {
+        //TODO some check to determine what kind of headlines to be retrieved
+        // here: all activities created by logged in user
         final SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
         String currentUser = preferences.getString("currentUser", null);
 
         String json = JsonConverter.getOwnActivityHeadlinesJson(currentUser);
         sendJsonString(json);
+    }
+
+    @Override
+    protected void updateView() {
+
     }
 }

@@ -21,5 +21,23 @@
         android:text="Create test activity"
         />
 
+    <TextView
+        android:id="@+id/txtActivity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"/>
+
+    <TextView
+        android:id="@+id/txtActivityId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btnPublishActivity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Publish test activity"
+        />
+
 
 </LinearLayout>

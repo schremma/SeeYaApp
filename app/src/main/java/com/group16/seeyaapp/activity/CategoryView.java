@@ -9,8 +9,14 @@ package com.group16.seeyaapp.activity;
  */
 public interface CategoryView {
 
-    void setMainCategories(String[] mainCategories); // show the list of all main categories
-    void setSubcategories(String[] subCategories); // show the list of subcategories under the chosen main category
-    void navigateToCreateActivityDetails(int subCategoryId); // navigates to the Activity/fragment for new activity details
+    // show the list of all main categories
+    void setMainCategories(String[] mainCategories);
+
+    // show the list of subcategories under the chosen main category
+    void setSubcategories(String[] subCategories);
+
+    // navigates to the view showing the form for filling in new activity details
+    void navigateToCreateActivityDetails(int subCategoryId);
+
     void showError(String errorMessage);
 }

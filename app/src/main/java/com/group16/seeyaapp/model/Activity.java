@@ -1,5 +1,7 @@
 package com.group16.seeyaapp.model;
 
+import com.group16.seeyaapp.helpers.DateHelper;
+
 import java.util.Date;
 
 /**
@@ -7,7 +9,7 @@ import java.util.Date;
  */
 public class Activity {
 
-    private int id;
+    private long id;
     private String owner;
     private int subcategory;
     private String location;
@@ -18,10 +20,54 @@ public class Activity {
     private int minNbrOfParticipants;
     private int maxNbrOfParticipants;
 
-    private boolean published;
+
+    private String subcategoryString;
+
     private String locationDetails;
     private Date datePublished;
 
+    private long nbrSignedUp;
+
+    private String errorMsg;
+
+    public String getValidationErrorMessage() {return errorMsg;}
+
+    public boolean validateActivity() {
+        errorMsg = "";
+        if (date == null) {
+            errorMsg += "Date cannot be empty\n";
+        }
+        if (time == null) {
+            errorMsg += "Time cannot be empty\n";
+        }
+        if (location == null || location.isEmpty()) {
+            errorMsg += "Location cannot be empty\n";
+        }
+        if (headline == null || headline.isEmpty()) {
+            errorMsg += "Headline cannot be empty\n";
+        }
+        if (message == null || message.isEmpty()) {
+            errorMsg += "Message cannot be empty\n";
+        }
+
+        if (errorMsg.length() > 0)
+            return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        String strOut = String.format("Activity: %s\n%s, %s at %s\nMessage: %s\nMinimum participants: %d\n" +
+                        "Maximum participants: %d\n", headline, location, DateHelper.DateToDateOnlyString(date),
+                DateHelper.DateToTimeOnlyString(time), message, minNbrOfParticipants, maxNbrOfParticipants);
+        if (datePublished != null) {
+            strOut += "Published on: " + datePublished.toString();
+        }
+        else
+            strOut += "Unpublished";
+
+        return strOut;
+    }
 
     // True if the time of the activity has already passed
     public boolean expired() {
@@ -102,13 +148,6 @@ public class Activity {
         this.maxNbrOfParticipants = maxNbrOfParticipants;
     }
 
-    public boolean isPublished() {
-        return published;
-    }
-
-    public void setPublished(boolean published) {
-        this.published = published;
-    }
 
     public String getLocationDetails() {
         return locationDetails;
@@ -127,12 +166,29 @@ public class Activity {
     }
 
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+
+    public String getSubcategoryString() {
+        return subcategoryString;
+    }
+
+    public void setSubcategoryString(String subcategoryString) {
+        this.subcategoryString = subcategoryString;
+    }
+
+    public long getNbrSignedUp() {
+        return nbrSignedUp;
+    }
+
+    public void setNbrSignedUp(long nbrSignedUp) {
+        this.nbrSignedUp = nbrSignedUp;
     }
     //endregion
 
