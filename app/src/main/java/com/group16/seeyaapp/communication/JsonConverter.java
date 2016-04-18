@@ -5,7 +5,7 @@ import android.util.Log;
 import com.group16.seeyaapp.helpers.DateHelper;
 import com.group16.seeyaapp.model.Account;
 import com.group16.seeyaapp.model.Activity;
-import com.group16.seeyaapp.model.Login;
+import com.group16.seeyaapp.model.UserLogin;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,7 +17,7 @@ public final class JsonConverter {
 
     private static final String TAG = "JsonConverter";
 
-    public static String jsonify(Login login) {
+    public static String jsonify(UserLogin login) {
         String json = null;
         try
         {

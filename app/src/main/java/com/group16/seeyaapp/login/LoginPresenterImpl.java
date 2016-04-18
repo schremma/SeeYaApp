@@ -8,7 +8,7 @@ import android.util.Log;
 import com.group16.seeyaapp.communication.ComConstants;
 import com.group16.seeyaapp.communication.CommunicatingPresenter;
 import com.group16.seeyaapp.communication.JsonConverter;
-import com.group16.seeyaapp.model.Login;
+import com.group16.seeyaapp.model.UserLogin;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,7 +16,7 @@ import org.json.JSONObject;
 /**
  * Created by Andrea on 10/04/16.
  */
-public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, Login> implements LoginPresenter {
+public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, UserLogin> implements LoginPresenter {
 
     private boolean loading = false;
 
@@ -29,8 +29,8 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, Login>
 
     @Override
     public void validateCredentials(String username, String password) {
-        Login login = new Login(username, password);
-        model = new Login();
+        UserLogin login = new UserLogin(username, password);
+        model = new UserLogin();
         model.setUsername(username);
 
         if (login.ValidateFormat()) {
@@ -56,7 +56,7 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, Login>
         }
     }
 
-    private void startLogIn(Login login) {
+    private void startLogIn(UserLogin login) {
 
         String loginJson = JsonConverter.jsonify(login);
         if (loginJson == null)
@@ -100,7 +100,7 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, Login>
         catch(JSONException e)
         {
             Log.i(TAG, e.getMessage());
-            String failMsg = "Login failed";
+            String failMsg = "UserLogin failed";
             if (loginResultJson != null)
                 failMsg +=" : " + loginResultJson;
 

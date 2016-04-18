@@ -21,15 +21,45 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"/>
 
+        <DatePicker
+            android:id="@+id/datePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/txtHeadline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:hint="headline"
+        android:drawablePadding="8dp"/>
+
+
+    <EditText
+        android:id="@+id/txtMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:inputType="textMultiLine"
+        android:lines="8"
+        android:hint="message"
+        android:drawablePadding="8dp"/>
 
         <EditText
-            android:id="@+id/txtusername"
+            android:id="@+id/txtMinParticipants"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:hint="user name"
-            android:drawablePadding="8dp"
-            />
+            android:hint="Minimum number of participants"
+            android:drawablePadding="8dp"/>
+
+        <EditText
+            android:id="@+id/txtMaxParticipants"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:hint="Maximum number of participants"
+            android:drawablePadding="8dp"/>
 
     <Button
         android:id="@+id/btnCreateActivity"
@@ -37,6 +67,7 @@
         android:layout_height="wrap_content"
         android:text="Create test activity"
         />
+
     </LinearLayout>
 
     <TextView
