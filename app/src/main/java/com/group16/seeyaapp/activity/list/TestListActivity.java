@@ -23,8 +23,6 @@ public class TestListActivity extends AppCompatActivity implements ActivityListV
     private ActivityListPresenterImpl presenter;
     private ListView listview;
 
-    private HashMap map = new HashMap<String, Integer>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,9 +46,7 @@ public class TestListActivity extends AppCompatActivity implements ActivityListV
                                     int position, long id) {
                 final String item = (String) parent.getItemAtPosition(position);
 
-                //int idInt = Integer.parseInt(item);
-                int idInt = (Integer) map.get(item);
-                Log.i("ACT SELECTED: ", "" + idInt);
+                int idInt = Integer.parseInt(item);
                 presenter.onActivitySelected(idInt);
             }
 
@@ -63,13 +59,10 @@ public class TestListActivity extends AppCompatActivity implements ActivityListV
         for (int i = 0; i < headlines.length; i++) {
             Log.i("ListView", String.format("%s, %s: %d", headlines[i], dates[i], ids[i]));
         }
-        map.clear();
+
         List<String> idStrings = new ArrayList<String>();
-        for(int i = 0; i < headlines.length; i++) {
-            String content = headlines[i] + "   date: " + dates[i];
-            idStrings.add(content);
-            map.put(content, ids[i]);
-        }
+        for (int i : ids)
+            idStrings.add(Integer.toString(i));
         final StableArrayAdapter adapter = new StableArrayAdapter(this,
                 android.R.layout.simple_list_item_1, idStrings);
         listview.setAdapter(adapter);
