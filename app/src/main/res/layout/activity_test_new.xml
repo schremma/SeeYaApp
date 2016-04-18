@@ -9,6 +9,7 @@
     >
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/createActivityContainer"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -21,10 +22,30 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"/>
 
-        <DatePicker
-            android:id="@+id/datePicker"
+        <TextView
+            android:id="@+id/tvDate"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <Button
+            android:id="@+id/btnChangeDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Change Date" />
+
+        <EditText
+            android:id="@+id/txtTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:hint="10:00:00"
+            android:drawablePadding="8dp"/>
+        <!--<DatePicker-->
+            <!--android:id="@+id/datePicker"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content" />-->
 
     <EditText
         android:id="@+id/txtHeadline"
@@ -40,8 +61,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:inputType="textMultiLine"
-        android:lines="8"
         android:hint="message"
         android:drawablePadding="8dp"/>
 
@@ -65,7 +84,7 @@
         android:id="@+id/btnCreateActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create test activity"
+        android:text="Create activity"
         />
 
     </LinearLayout>
@@ -85,7 +104,7 @@
         android:id="@+id/btnPublishActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Publish test activity"
+        android:text="Publish activity"
         />
 
 
