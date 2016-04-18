@@ -22,6 +22,7 @@ import java.util.List;
 public class TestListActivity extends AppCompatActivity implements ActivityListView {
     private ActivityListPresenterImpl presenter;
     private ListView listview;
+    private HashMap map = new HashMap<String, Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
