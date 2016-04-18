@@ -12,6 +12,7 @@ import com.group16.seeyaapp.helpers.DateHelper;
 import com.group16.seeyaapp.model.Activity;
 import com.group16.seeyaapp.model.Location;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,7 +47,19 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
                 String currentUser = preferences.getString("currentUser", null);
                 model.setOwner(currentUser);
 
-                String json = JsonConverter.jsonify(model);
+                //TODO find a better way to store locations to avoid this kind of iteration
+                int locationId = -1;
+                for(String k : locations.keySet()) {
+                    for(Location l : locations.get(k)) {
+                        if (l.getName().equals(model.getLocation())) {
+                            locationId = l.getId();
+                            break;
+                        }
+                    }
+                }
+
+                Log.i(TAG, "Location id: " + locationId);
+                String json = JsonConverter.jsonify(model, locationId);
                 actionType = ActionType.CreateNew;
                 sendJsonString(json);
             }
@@ -73,13 +86,13 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
         String json = JsonConverter.getActivityJson(activityId);
 
         //TODO get json from server instead:
-        //sendJsonString(json);
+        sendJsonString(json);
 
-        // Test activity for now
-        model = new Activity();
-        model.setId(activityId);
-        model.setHeadline("Test activity");
-        view().displayActivityDetails(model);
+//        // Test activity for now
+//        model = new Activity();
+//        model.setId(activityId);
+//        model.setHeadline("Test activity");
+//        view().displayActivityDetails(model);
     }
 
     @Override
@@ -139,13 +152,18 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
     }
 
     private void setActivity(String json) {
+        Log.i(TAG, json);
 
-        // TODO: test this with server
         model = new Activity();
         try {
             JSONObject jsonObject = new JSONObject(json);
             model.setId(jsonObject.getLong(ComConstants.ID));
+
+            //TODO main category and subcategory string
             model.setSubcategoryString(jsonObject.getString(ComConstants.SUBCATEGORY));
+
+            //TODO location string
+            model.setLocation(jsonObject.getString(ComConstants.PLACE));
             model.setMaxNbrOfParticipants(jsonObject.getInt(ComConstants.MAX_NBROF_PARTICIPANTS));
             model.setMinNbrOfParticipants(jsonObject.getInt(ComConstants.MIN_NBR_OF_PARTICIPANTS));
 
@@ -154,7 +172,11 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
             model.setHeadline(jsonObject.getString(ComConstants.HEADLINE));
             model.setNbrSignedUp(jsonObject.getLong(ComConstants.NBR_OF_SIGNEDUP));
 
-            //TODO server: send date published as well to be able to get if it is published or not
+            //Date published might be null, which means that Activity has not been published yet
+            try {
+                Date published = DateHelper.StringDateToDate(jsonObject.getString(ComConstants.DATE_PUBLISHED));
+                model.setDatePublished(published);
+            } catch (ParseException e) {}
 
             try {
                 Date date = DateHelper.StringDateToDate(jsonObject.getString(ComConstants.DATE));
@@ -203,19 +225,13 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
 
     private void updateLocationList(String json) {
         locations = new HashMap<String, List<Location>>();
+        Log.i(TAG, "Locations: " + json);
 
-        // TODO server: send locations
-        // now as test
-        List<Location> l = new ArrayList<Location>();
-        l.add(new Location(1, "Malmö"));
-        l.add(new Location(2, "Lund"));
-        locations.put("Skane", l);
-        onLocationsRetrievalSuccess();
 
         // TODO this instead of test values
-       /* try {
+       try {
             JSONObject jsonObject = new JSONObject(json);
-            JSONArray mainArr = jsonObject.getJSONArray(ComConstants.ARRAY_MAINCATEGORY);
+            JSONArray mainArr = jsonObject.getJSONArray(ComConstants.ARRAY_LANDSCAPE);
 
             for (int i = 0; i < mainArr.length(); i++) {
                 JSONObject mainCat = mainArr.getJSONObject(i);
@@ -225,7 +241,7 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
                 locations.put(mainCatName, new ArrayList<Location>());
 
 
-                JSONArray subArr = mainCat.getJSONArray(ComConstants.ARRAY_SUBCATEGORY);
+                JSONArray subArr = mainCat.getJSONArray(ComConstants.ARRAY_CITY);
 
                 for (int y = 0; y < subArr.length(); y++) {
                     JSONObject subCat = subArr.getJSONObject(y);
@@ -249,7 +265,7 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
                 failMsg +=" : " + json;
 
             onRetrievalError(failMsg);
-        }*/
+        }
     }
 
 

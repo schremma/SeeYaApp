@@ -8,7 +8,6 @@ package com.group16.seeyaapp.communication;
  */
 
 public final class ComConstants {
-
     public static final String TYPE = "1";
     public static final String NEWUSER = "2";
     public static final String LOGIN ="3";
@@ -43,6 +42,11 @@ public final class ComConstants {
     public static final String ARRAY_HEADLINE = "32";
     public static final String NBR_OF_SIGNEDUP = "33";
     public static final String MY_ACTIVITIES = "34";
+    public static final String ARRAY_LANDSCAPE = "35";
+    public static final String ARRAY_CITY = "36";
+    public static final String LOGIN_OK = "37";
+    public static final String LOGIN_FAIL = "38";
+    public static final String DATE_PUBLISHED = "39";
 
     public static final String LOG_INFO = "100";
     public static final String LOG_ERROR = "101";

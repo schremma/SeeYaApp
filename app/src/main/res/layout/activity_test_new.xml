@@ -8,11 +8,28 @@
     android:layout_marginTop="16dp"
     >
 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:orientation="vertical">
+
     <Spinner
         android:id="@+id/spinnerLocations"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"/>
+        android:layout_marginBottom="20dp"/>
+
+
+        <EditText
+            android:id="@+id/txtusername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:hint="user name"
+            android:drawablePadding="8dp"
+            />
 
     <Button
         android:id="@+id/btnCreateActivity"
@@ -20,6 +37,7 @@
         android:layout_height="wrap_content"
         android:text="Create test activity"
         />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/txtActivity"

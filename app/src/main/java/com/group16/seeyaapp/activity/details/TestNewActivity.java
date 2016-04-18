@@ -44,6 +44,7 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
         btnCreate = (Button)findViewById(R.id.btnCreateActivity);
         btnPublish = (Button)findViewById(R.id.btnPublishActivity);
         tv = (TextView)findViewById(R.id.txtActivity);
+        spinnerLocations = (Spinner) findViewById(R.id.spinnerLocations);
 
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
@@ -61,7 +62,6 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
                 activity = new Activity();
                 activity.setSubcategory(subCatId);
 
-                spinnerLocations = (Spinner) findViewById(R.id.spinnerLocations);
                 spinnerLocations.setVisibility(View.VISIBLE);
 
                 spinnerLocations.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -155,15 +155,23 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
     // The view is to display an already created activity
     @Override
     public void displayActivityDetails(Activity activity) {
-        TextView tvId = (TextView)findViewById(R.id.txtActivityId);
+
         this.activity = activity;
-        tv.setText("Activity details are shown here...");
-        tvId.setText("Id: " + activity.getId());
+        spinnerLocations.setVisibility(View.INVISIBLE);
+
+        if (activity.getDatePublished() != null) {
+            btnPublish.setVisibility(View.INVISIBLE);
+        }
+
+        tv.setText(activity.toString());
+
     }
 
     @Override
     public void updatePublishedStatus(boolean published) {
         if (published) {
+            activity.setDatePublished(new Date());
+            tv.setText(activity.toString());
             btnPublish.setVisibility(View.INVISIBLE);
             Toast toast = Toast.makeText(this, "Activity has been published!", Toast.LENGTH_SHORT);
             toast.show();

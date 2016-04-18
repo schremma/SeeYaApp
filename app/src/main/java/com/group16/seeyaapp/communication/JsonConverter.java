@@ -50,7 +50,7 @@ public final class JsonConverter {
         return json;
     }
 
-    public static String jsonify(Activity activity) {
+    public static String jsonify(Activity activity, long locationId) {
         String json = null;
         try
         {
@@ -58,7 +58,7 @@ public final class JsonConverter {
             jsonObject.put(ComConstants.TYPE, ComConstants.NEWACTIVITY);
 
             jsonObject.put(ComConstants.NAME, activity.getOwner());
-            jsonObject.put(ComConstants.PLACE, activity.getLocation());
+            jsonObject.put(ComConstants.PLACE, locationId);
             jsonObject.put(ComConstants.SUBCATEGORY, activity.getSubcategory());
             jsonObject.put(ComConstants.MAX_NBROF_PARTICIPANTS, activity.getMaxNbrOfParticipants());
             jsonObject.put(ComConstants.MIN_NBR_OF_PARTICIPANTS, activity.getMinNbrOfParticipants());

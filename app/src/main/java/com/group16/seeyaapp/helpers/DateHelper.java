@@ -10,7 +10,7 @@ import java.util.Date;
  */
 public final class DateHelper {
     final static String DATEFORMAT = "yyyy-MM-dd";
-    final static String TIMEORMAT = "hh:mm:ss";
+    final static String TIMEFORMAT = "hh:mm:ss";
 
     public static String DateToDateOnlyString(Date date) {
         DateFormat formatter = new SimpleDateFormat(DATEFORMAT);
@@ -18,7 +18,7 @@ public final class DateHelper {
     }
 
     public static String DateToTimeOnlyString(Date time) {
-        DateFormat formatter = new SimpleDateFormat(TIMEORMAT);
+        DateFormat formatter = new SimpleDateFormat(TIMEFORMAT);
         return formatter.format(time);
     }
 
@@ -28,7 +28,7 @@ public final class DateHelper {
     }
 
     public static Date StringTimeToDate(String timeStr) throws ParseException {
-        DateFormat format = new SimpleDateFormat(DATEFORMAT);
+        DateFormat format = new SimpleDateFormat(TIMEFORMAT);
         return format.parse(timeStr);
     }
 }
