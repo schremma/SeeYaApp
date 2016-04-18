@@ -57,6 +57,7 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
 
         btnCreate = (Button)findViewById(R.id.btnCreateActivity);
         btnPublish = (Button)findViewById(R.id.btnPublishActivity);
+        btnPublish.setVisibility(View.INVISIBLE);
         tv = (TextView)findViewById(R.id.txtActivity);
         spinnerLocations = (Spinner) findViewById(R.id.spinnerLocations);
         createViewContainer = (LinearLayout)findViewById(R.id.createActivityContainer);
@@ -206,6 +207,10 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
         if (activity.getDatePublished() != null) {
             btnPublish.setVisibility(View.INVISIBLE);
         }
+        else {
+            btnPublish.setVisibility(View.VISIBLE);
+        }
+
 
         tv.setText(activity.toString());
 
