@@ -25,7 +25,7 @@ public class CommunicationService extends Service {
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
     private Socket socket;
-    private String ip = "10.0.2.2"; //localhost from emulator
+    private String ip = "172.20.10.9"; //localhost from emulator
     private int port = 7500;
 
     private DataInputStream dis;
