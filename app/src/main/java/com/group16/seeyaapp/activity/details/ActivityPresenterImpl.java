@@ -88,11 +88,6 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
         //TODO get json from server instead:
         sendJsonString(json);
 
-//        // Test activity for now
-//        model = new Activity();
-//        model.setId(activityId);
-//        model.setHeadline("Test activity");
-//        view().displayActivityDetails(model);
     }
 
     @Override
@@ -162,7 +157,6 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
             //TODO main category and subcategory string
             model.setSubcategoryString(jsonObject.getString(ComConstants.SUBCATEGORY));
 
-            //TODO location string
             model.setLocation(jsonObject.getString(ComConstants.PLACE));
             model.setMaxNbrOfParticipants(jsonObject.getInt(ComConstants.MAX_NBROF_PARTICIPANTS));
             model.setMinNbrOfParticipants(jsonObject.getInt(ComConstants.MIN_NBR_OF_PARTICIPANTS));
