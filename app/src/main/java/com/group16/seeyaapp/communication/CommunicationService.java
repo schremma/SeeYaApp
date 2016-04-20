@@ -28,6 +28,7 @@ public class CommunicationService extends Service {
     private String ip = "10.0.2.2"; //localhost from emulator
     private int port = 7500;
 
+
     private DataInputStream dis;
     private DataOutputStream dos;
 
