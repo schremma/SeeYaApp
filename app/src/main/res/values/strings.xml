@@ -11,4 +11,8 @@
     <string name="favourite">Favourite</string>
     <string name="location">Location</string>
     <string name="sports">Sports</string>
+    <string name="loginBtn">Login</string>
+    <string name="btnRegister">Register</string>
+    <string name="viewCreated">View created activities</string>
+    <string name="createNew">Create New activity</string>
 </resources>

@@ -6,14 +6,15 @@
     android:gravity="center"
     android:orientation="vertical"
     android:layout_marginTop="16dp"
-    >
+    android:weightSum="1">
 
 
     <Spinner
         android:id="@+id/spinnerMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="30dp"
+        android:layout_weight="0.40" />
 
     <Spinner
         android:id="@+id/spinnerSub"

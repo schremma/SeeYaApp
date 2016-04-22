@@ -24,7 +24,8 @@
         android:id="@+id/signIn"
         android:layout_marginTop="250dp"
         android:background= "@drawable/rounded_green_rectangle"
-        android:onClick="signIn"/>
+        android:onClick="signIn"
+        android:layout_centerHorizontal="true"/>
 
 
     <Button
@@ -37,7 +38,8 @@
         android:layout_marginTop="30dp"
         android:layout_below="@+id/signUp"
         android:background= "@drawable/rounded_green_rectangle"
-        android:onClick="signUp"/>
+        android:onClick="signUp"
+        android:layout_centerHorizontal="true"/>
 
 
 
