@@ -20,13 +20,13 @@
 
         <service android:name=".communication.CommunicationService" />
 
-        <activity android:name=".login.TestLoginActivity" />
-        <activity android:name=".register.TestRegisterActivity" />
-        <activity android:name=".activity.categories.TestCategoriesActivity" />
+        <activity android:name=".login.TestLoginActivity"/>
+        <activity android:name=".register.TestRegisterActivity"/>
+        <activity android:name=".activity.categories.TestCategoriesActivity"/>
         <!--<activity android:name=".main.MainActivity" />-->
-        <activity android:name=".activity.details.TestNewActivity" />
+        <activity android:name=".activity.details.TestNewActivity"/>
          <activity android:name=".activity.list.TestListActivity"></activity>
-        <activity android:name=".navigation.TestCreatePage" />
+        <activity android:name=".navigation.TestCreatePage"/>
         <activity android:name=".navigation.DemoPage"></activity>
     </application>
 
