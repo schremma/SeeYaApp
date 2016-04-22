@@ -40,7 +40,7 @@
         android:singleLine="true"
         android:background="@drawable/rounded_white_rectangle"
         android:layout_below="@+id/signInText"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="140dp"
         android:layout_centerHorizontal="true">
         <requestFocus />
     </EditText>
