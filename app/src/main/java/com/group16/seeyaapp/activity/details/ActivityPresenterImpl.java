@@ -38,7 +38,7 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
     private HashMap<String, List<Location>> locations;
     private String locationsVersion;
 
-    private boolean editing;
+    private boolean editing;    // TODO Remove these?
     private ActionType actionType;
 
     @Override
@@ -81,6 +81,8 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
     @Override
     public void onPublishActivity(long activityId) {
         String json = JsonConverter.publishActivityJson(activityId);
+
+        // TODO add possibility to publish activity to specific users
         actionType = ActionType.Publish;
         sendJsonString(json);
     }
@@ -101,11 +103,19 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
             retrieveLocations();
     }
 
+    @Override
+    public void checkIfUserExists(String userName) {
+        // TODO implement
+        String json = JsonConverter.userExistsJson(userName);
+        sendJsonString(json);
+    }
+
     /**
      * The json response could be:
      * 1. CONFIRMATION
      *      1a: confirmation that an activity has been created
      *      1b: confirmation that an activity has been published
+     *      1c: confirmation that a user exists (a user to publish an activity to)
      * 2. LOCATIONS
      *      2a: an array with locations
      *      2b: a confirmation that we already have the right version
@@ -125,14 +135,19 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
 
                 String message =  (String)jsonObject.get(ComConstants.MESSAGE);
 
-                onActionSuccess(message);
+                view().updatePublishedStatus(true);
+                //onActionSuccess(message);
             }
             else if (msgType.equals(ComConstants.NEW_ACTIVTIY_CONFIRMATION)) {
                 // TODO no need of action check in onActionSuccess anymore
 
                 String message = (String) jsonObject.get(ComConstants.MESSAGE);
-
-                onActionSuccess(message);
+                view().updateCreateStatus(true);
+                //onActionSuccess(message);
+            }
+            else if (msgType.equals(ComConstants.USER_EXISTS)) {
+                String username =  (String)jsonObject.get(ComConstants.USERNAME);
+                onUserExistConfirmed(true, username);
             }
             else if (msgType.equals(ComConstants.LOCATIONS)) {
                 updateLocationList(json);
@@ -169,6 +184,10 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
                 String message =  (String)jsonObject.get(ComConstants.MESSAGE);
                 onActionFail(message);
             }
+            else if (msgType.equals(ComConstants.INVALID_USERNAME)){
+                String username =  (String)jsonObject.get(ComConstants.USERNAME);
+                onUserExistConfirmed(false, username);
+            }
             else {
                 String message =  (String)jsonObject.get(ComConstants.MESSAGE);
                 onActionFail(message);
@@ -184,6 +203,10 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
             onActionFail(failMsg);
         }
 
+    }
+
+    private void onUserExistConfirmed(boolean exists, String username) {
+        // TODO call view method to confirm user existence or notify of wrong user name
     }
 
     private void setActivity(String json) {

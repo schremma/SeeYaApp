@@ -170,6 +170,31 @@ public final class JsonConverter {
         return json;
     }
 
+    public static String getFilteredHeadlinesJson(Filter filter, String userName) {
+        String json = null;
+        try
+        {
+            JSONObject jsonObject = new JSONObject();
+
+            switch (filter) {
+                case CategoriesForInvitedToActivities:
+                    jsonObject.put(ComConstants.TYPE, ComConstants.GET_HEADLINES_FOR_CATEGORY);
+                    break;
+                case CategoriesForOwnActivities:
+                    jsonObject.put(ComConstants.TYPE, ComConstants.GET_HEADLINES_FOR_CATEGORY_FOR_OWN_ACTIVITIES);
+                    break;
+            }
+
+            jsonObject.put(ComConstants.USERNAME, userName);
+
+            json = jsonObject.toString();
+        }
+        catch (JSONException e) {
+            Log.d(TAG, e.getMessage());}
+
+        return json;
+    }
+
     public static String getLocationsJson(String version) {
         String json = null;
         try
@@ -210,6 +235,22 @@ public final class JsonConverter {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put(ComConstants.TYPE, ComConstants.MY_ACTIVITIES);
             jsonObject.put(ComConstants.USERNAME, ownerUserName);
+
+            json = jsonObject.toString();
+        }
+        catch (JSONException e) {
+            Log.d(TAG, e.getMessage());}
+
+        return json;
+    }
+
+    public static String userExistsJson(String userName) {
+        String json = null;
+        try
+        {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(ComConstants.TYPE, ComConstants.CHECK_IF_USER_EXISTS);
+            jsonObject.put(ComConstants.USERNAME, userName);
 
             json = jsonObject.toString();
         }

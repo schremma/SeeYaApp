@@ -202,11 +202,13 @@ public class MainListPresenterImpl extends CommunicatingPresenter<MainListView, 
 
         // TODO: add categoriesForInvitedTo
 
+        SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
+        String currentUser = preferences.getString(LocalConstants.SP_CURRENT_USER, null);
+
         switch (activityListFilter) {
             case CategoriesForOwnActivities:
                 // TODO send json to get only those categories in which the user has created at least one activity
-                // json with "getCategoriesWithActivities
-                // getCategoriesWithOwnActivities: username"
+                JsonConverter.getFilteredCategoriesJson(activityListFilter, currentUser);
                 break;
             case CategoriesForPastActivties:
                 break;
@@ -236,16 +238,6 @@ public class MainListPresenterImpl extends CommunicatingPresenter<MainListView, 
         else {
             // TODO call view to show error message
         }
-
-//        //TODO send json to server
-//        switch (listFilter) {
-//            case CategoriesForInvitedToActivities:
-//                // getHeadlinesForCategory: id, username
-//                break;
-//            case CategoriesForOwnActivities:
-//                // getHeadlinesForCategoryForOwnActivities: id, username
-//                break;
-//        }
 
     }
 }

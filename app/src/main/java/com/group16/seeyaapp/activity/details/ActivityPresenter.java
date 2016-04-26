@@ -22,4 +22,6 @@ public interface ActivityPresenter {
     // The user wants to fill in an empty form to be able to create a new activity
     void aboutToCreateActivity();
 
+    void checkIfUserExists(String userName);
+
 }

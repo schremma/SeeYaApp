@@ -107,16 +107,24 @@ public class ActivityListPresenterImpl extends CommunicatingPresenter<ActivityLi
     public void bindView(@NonNull ActivityListView view) {
         super.bindView(view);
 
-        if (ids == null)    // TODO rewrite this
+        if (ids == null)    // TODO rewrite this (aboutToListActivities() is used instead)
             retrieveHeadlines();
     }
 
     private void retrieveHeadlines() {
-        //TODO some check to determine what kind of headlines to be retrieved
-        // here: all activities created by logged in user
         final SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
         String currentUser = preferences.getString("currentUser", null);
 
+        //TODO some check to determine what kind of headlines to be retrieved
+//        switch (listFilter) {
+//            case CategoriesForInvitedToActivities:
+//            case CategoriesForOwnActivities:
+//                JsonConverter.getFilteredHeadlinesJson(filter, currentUser);
+//                break;
+//        }
+
+
+        // TODO as a test now, we get all activities created by logged in user
         String json = JsonConverter.getOwnActivityHeadlinesJson(currentUser);
         sendJsonString(json);
     }
