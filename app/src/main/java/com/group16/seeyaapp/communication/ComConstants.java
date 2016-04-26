@@ -8,6 +8,7 @@ package com.group16.seeyaapp.communication;
  */
 
 public final class ComConstants {
+
     public static final String TYPE = "1";
     public static final String NEWUSER = "2";
     public static final String LOGIN ="3";
@@ -16,9 +17,9 @@ public final class ComConstants {
     public static final String USERNAME = "6";
     public static final String PASSWORD = "7";
     public static final String EMAIL = "8";
-    public static final String CONFIRMATION = "9";
+    public static final String CONFIRMATION = "9";			//TODO remove?
     public static final String MESSAGE = "10";
-    public static final String CONFIRMATION_TYPE = "11";
+    public static final String CONFIRMATION_TYPE = "11";	//TODO remove?
     public static final String ERROR = "12";
     public static final String ERROR_TYPE = "13";
     public static final String NEWACTIVITY = "14";
@@ -36,7 +37,7 @@ public final class ComConstants {
     public static final String ACTIVITY_CATEGORIES = "26";
     public static final String LOCATIONS = "27";
     public static final String MAINCATEGORY = "28";
-    public static final String VERSION_NBR = "29";
+    public static final String LOCATIONS_VERSION_NBR = "29";
     public static final String ARRAY_SUBCATEGORY = "30";
     public static final String ARRAY_MAINCATEGORY = "31";
     public static final String ARRAY_HEADLINE = "32";
@@ -47,7 +48,14 @@ public final class ComConstants {
     public static final String LOGIN_OK = "37";
     public static final String LOGIN_FAIL = "38";
     public static final String DATE_PUBLISHED = "39";
+    public static final String LOCATIONS_CONFIRMATION = "40";
+    public static final String CATEGORIES_CONFIRMATION = "41";
+    public static final String CATEGORIES_VERSION_NUMBER = "42";
+    public static final String SIGNUP = "43";
+    public static final String UNREGISTER = "44";
+    public static final String SIGNUP_CONFIRMATION = "45";
+    public static final String SIGNUP_ERROR = "46";
 
-    public static final String LOG_INFO = "100";
-    public static final String LOG_ERROR = "101";
+    public static final String LOG_INFO = "INFO";
+    public static final String LOG_ERROR = "ERROR";
 }

@@ -9,7 +9,6 @@ import com.google.common.primitives.Ints;
 import com.group16.seeyaapp.communication.ComConstants;
 import com.group16.seeyaapp.communication.CommunicatingPresenter;
 import com.group16.seeyaapp.communication.JsonConverter;
-import com.group16.seeyaapp.model.Activity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,10 +20,12 @@ import java.util.List;
 /**
  * Created by Andrea on 15/04/16.
  */
-public class ActivityListPresenterImpl extends CommunicatingPresenter<ActivityListView, List<Activity>> implements ActivityListPresenter  {
+public class ActivityListPresenterImpl extends CommunicatingPresenter<ActivityListView, Filter> implements ActivityListPresenter  {
     private List<String> headlines;
     private List<String> dates;
     private List<Integer> ids;
+
+    private int listGroupId;
 
     private static final String TAG = "ActivityListPresenter";
 
@@ -32,7 +33,21 @@ public class ActivityListPresenterImpl extends CommunicatingPresenter<ActivityLi
 
     @Override
     public void onActivitySelected(int activityId) {
+
+        // TODO navigate to different kinds of displays based on model (list filter)
+        // i.e. if it concerns own editable activities (before publishing them) - ActivityView
+        // but if it concerns non-editable activities - DetailView
         view().navigateToActivityDisplay(activityId);
+    }
+
+    @Override
+    public void aboutToListActivities(int groupId, Filter listFilter) {
+        model = listFilter;
+        listGroupId = groupId;
+
+        // TODO implement retrieving headlines according to filter and groupId
+        // instead of just retrieving all activities owned by the current user
+        retrieveHeadlines();
     }
 
     /**
@@ -92,7 +107,7 @@ public class ActivityListPresenterImpl extends CommunicatingPresenter<ActivityLi
     public void bindView(@NonNull ActivityListView view) {
         super.bindView(view);
 
-        if (ids == null)
+        if (ids == null)    // TODO rewrite this
             retrieveHeadlines();
     }
 

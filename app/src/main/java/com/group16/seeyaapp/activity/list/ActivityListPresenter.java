@@ -8,4 +8,6 @@ public interface ActivityListPresenter {
 
     // The user has chosen one of the listed activities to be able to see the details
     void onActivitySelected(int activityId);
+
+    void aboutToListActivities(int groupId, Filter listFilter);
 }

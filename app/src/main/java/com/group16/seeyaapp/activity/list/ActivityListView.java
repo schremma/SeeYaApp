@@ -5,8 +5,8 @@ package com.group16.seeyaapp.activity.list;
  */
 public interface ActivityListView {
 
-    // Show a list of actvities, displaying the headline and the date for each.
-    // Keep track of the associated id as well to send it to presenter when an
+    // Show a list of activities, displaying the headline and the date for each.
+    // The view should keep track of the associated id as well to send it to presenter when an
     // activity has been selected.
     // Info for each activity is stored at the same index position in each array
     // i.e. for the first activity on the list has headlines[0], dates[0] and ids[0]
@@ -14,7 +14,7 @@ public interface ActivityListView {
     void setHeadlineList(String[] headlines, String[] dates, int[] ids);
 
     // The user has selected a specific list item ->
-    // navigate to the view that dsiplayes the selected activity
+    // navigate to the view that displays the selected activity
     // and send the id of the activity to that view
     void navigateToActivityDisplay(int activityId);
 

@@ -49,6 +49,13 @@ public class TestRegisterActivity extends AppCompatActivity implements RegisterV
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        PresenterManager.getInstance().savePresenter(presenter, outState);
+    }
+
+    @Override
     public void onClick(View v) {
         presenter.registerNewUser(username.getText().toString(), email.getText().toString(), password.getText().toString());
     }

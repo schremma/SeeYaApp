@@ -75,6 +75,11 @@ public class Activity {
         return (today.after(date));
     }
 
+    // True if at least one more participant can still sign up
+    public boolean stillHasSpace() {
+        return maxNbrOfParticipants > nbrSignedUp;
+    }
+
     //region Getters and setters for all fields
     public String getOwner() {
         return owner;

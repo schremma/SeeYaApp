@@ -71,6 +71,13 @@ public class TestCategoriesActivity extends AppCompatActivity implements Categor
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        PresenterManager.getInstance().savePresenter(presenter, outState);
+    }
+
+    @Override
     public void setMainCategories(String[] mainCategories) {
 
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mainCategories);

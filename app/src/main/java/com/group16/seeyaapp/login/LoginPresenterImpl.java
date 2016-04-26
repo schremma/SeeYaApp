@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.group16.seeyaapp.LocalConstants;
 import com.group16.seeyaapp.communication.ComConstants;
 import com.group16.seeyaapp.communication.CommunicatingPresenter;
 import com.group16.seeyaapp.communication.JsonConverter;
@@ -77,8 +78,9 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, UserLo
 
             if (msgType.equals(ComConstants.CONFIRMATION)) {
                 String confirmationType = (String)jsonObject.get(ComConstants.CONFIRMATION_TYPE);
+                if (confirmationType.equals(ComConstants.LOGIN_OK)) {
 
-                // on success, it would also contain an auth token (?) that we would save in shared preferences
+                    // on success, it would also contain an auth token (?) that we would save in shared preferences
                     /*String mockAuthToken = "whatever";
 
                     final SharedPreferences prefs = new ObscuredSharedPreferences(
@@ -86,11 +88,12 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, UserLo
 
                     prefs.edit().putString("authToken", mockAuthToken).commit();*/
 
-                // And store username also for later use
-                final SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
-                preferences.edit().putString("currentUser", model.getUserName()).commit();
+                    // And store username also for later use
+                    final SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
+                    preferences.edit().putString(LocalConstants.SP_CURRENT_USER, model.getUserName()).commit();
 
-                loginSuccess();
+                    loginSuccess();
+                }
             }
             else {
                 String message =  (String)jsonObject.get(ComConstants.MESSAGE);
@@ -100,7 +103,7 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, UserLo
         catch(JSONException e)
         {
             Log.i(TAG, e.getMessage());
-            String failMsg = "UserLogin failed";
+            String failMsg = "Login failed";
             if (loginResultJson != null)
                 failMsg +=" : " + loginResultJson;
 

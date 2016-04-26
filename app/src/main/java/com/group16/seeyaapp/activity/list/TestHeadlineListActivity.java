@@ -19,16 +19,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class TestListActivity extends AppCompatActivity implements ActivityListView {
+public class TestHeadlineListActivity extends AppCompatActivity implements ActivityListView{
+
     private ActivityListPresenterImpl presenter;
     private ListView listview;
     private HashMap map = new HashMap<String, Integer>();
+
+    private Filter listFilter;
+    private int groupId;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test_list);
+        setContentView(R.layout.activity_test_headline_list);
 
         if (savedInstanceState == null) {
             presenter = new ActivityListPresenterImpl();
@@ -49,10 +53,23 @@ public class TestListActivity extends AppCompatActivity implements ActivityListV
                 final String item = (String) parent.getItemAtPosition(position);
 
                 int idInt = (int)map.get(item);
+
                 presenter.onActivitySelected(idInt);
             }
 
         });
+
+
+        Intent intent = getIntent();
+        if (intent.getExtras() != null) {
+
+
+            groupId = intent.getIntExtra("groupId", -1);
+            listFilter = (Filter) intent.getSerializableExtra("listFilter");
+
+            Log.i("HeadlineListActivity", "Got extras: " + groupId + ", " + listFilter.name());
+
+        }
     }
 
     @Override
@@ -92,6 +109,10 @@ public class TestListActivity extends AppCompatActivity implements ActivityListV
         super.onResume();
 
         presenter.bindView(this);
+
+        if (listFilter != null) {
+            presenter.aboutToListActivities(groupId, listFilter);
+        }
     }
 
     @Override

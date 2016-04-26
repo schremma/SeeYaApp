@@ -48,5 +48,17 @@
         android:typeface="serif"
         />
 
+    <Button
+        android:id="@+id/btnGoToBrowseActivities"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/goToBrowseActivities"
+        android:background="@drawable/rounded_green_rectangle"
+        android:layout_marginTop="32dp"
+        android:layout_below="@+id/btnGoToCreatePage"
+        android:textSize="20sp"
+        android:typeface="serif"
+        />
+
 
 </RelativeLayout>

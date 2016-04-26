@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".main.MainActivity">
+        <activity android:name=".navigation.DemoPage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,24 +18,34 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".communication.CommunicationService"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <service
+            android:name=".communication.CommunicationService"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
 
-        <activity android:name=".login.TestLoginActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
-        <activity android:name=".register.TestRegisterActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
-        <activity android:name=".activity.categories.TestCategoriesActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
-        <!--<activity android:name=".main.MainActivity" />-->
-        <activity android:name=".activity.details.TestNewActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
-         <activity android:name=".activity.list.TestListActivity"
-             android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
-        <activity android:name=".navigation.TestCreatePage"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
-        <activity android:name=".navigation.DemoPage"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+        <activity
+            android:name=".login.TestLoginActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".register.TestRegisterActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".activity.categories.TestCategoriesActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".main.MainActivity" />
+        <activity
+            android:name=".activity.details.TestNewActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".activity.list.TestListActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".navigation.TestCreatePage"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <!--<activity-->
+            <!--android:name=".navigation.DemoPage"-->
+            <!--android:theme="@style/Theme.AppCompat.NoActionBar" />-->
+         <activity android:name=".activity.list.mainlist.TestMainListActivity"></activity>
+        <activity android:name=".activity.list.TestHeadlineListActivity"></activity>
     </application>
 
 </manifest>

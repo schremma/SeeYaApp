@@ -11,6 +11,7 @@ import java.util.Date;
 public final class DateHelper {
     final static String DATEFORMAT = "yyyy-MM-dd";
     final static String TIMEFORMAT = "hh:mm:ss";
+    final static String FULL_DATEFORMAT = "yyyy-MM-dd hh:mm:ss";
 
     public static String DateToDateOnlyString(Date date) {
         DateFormat formatter = new SimpleDateFormat(DATEFORMAT);
@@ -30,5 +31,15 @@ public final class DateHelper {
     public static Date StringTimeToDate(String timeStr) throws ParseException {
         DateFormat format = new SimpleDateFormat(TIMEFORMAT);
         return format.parse(timeStr);
+    }
+
+    public static Date CompleteStringDateToDate(String dateStr) throws ParseException {
+        DateFormat format = new SimpleDateFormat(FULL_DATEFORMAT);
+        return format.parse(dateStr);
+    }
+
+    public static String CompleteDateToString(Date date) {
+        DateFormat formatter = new SimpleDateFormat(FULL_DATEFORMAT);
+        return formatter.format(date);
     }
 }

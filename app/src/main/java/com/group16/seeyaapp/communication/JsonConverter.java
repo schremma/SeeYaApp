@@ -92,13 +92,15 @@ public final class JsonConverter {
         return json;
     }
 
-    public static String getCategoriesJson(int versionNbr) {
+    public static String signUpForActivityJson(long activityId, String username) {
         String json = null;
         try
         {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put(ComConstants.TYPE, ComConstants.ACTIVITY_CATEGORIES);
-            jsonObject.put(ComConstants.VERSION_NBR, versionNbr);
+            jsonObject.put(ComConstants.TYPE, ComConstants.SIGNUP);
+
+            jsonObject.put(ComConstants.ID, activityId);
+            jsonObject.put(ComConstants.USERNAME, username);
 
             json = jsonObject.toString();
         }
@@ -108,13 +110,47 @@ public final class JsonConverter {
         return json;
     }
 
-    public static String getLocationsJson(int versionNbr) {
+    public static String unregisterFromActivityJson(long activityId, String username) {
         String json = null;
         try
         {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put(ComConstants.TYPE, ComConstants.LOCATIONS);
-            jsonObject.put(ComConstants.VERSION_NBR, versionNbr);
+            jsonObject.put(ComConstants.TYPE, ComConstants.UNREGISTER);
+
+            jsonObject.put(ComConstants.ID, activityId);
+            jsonObject.put(ComConstants.USERNAME, username);
+
+            json = jsonObject.toString();
+        }
+        catch (JSONException e) {
+            Log.d(TAG, e.getMessage());}
+
+        return json;
+    }
+
+    public static String getCategoriesJson(String version) {
+        String json = null;
+        try
+        {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(ComConstants.TYPE, ComConstants.CATEGORIES_VERSION_NUMBER);
+            jsonObject.put(ComConstants.ID, version);
+
+            json = jsonObject.toString();
+        }
+        catch (JSONException e) {
+            Log.d(TAG, e.getMessage());}
+
+        return json;
+    }
+
+    public static String getLocationsJson(String version) {
+        String json = null;
+        try
+        {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(ComConstants.TYPE, ComConstants.LOCATIONS_VERSION_NBR);
+            jsonObject.put(ComConstants.ID, version);
 
             json = jsonObject.toString();
         }
@@ -130,7 +166,6 @@ public final class JsonConverter {
         {
             JSONObject jsonObject = new JSONObject();
 
-            //TODO check if it is right
             jsonObject.put(ComConstants.TYPE, ComConstants.ACTIVITIY);
             jsonObject.put(ComConstants.ID, activityId);
 

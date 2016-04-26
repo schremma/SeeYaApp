@@ -1,84 +1,45 @@
-package com.group16.seeyaapp.activity.categories;
+package com.group16.seeyaapp.activity.list.mainlist;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.group16.seeyaapp.LocalConstants;
+import com.group16.seeyaapp.activity.list.Filter;
 import com.group16.seeyaapp.communication.ComConstants;
 import com.group16.seeyaapp.communication.CommunicatingPresenter;
 import com.group16.seeyaapp.communication.JsonConverter;
 import com.group16.seeyaapp.helpers.DateHelper;
-import com.group16.seeyaapp.model.NestedCategory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Created by Andrea on 14/04/16.
+ * Created by Andrea on 25/04/16.
  */
-public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, String> implements CategoryPresenter {
-    private static final String TAG = "CategoryPresenter";
+public class MainListPresenterImpl extends CommunicatingPresenter<MainListView, String> implements MainListPresenter {
+    private static final String TAG = "MainListPresenter";
 
-    private List<NestedCategory> maincategoryList;
-    private List<NestedCategory> subcategoryList;
+    private List<String> listHeader;
+    private HashMap<String, List<String>> listChild;
+    private List<Map.Entry<String,Integer>> idStringPairs= new ArrayList<>(); //ids corresponding to strings in listChild
+
     private String categoriesVersion;
 
-    /**
-     * When the user has selected a main catgory,
-     * a list with all the subcategories under this main category
-     * is sent to the view.
-     * @param mainCategory
-     */
-    @Override
-    public void mainCategorySelected(String mainCategory) {
 
-        if (mainCategory != null) {
-            model = mainCategory;
-            List<String> subcategories = new ArrayList<String>();
-
-            for (NestedCategory c : subcategoryList) {
-                if (c.getParentName().equals(mainCategory)) {
-                    subcategories.add(c.getName());
-                }
-            }
-
-            view().setSubcategories(subcategories.toArray(new String[subcategories.size()]));
-        }
-    }
-
-    @Override
-    public void pressedNext(String selectedSubcategory) {
-
-        int id = -1;
-
-        for(int i = 0; i < subcategoryList.size() &&  id == -1; i++) {
-            if(subcategoryList.get(i).getName().equals(selectedSubcategory)) {
-                id = subcategoryList.get(i).getId();
-                Log.i(TAG, "Selected subcategory: " + subcategoryList.get(i).getName());
-
-                model = selectedSubcategory;
-            }
-        }
-
-        if (id != -1) {
-            view().navigateToCreateActivityDetails(id);
-        }
-        else
-            view().showError("Select a main and a subcategory");
-
-    }
 
     /**
      * The json String returned form the server might be:
-     * 1. ARRAY_MAINCATEGORY: a list with up-t-date main and subcategories
+     * 1. ARRAY_MAINCATEGORY: a list with up-to-date main and subcategories
      * 2. a confirmation that we already have the right version of categories
      * @param json
      */
@@ -93,11 +54,10 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
 
             if (msgType.equals(ComConstants.ACTIVITY_CATEGORIES)) {
 
-                Log.i(TAG, "Categories update");
+                Log.i(TAG, "Categories update...");
 
                 jsonToCategories(jsonObject);
 
-                //add the version number as well to local storage, got from the server
                 String version = jsonObject.getString(ComConstants.CATEGORIES_VERSION_NUMBER);
                 Log.i(TAG, "Categories version: " + version);
 
@@ -105,10 +65,11 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
                 preferences.edit().putString(LocalConstants.SP_CATEGORIES, json).commit();
                 preferences.edit().putString(LocalConstants.SP_CATEGORIES_CHECK_DATE, DateHelper.CompleteDateToString(new Date())).commit();
                 preferences.edit().putString(LocalConstants.SP_VERSION_CATEGORIES, version).commit();
-                onRetrievalSuccess();
+                onUpdatedListData();
             }
             else if (msgType.equals(ComConstants.CATEGORIES_CONFIRMATION)) {
                 Log.i(TAG, "Categories already up-to-date");
+
 
                 // We already have the right version, just get it from local storage
                 SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
@@ -116,17 +77,16 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
 
                 if (categoriesVersion != null && versionInPrefs != null && categoriesVersion.equals(versionInPrefs)) {
                     // We already have the right version loaded in this instance
-                    Log.i(TAG, "categories in instance are up-to-date");
-
-                    onRetrievalSuccess();
+                    onUpdatedListData();
                 }
                 else {
                     String categoriesJsonString = preferences.getString(LocalConstants.SP_CATEGORIES, null);
                     JSONObject jsonCategories = new JSONObject(categoriesJsonString);
                     jsonToCategories(jsonCategories);
                     categoriesVersion = versionInPrefs;
-                    onRetrievalSuccess();
+                    onUpdatedListData();
                 }
+
             }
         }
         catch (JSONException e)
@@ -141,18 +101,19 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
     }
 
     private void jsonToCategories(JSONObject jsonObject) throws JSONException{
-        maincategoryList = new ArrayList<NestedCategory>();
-        subcategoryList = new ArrayList<NestedCategory>();
+        listHeader = new ArrayList<String>();
+        listChild = new HashMap<String, List<String>>();
 
         JSONArray mainArr = jsonObject.getJSONArray(ComConstants.ARRAY_MAINCATEGORY);
 
         for (int i = 0; i < mainArr.length(); i++) {
             JSONObject mainCat = mainArr.getJSONObject(i);
 
-            int mainCatId = mainCat.getInt(ComConstants.ID);
+            //int mainCatId = mainCat.getInt(ComConstants.ID);
             String mainCatName = mainCat.getString(ComConstants.NAME);
 
-            maincategoryList.add(new NestedCategory(mainCatId, mainCatName));
+            listHeader.add(mainCatName);
+            listChild.put(mainCatName, new ArrayList<String>());
 
 
             JSONArray subArr = mainCat.getJSONArray(ComConstants.ARRAY_SUBCATEGORY);
@@ -163,27 +124,25 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
                 int subCatId = subCat.getInt(ComConstants.ID);
                 String subCatName = subCat.getString(ComConstants.NAME);
 
-                subcategoryList.add(new NestedCategory(subCatId, subCatName, mainCatId, mainCatName));
+                listChild.get(mainCatName).add(subCatName);
+
+                idStringPairs.add(new AbstractMap.SimpleEntry<>(subCatName, subCatId));
             }
         }
     }
 
-    private void retrieveCategories() {
+
+    private void retrieveAllCategories() {
 
         SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
         boolean performCheckWithServer = true;
-
-//        //remove key from preferences
-//        SharedPreferences.Editor editor = preferences.edit();
-//        editor.remove(LocalConstants.SP_VERSION_CATEGORIES);
-//        editor.apply();
 
         String version = "0";
 
         if (preferences.contains(LocalConstants.SP_VERSION_CATEGORIES)) {
             version = preferences.getString(LocalConstants.SP_VERSION_CATEGORIES, "0");
 
-            // TODO decide if we need to check our version with server
+            // decide if we need to check our version with server
             if (preferences.contains(LocalConstants.SP_CATEGORIES_CHECK_DATE)) {
                 String lastCheckString = preferences.getString(LocalConstants.SP_CATEGORIES_CHECK_DATE, null);
 
@@ -205,7 +164,7 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
                             try {
                                 JSONObject jsonObject = new JSONObject(categoriesJson);
                                 jsonToCategories(jsonObject);
-                                onRetrievalSuccess();
+                                onUpdatedListData();
                             } catch (JSONException ex) {
                                 performCheckWithServer = true;
                             }
@@ -224,30 +183,69 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
         }
     }
 
-    private void onRetrievalSuccess() {
-        String[] mainArr = new String[maincategoryList.size()];
+    private void onUpdatedListData() {
 
-        int counter = 0;
-        for(NestedCategory c : maincategoryList) {
-            mainArr[counter] = c.getName();
-            counter++;
-        }
-
-        view().setMainCategories(mainArr);
+        view().setNestedListHeaders(listHeader, listChild);
     }
 
     private void onRetrievalError(String error) {
-        view().showError(error);
-    }
-
-    @Override
-    public void bindView(@NonNull CategoryView view) {
-        super.bindView(view);
-        retrieveCategories();
+        // TODO call view to show error message
     }
 
     @Override
     protected void updateView() {
+
+    }
+
+    @Override
+    public void aboutToListActivities(Filter activityListFilter) {
+
+        // TODO: add categoriesForInvitedTo
+
+        switch (activityListFilter) {
+            case CategoriesForOwnActivities:
+                // TODO send json to get only those categories in which the user has created at least one activity
+                // json with "getCategoriesWithActivities
+                // getCategoriesWithOwnActivities: username"
+                break;
+            case CategoriesForPastActivties:
+                break;
+            default:
+                retrieveAllCategories();
+                break;
+        }
+    }
+
+    @Override
+    public void selectedListItem(String selectedItem, Filter listFilter) {
+
+        // get id of selectedItem
+        int id = -1;
+        for (int i = 0; i < idStringPairs.size() && id == -1; i++) {
+            if (idStringPairs.get(i).getKey().equals(selectedItem)) {
+                id = idStringPairs.get(i).getValue();
+                Log.i(TAG, "selected list item id for " + idStringPairs.get(i).getKey() + ": " + id);
+            }
+        }
+
+        if (id != -1) {
+            // call view to navigate to a list with activity headlines, send selectedItem id and listFilter
+            view().navigateToHeadlineDisplay(id, listFilter);
+
+        }
+        else {
+            // TODO call view to show error message
+        }
+
+//        //TODO send json to server
+//        switch (listFilter) {
+//            case CategoriesForInvitedToActivities:
+//                // getHeadlinesForCategory: id, username
+//                break;
+//            case CategoriesForOwnActivities:
+//                // getHeadlinesForCategoryForOwnActivities: id, username
+//                break;
+//        }
 
     }
 }

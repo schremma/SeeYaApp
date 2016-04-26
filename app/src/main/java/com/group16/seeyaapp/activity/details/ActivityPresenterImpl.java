@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.group16.seeyaapp.LocalConstants;
 import com.group16.seeyaapp.communication.ComConstants;
 import com.group16.seeyaapp.communication.CommunicatingPresenter;
 import com.group16.seeyaapp.communication.JsonConverter;
@@ -24,15 +25,19 @@ import java.util.List;
 
 /**
  * Created by Andrea on 14/04/16.
- * If the presenter is to display a specific activity: it gets the whole activity from server
- * using the provided id
- * if it is to create a new activity, it gets the list of locations and sends it to the view.
+ * Manages the display of editable activities, i.e. activities the user himself or herself
+ * created but has not published yet, or activities that are in the process of being created by the user.
+ * If the presenter is to display a specific activity - a created but has not published one:
+ * it gets the whole activity from server using the provided id.
+ * If it is to create a new activity, it gets the list of locations and sends it to the view.
  * The view communicates to the presenter which if these two scenarios are to take place,
- * by calling the aboutTOPublishActivity() or aboutToCreateActivity(), just before it is displayed.
+ * by calling the aboutToPublishActivity() or aboutToCreateActivity(), just before it is displayed.
  */
 public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, Activity> implements ActivityPresenter {
     private static final String TAG = "ActivityPresenter";
     private HashMap<String, List<Location>> locations;
+    private String locationsVersion;
+
     private boolean editing;
     private ActionType actionType;
 
@@ -44,7 +49,7 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
             if (activity.validateActivity()) {
 
                 final SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
-                String currentUser = preferences.getString("currentUser", null);
+                String currentUser = preferences.getString(LocalConstants.SP_CURRENT_USER, null);
                 model.setOwner(currentUser);
 
                 //TODO find a better way to store locations to avoid this kind of iteration
@@ -85,7 +90,6 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
         editing = false;
         String json = JsonConverter.getActivityJson(activityId);
 
-        //TODO get json from server instead:
         sendJsonString(json);
 
     }
@@ -126,6 +130,27 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
             else if (msgType.equals(ComConstants.LOCATIONS)) {
                 updateLocationList(json);
             }
+            else if (msgType.equals(ComConstants.LOCATIONS_CONFIRMATION)) {
+                Log.i(TAG, "Locations already up-to-date");
+                // We already have the right version, just get it from local storage
+                // maybe we have even already have the right version in this instance
+
+                SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
+                String versionInPrefs = preferences.getString(LocalConstants.SP_VERSION_LOCATIONS, null);
+
+                if (locationsVersion != null && versionInPrefs != null && locationsVersion.equals(versionInPrefs)) {
+                    // We already have the right version loaded in this instance
+                    onLocationsRetrievalSuccess();
+                }
+                else {
+                    String locationsJsonString = preferences.getString(LocalConstants.SP_LOCATIONS, null);
+
+                    JSONObject jsonLocations = new JSONObject(locationsJsonString);
+                    jsonToLocations(jsonLocations);
+                    locationsVersion = versionInPrefs;
+                    onLocationsRetrievalSuccess();
+                }
+            }
             else if (msgType.equals(ComConstants.ACTIVITIY)) {
                 setActivity(json);
             }
@@ -137,7 +162,7 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
         catch(JSONException e)
         {
             Log.i(TAG, e.getMessage());
-            String failMsg = "Activity creation failed";
+            String failMsg = "Error";
             if (json != null)
                 failMsg +=" : " + json;
 
@@ -154,7 +179,7 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
             JSONObject jsonObject = new JSONObject(json);
             model.setId(jsonObject.getLong(ComConstants.ID));
 
-            //TODO main category and subcategory string
+            //TODO main category string (?)
             model.setSubcategoryString(jsonObject.getString(ComConstants.SUBCATEGORY));
 
             model.setLocation(jsonObject.getString(ComConstants.PLACE));
@@ -210,45 +235,76 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
     }
 
     private void retrieveLocations() {
-        // TODO: get version number from local storage
-        int versionNbr = 0;
 
-        String json = JsonConverter.getLocationsJson(versionNbr);
+        SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
+        boolean performCheckWithServer = true;
+
+
+        String version = "0";
+
+        if (preferences.contains(LocalConstants.SP_VERSION_LOCATIONS)) {
+            version = preferences.getString(LocalConstants.SP_VERSION_LOCATIONS, "0");
+
+            // decide if we need to check our version with server
+            if (preferences.contains(LocalConstants.SP_LOCATIONS_CHECK_DATE)) {
+                String lastCheckString = preferences.getString(LocalConstants.SP_LOCATIONS_CHECK_DATE, null);
+
+                try {
+                    Date lastCheck = DateHelper.CompleteStringDateToDate(lastCheckString);
+                    if (new Date().getTime() - lastCheck.getTime() < LocalConstants.VERSION_CHECK_INTERVAL) {
+                        performCheckWithServer = false;
+
+                        Log.i(TAG, String.format("Locations version: %s, last check was: %s, have to check with server: %b", version, DateHelper.CompleteDateToString(lastCheck), performCheckWithServer));
+                    }
+
+                } catch (ParseException e) {
+                }
+
+                if (!performCheckWithServer) {
+                    if (preferences.contains(LocalConstants.SP_CATEGORIES)) {
+                        String categoriesJson = preferences.getString(LocalConstants.SP_CATEGORIES, "null");
+                        if (categoriesJson != null) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(categoriesJson);
+                                jsonToLocations(jsonObject);
+                                onLocationsRetrievalSuccess();
+                            } catch (JSONException ex) {
+                                performCheckWithServer = true;
+                            }
+                        }
+                    } else {
+                        performCheckWithServer = true;
+                    }
+                }
+            }
+        }
+
+
+        if (performCheckWithServer) {
+        String json = JsonConverter.getLocationsJson(version);
         sendJsonString(json);
+        }
     }
 
     private void updateLocationList(String json) {
-        locations = new HashMap<String, List<Location>>();
+
         Log.i(TAG, "Locations: " + json);
 
 
-        // TODO this instead of test values
        try {
             JSONObject jsonObject = new JSONObject(json);
-            JSONArray mainArr = jsonObject.getJSONArray(ComConstants.ARRAY_LANDSCAPE);
-
-            for (int i = 0; i < mainArr.length(); i++) {
-                JSONObject mainCat = mainArr.getJSONObject(i);
-
-                //int mainCatId = mainCat.getInt(ComConstants.ID);
-                String mainCatName = mainCat.getString(ComConstants.NAME);
-                locations.put(mainCatName, new ArrayList<Location>());
+            jsonToLocations(jsonObject);
 
 
-                JSONArray subArr = mainCat.getJSONArray(ComConstants.ARRAY_CITY);
+           // add the version number as well, got from the server, now 0
+           String version = jsonObject.getString(ComConstants.LOCATIONS_VERSION_NBR);
+           Log.i(TAG, "Locations version: " + version);
 
-                for (int y = 0; y < subArr.length(); y++) {
-                    JSONObject subCat = subArr.getJSONObject(y);
+           SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
+           preferences.edit().putString(LocalConstants.SP_LOCATIONS, json).commit();
+           preferences.edit().putString(LocalConstants.SP_LOCATIONS_CHECK_DATE, DateHelper.CompleteDateToString(new Date())).commit();
+           preferences.edit().putString(LocalConstants.SP_VERSION_LOCATIONS, version).commit();
 
-                    int subCatId = subCat.getInt(ComConstants.ID);
-                    String subCatName = subCat.getString(ComConstants.NAME);
-
-                    Location sLocation = new Location(subCatId, subCatName);
-                    locations.get(mainCatName).add(sLocation);
-                }
-
-            }
-            //TODO store retrieved locations with version number somewhere locally
             onLocationsRetrievalSuccess();
         }
         catch (JSONException e)
@@ -259,6 +315,34 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
                 failMsg +=" : " + json;
 
             onRetrievalError(failMsg);
+        }
+    }
+
+    private void jsonToLocations(JSONObject jsonObject) throws JSONException {
+        locations = new HashMap<String, List<Location>>();
+
+        JSONArray mainArr = jsonObject.getJSONArray(ComConstants.ARRAY_LANDSCAPE);
+
+        for (int i = 0; i < mainArr.length(); i++) {
+            JSONObject mainCat = mainArr.getJSONObject(i);
+
+            //int mainCatId = mainCat.getInt(ComConstants.ID);
+            String mainCatName = mainCat.getString(ComConstants.NAME);
+            locations.put(mainCatName, new ArrayList<Location>());
+
+
+            JSONArray subArr = mainCat.getJSONArray(ComConstants.ARRAY_CITY);
+
+            for (int y = 0; y < subArr.length(); y++) {
+                JSONObject subCat = subArr.getJSONObject(y);
+
+                int subCatId = subCat.getInt(ComConstants.ID);
+                String subCatName = subCat.getString(ComConstants.NAME);
+
+                Location sLocation = new Location(subCatId, subCatName);
+                locations.get(mainCatName).add(sLocation);
+            }
+
         }
     }
 
@@ -286,7 +370,7 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
         super.bindView(view);
 
         //we do not need to retrieve locations if the activity is just displayed without editing
-        if (editing && locations == null)
+        if (editing)
             retrieveLocations();
     }
 
@@ -295,6 +379,7 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
     protected void updateView() {
 
     }
+
 
     private enum ActionType {
         CreateNew,
