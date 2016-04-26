@@ -110,6 +110,7 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
      *      2a: an array with locations
      *      2b: a confirmation that we already have the right version
      * 3. ACTIVITY: an already created activity that is to be displayed
+     * 4. ERROR
      * @param json
      */
     @Override
@@ -119,11 +120,17 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
             JSONObject jsonObject = new JSONObject(json);
             String msgType = (String)jsonObject.get(ComConstants.TYPE);
 
-            if (msgType.equals(ComConstants.CONFIRMATION)) {
-                // This could be a confirmation for both creating an activity or for publishing an activity
+            if (msgType.equals(ComConstants.PUBLISH_ACTIVITY_CONFIRMATION)) {
+                // TODO no need of action check in onActionSuccess anymore
 
-                String confirmationType = (String)jsonObject.get(ComConstants.CONFIRMATION_TYPE);
                 String message =  (String)jsonObject.get(ComConstants.MESSAGE);
+
+                onActionSuccess(message);
+            }
+            else if (msgType.equals(ComConstants.NEW_ACTIVTIY_CONFIRMATION)) {
+                // TODO no need of action check in onActionSuccess anymore
+
+                String message = (String) jsonObject.get(ComConstants.MESSAGE);
 
                 onActionSuccess(message);
             }
@@ -153,6 +160,14 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
             }
             else if (msgType.equals(ComConstants.ACTIVITIY)) {
                 setActivity(json);
+            }
+            else if (msgType.equals(ComConstants.PUBLISH_ACTIVITY_ERROR)){
+                String message =  (String)jsonObject.get(ComConstants.MESSAGE);
+                onActionFail(message);
+            }
+            else if (msgType.equals(ComConstants.NEW_ACTIVITY_ERROR)){
+                String message =  (String)jsonObject.get(ComConstants.MESSAGE);
+                onActionFail(message);
             }
             else {
                 String message =  (String)jsonObject.get(ComConstants.MESSAGE);

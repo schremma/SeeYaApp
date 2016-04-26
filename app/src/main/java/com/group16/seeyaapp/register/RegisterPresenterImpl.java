@@ -61,15 +61,15 @@ public class RegisterPresenterImpl extends CommunicatingPresenter<RegisterView, 
             JSONObject jsonObject = new JSONObject(registerResultJson);
             String msgType = (String)jsonObject.get(ComConstants.TYPE);
 
-            if (msgType.equals(ComConstants.CONFIRMATION)) {
-                String confirmationType = (String)jsonObject.get(ComConstants.CONFIRMATION_TYPE);
-                if (confirmationType.equals("OK")) {
-
-                    // Store username for later use
-                    final SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
-                    preferences.edit().putString("currentUser", model.getUserName()).commit();
-                    registerSuccess();
-                }
+            if (msgType.equals(ComConstants.NEW_USER_CONFIRMATION)) {
+                // Store username for later use
+                final SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
+                preferences.edit().putString("currentUser", model.getUserName()).commit();
+                registerSuccess();
+            }
+            else if (msgType.equals(ComConstants.NEW_USER_ERROR)) {
+                String message =  (String)jsonObject.get(ComConstants.MESSAGE);
+                registerFail(message);
             }
             else {
                 String message =  (String)jsonObject.get(ComConstants.MESSAGE);

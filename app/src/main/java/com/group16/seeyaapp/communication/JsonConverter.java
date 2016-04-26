@@ -2,6 +2,7 @@ package com.group16.seeyaapp.communication;
 
 import android.util.Log;
 
+import com.group16.seeyaapp.activity.list.Filter;
 import com.group16.seeyaapp.helpers.DateHelper;
 import com.group16.seeyaapp.model.Account;
 import com.group16.seeyaapp.model.Activity;
@@ -135,6 +136,31 @@ public final class JsonConverter {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put(ComConstants.TYPE, ComConstants.CATEGORIES_VERSION_NUMBER);
             jsonObject.put(ComConstants.ID, version);
+
+            json = jsonObject.toString();
+        }
+        catch (JSONException e) {
+            Log.d(TAG, e.getMessage());}
+
+        return json;
+    }
+
+    public static String getFilteredCategoriesJson(Filter filter, String userName) {
+        String json = null;
+        try
+        {
+            JSONObject jsonObject = new JSONObject();
+
+            switch (filter) {
+                case CategoriesForInvitedToActivities:
+                    jsonObject.put(ComConstants.TYPE, ComConstants.GET_CATEGORIES_WITH_ACTIVITIES);
+                    break;
+                case CategoriesForOwnActivities:
+                    jsonObject.put(ComConstants.TYPE, ComConstants.GET_CATEGORIES_WITH_OWNED_ACTIVITIES);
+                    break;
+            }
+
+            jsonObject.put(ComConstants.USERNAME, userName);
 
             json = jsonObject.toString();
         }
