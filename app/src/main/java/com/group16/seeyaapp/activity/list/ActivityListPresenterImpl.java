@@ -45,7 +45,7 @@ public class ActivityListPresenterImpl extends CommunicatingPresenter<ActivityLi
         model = listFilter;
         listGroupId = groupId;
 
-        // TODO implement retrieving headlines according to filter and groupId
+        // TODO implement retrieving headlines according to filter and groupId in retrieveHeadlines()
         // instead of just retrieving all activities owned by the current user
         retrieveHeadlines();
     }

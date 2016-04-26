@@ -81,10 +81,15 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
     @Override
     public void onPublishActivity(long activityId) {
         String json = JsonConverter.publishActivityJson(activityId);
-
-        // TODO add possibility to publish activity to specific users
         actionType = ActionType.Publish;
         sendJsonString(json);
+    }
+
+    @Override
+    public void onPublishActivity(long activityId, List<String> invitees) {
+        // TODO implement possibility to publish activity to specific users
+        // convert to json in JsonConverter - add method there
+        // send to server
     }
 
     @Override
@@ -131,7 +136,6 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
             String msgType = (String)jsonObject.get(ComConstants.TYPE);
 
             if (msgType.equals(ComConstants.PUBLISH_ACTIVITY_CONFIRMATION)) {
-                // TODO no need of action check in onActionSuccess anymore
 
                 String message =  (String)jsonObject.get(ComConstants.MESSAGE);
 
@@ -139,7 +143,6 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
                 //onActionSuccess(message);
             }
             else if (msgType.equals(ComConstants.NEW_ACTIVTIY_CONFIRMATION)) {
-                // TODO no need of action check in onActionSuccess anymore
 
                 String message = (String) jsonObject.get(ComConstants.MESSAGE);
                 view().updateCreateStatus(true);
@@ -206,7 +209,7 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
     }
 
     private void onUserExistConfirmed(boolean exists, String username) {
-        // TODO call view method to confirm user existence or notify of wrong user name
+        view().onUserExistenceChecked(exists, username);
     }
 
     private void setActivity(String json) {

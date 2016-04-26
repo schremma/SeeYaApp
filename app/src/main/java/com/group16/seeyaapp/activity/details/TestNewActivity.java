@@ -246,6 +246,11 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
     }
 
     @Override
+    public void onUserExistenceChecked(boolean userExists, String username) {
+        // TODO implement
+    }
+
+    @Override
     public void showOnError(String errorMessage) {
         Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
         toast.show();

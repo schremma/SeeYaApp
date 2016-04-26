@@ -200,8 +200,6 @@ public class MainListPresenterImpl extends CommunicatingPresenter<MainListView, 
     @Override
     public void aboutToListActivities(Filter activityListFilter) {
 
-        // TODO: add categoriesForInvitedTo
-
         SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
         String currentUser = preferences.getString(LocalConstants.SP_CURRENT_USER, null);
 
@@ -209,6 +207,12 @@ public class MainListPresenterImpl extends CommunicatingPresenter<MainListView, 
             case CategoriesForOwnActivities:
                 // TODO send json to get only those categories in which the user has created at least one activity
                 JsonConverter.getFilteredCategoriesJson(activityListFilter, currentUser);
+                break;
+            case CategoriesForInvitedToActivities:
+                //TODO now it retrieves all categories but change it to this:
+                //JsonConverter.getFilteredCategoriesJson(activityListFilter, currentUser);
+                // instead of this:
+                retrieveAllCategories();
                 break;
             case CategoriesForPastActivties:
                 break;

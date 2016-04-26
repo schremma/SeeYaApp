@@ -22,6 +22,8 @@ public interface ActivityView {
     // if created == true: activity has just been successfully created
     void updateCreateStatus(boolean created);
 
+    void onUserExistenceChecked(boolean userExists, String username);
+
     void showOnError(String errorMessage);
 
 }
