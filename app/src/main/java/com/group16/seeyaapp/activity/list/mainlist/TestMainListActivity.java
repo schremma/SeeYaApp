@@ -71,7 +71,7 @@ public class TestMainListActivity extends AppCompatActivity implements MainListV
 
         Intent intent = new Intent(this, TestHeadlineListActivity.class);
 
-        // the headline list need groupId and listFilter to know what kind of list to display
+        // the headline list needs groupId and listFilter to know what kind of list to display
         intent.putExtra("groupId", selectedItemId);
         intent.putExtra("listFilter", listFilter);
         startActivity(intent);

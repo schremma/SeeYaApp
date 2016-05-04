@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -21,8 +22,10 @@ import com.group16.seeyaapp.helpers.DateHelper;
 import com.group16.seeyaapp.model.Activity;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class TestNewActivity extends AppCompatActivity implements ActivityView {
 
@@ -33,8 +36,14 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
     private int activityId;
     private Button btnCreate;
     private Button btnPublish;
+    private Button btnAddInvitee;
+    private TextView tvInvitedList;
+    private EditText txtInvitedUser;
+    private List<String> lstInvited;
+
     private TextView tv;
     private LinearLayout createViewContainer;
+    private LinearLayout addInviteesContainer;
 
     //private DatePicker dpResult;
     private Button btnChangeDate;
@@ -61,6 +70,10 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
         tv = (TextView)findViewById(R.id.txtActivity);
         spinnerLocations = (Spinner) findViewById(R.id.spinnerLocations);
         createViewContainer = (LinearLayout)findViewById(R.id.createActivityContainer);
+        addInviteesContainer = (LinearLayout)findViewById(R.id.addInviteeContainer);
+        btnAddInvitee = (Button)findViewById(R.id.btnAddInvitee);
+        txtInvitedUser = (EditText)findViewById(R.id.txtInvitedUserName);
+        tvInvitedList = (TextView)findViewById(R.id.tvListOfInvited);
 
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
@@ -75,6 +88,7 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
                 btnCreate.setVisibility(View.VISIBLE);
                 btnPublish.setVisibility(View.INVISIBLE);
                 createViewContainer.setVisibility(View.VISIBLE);
+                addInviteesContainer.setVisibility(View.GONE);
 
 
                 activity = new Activity();
@@ -128,11 +142,26 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
                     btnCreate.setVisibility(View.INVISIBLE);
                     btnPublish.setVisibility(View.VISIBLE);
                     createViewContainer.setVisibility(View.GONE);
+                    addInviteesContainer.setVisibility(View.VISIBLE);
+                    lstInvited = new ArrayList<>();
 
                     btnPublish.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            presenter.onPublishActivity(activity.getId());
+                            if (lstInvited == null || lstInvited.size() < 1) {
+                                presenter.onPublishActivity(activity.getId());
+                            }
+                            else {
+                                presenter.onPublishActivity(activity.getId(), lstInvited);
+                            }
+                        }
+                    });
+
+                    btnAddInvitee.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String usr = txtInvitedUser.getText().toString();
+                            checkIfInvitedUserExists(usr);
                         }
                     });
 
@@ -248,6 +277,13 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
     @Override
     public void onUserExistenceChecked(boolean userExists, String username) {
         // TODO implement
+        if (userExists) {
+            Toast toast = Toast.makeText(this, "User confirmed", Toast.LENGTH_SHORT);
+            toast.show();
+
+            tvInvitedList.setText(tvInvitedList.getText() + "; " + username);
+            lstInvited.add(username);
+        }
     }
 
     @Override
@@ -332,4 +368,10 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
 
         }
     };
+
+    private void checkIfInvitedUserExists(String userName) {
+        if (userName != null) {
+            presenter.checkIfUserExists(userName);
+        }
+    }
 }

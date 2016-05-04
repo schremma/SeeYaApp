@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.group16.seeyaapp.BasePresenter;
 
@@ -39,7 +40,12 @@ public abstract class CommunicatingPresenter<V, M> extends BasePresenter<V, M> i
     @Override
     public void onReceiveResult(int resultCode, Bundle resultData) {
         String resultJson = resultData.getString("result");
-        communicationResult(resultJson);
+        if (resultJson != null) {
+            communicationResult(resultJson);
+        }
+        else {
+            Log.i("CommunicatingPresenter", "null json result from service, message handling is terminated.");
+        }
     }
 
     protected abstract void communicationResult(String json);

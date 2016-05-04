@@ -119,7 +119,7 @@ public class ActivityListPresenterImpl extends CommunicatingPresenter<ActivityLi
 //        switch (listFilter) {
 //            case CategoriesForInvitedToActivities:
 //            case CategoriesForOwnActivities:
-//                JsonConverter.getFilteredHeadlinesJson(filter, currentUser);
+//                JsonConverter.getFilteredHeadlinesJson(filter, currentUser, listGroupId);
 //                break;
 //        }
 

@@ -101,6 +101,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <LinearLayout
+        android:id="@+id/addInviteeContainer"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/txtInvitedUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:hint="name of invited user"
+            android:drawablePadding="8dp"/>
+
+        <Button
+            android:id="@+id/btnAddInvitee"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add invited user"
+            />
+
+        <TextView
+            android:id="@+id/tvListOfInvited"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
     <Button
         android:id="@+id/btnPublishActivity"
         android:visibility="invisible"

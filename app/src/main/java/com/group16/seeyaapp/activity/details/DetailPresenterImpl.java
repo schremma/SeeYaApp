@@ -53,7 +53,22 @@ public class DetailPresenterImpl extends CommunicatingPresenter<DetailView, Acti
 
     @Override
     public void onPressedUnjoin() {
+        if (model != null) {
+            SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
+            String currentUser = preferences.getString(LocalConstants.SP_CURRENT_USER, null);
 
+            if (currentUser != null) {
+                String json = JsonConverter.unregisterFromActivityJson(model.getId(), currentUser);
+                sendJsonString(json);
+            }
+            else {
+                view().showOnError("Error unregistering from activity");
+                Log.i(TAG, "Error: current user is null");
+            }
+        }
+        else {
+            onError("Error, no activity to unregister from");
+        }
     }
 
     @Override
@@ -74,9 +89,21 @@ public class DetailPresenterImpl extends CommunicatingPresenter<DetailView, Acti
             }
             else if (msgType.equals(ComConstants.SIGNUP_CONFIRMATION)) {
 
+                // TODO update the number of attending here, get it from server as part of sign up confirmation?
+                // for now, just increment the number of attendees
+                model.setNbrSignedUp(model.getNbrSignedUp() +1);
                 view().updateSignedUpStatus(true);
+                view().updateNbrAttending((int)model.getNbrSignedUp());
             }
             else if (msgType.equals(ComConstants.SIGNUP_ERROR)) {
+                String message =  (String)jsonObject.get(ComConstants.MESSAGE);
+                onError(message);
+            }
+            else if (msgType.equals(ComConstants.UNREGISTER_FROM_ACTIVITY_CONFIRMATION)) {
+
+                view().updateSignedUpStatus(false);
+            }
+            else if (msgType.equals(ComConstants.UNREGISTER_FROM_ACTIVITY_ERROR)) {
                 String message =  (String)jsonObject.get(ComConstants.MESSAGE);
                 onError(message);
             }

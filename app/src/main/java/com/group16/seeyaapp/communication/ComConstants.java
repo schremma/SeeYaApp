@@ -21,7 +21,7 @@ public final class ComConstants {
     public static final String MESSAGE = "10";
     public static final String CONFIRMATION_TYPE = "11";	//TODO remove?
     public static final String ERROR = "12";
-    public static final String ERROR_TYPE = "13";
+    public static final String ERROR_TYPE = "13";			//TODO remove?
     public static final String NEWACTIVITY = "14";
     public static final String NAME = "15";
     public static final String PLACE = "16";
@@ -52,7 +52,7 @@ public final class ComConstants {
     public static final String CATEGORIES_CONFIRMATION = "41";
     public static final String CATEGORIES_VERSION_NUMBER = "42";
     public static final String SIGNUP = "43";
-    public static final String UNREGISTER = "44";
+    public static final String UNREGISTER_FROM_ACTIVITY = "44";
     public static final String SIGNUP_CONFIRMATION = "45";
     public static final String SIGNUP_ERROR = "46";
     public static final String PUBLISH_ACTIVITY_CONFIRMATION = "47";
@@ -69,6 +69,8 @@ public final class ComConstants {
     public static final String CHECK_IF_USER_EXISTS = "58";
     public static final String USER_EXISTS = "59";
     public static final String INVALID_USERNAME = "60";
+    public static final String UNREGISTER_FROM_ACTIVITY_CONFIRMATION = "61";
+    public static final String UNREGISTER_FROM_ACTIVITY_ERROR = "62";
 
     public static final String LOG_INFO = "INFO";
     public static final String LOG_ERROR = "ERROR";

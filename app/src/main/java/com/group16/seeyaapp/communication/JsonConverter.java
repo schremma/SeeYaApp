@@ -8,8 +8,11 @@ import com.group16.seeyaapp.model.Account;
 import com.group16.seeyaapp.model.Activity;
 import com.group16.seeyaapp.model.UserLogin;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * Created by Andrea on 10/04/16.
@@ -93,6 +96,34 @@ public final class JsonConverter {
         return json;
     }
 
+    public static String publishActivityToSpecificUsersJson(long activityId, List<String> invitees) {
+        String json = null;
+        try
+        {
+            JSONObject jsonObject = new JSONObject();
+
+            //TODO check correct message type:
+            jsonObject.put(ComConstants.TYPE, "0");
+            jsonObject.put(ComConstants.ID, activityId);
+
+            JSONArray jArray = new JSONArray();
+            for(String invitee : invitees) {
+                JSONObject inviteeJson = new JSONObject();
+
+                inviteeJson.put(ComConstants.USERNAME, invitee);
+                jArray.put(inviteeJson);
+            }
+
+            // TODO correct constant for user name array: "ARRAY_USERNAME"
+            jsonObject.put("0", jArray);
+            json = jsonObject.toString();
+        }
+        catch (JSONException e) {
+            Log.d(TAG, e.getMessage());}
+
+        return json;
+    }
+
     public static String signUpForActivityJson(long activityId, String username) {
         String json = null;
         try
@@ -116,7 +147,7 @@ public final class JsonConverter {
         try
         {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put(ComConstants.TYPE, ComConstants.UNREGISTER);
+            jsonObject.put(ComConstants.TYPE, ComConstants.UNREGISTER_FROM_ACTIVITY);
 
             jsonObject.put(ComConstants.ID, activityId);
             jsonObject.put(ComConstants.USERNAME, username);
@@ -170,7 +201,7 @@ public final class JsonConverter {
         return json;
     }
 
-    public static String getFilteredHeadlinesJson(Filter filter, String userName) {
+    public static String getFilteredHeadlinesJson(Filter filter, String userName, int groupId) {
         String json = null;
         try
         {
@@ -186,6 +217,7 @@ public final class JsonConverter {
             }
 
             jsonObject.put(ComConstants.USERNAME, userName);
+            jsonObject.put(ComConstants.ID, groupId);
 
             json = jsonObject.toString();
         }

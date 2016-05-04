@@ -87,8 +87,9 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
 
     @Override
     public void onPublishActivity(long activityId, List<String> invitees) {
-        // TODO implement possibility to publish activity to specific users
-        // convert to json in JsonConverter - add method there
+        // TODO convert to json in JsonConverter - complete method
+        String json = JsonConverter.publishActivityToSpecificUsersJson(activityId, invitees);
+        sendJsonString(json);
         // send to server
     }
 

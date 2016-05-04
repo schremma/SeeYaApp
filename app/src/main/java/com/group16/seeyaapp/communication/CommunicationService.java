@@ -129,10 +129,25 @@ public class CommunicationService extends Service {
         Message msg = mServiceHandler.obtainMessage();
         msg.arg1 = startId;
 
-        final ResultReceiver resultReceiver = intent.getParcelableExtra("receiver");
-        String json = intent.getStringExtra("json");
-        msg.obj = new ServerTask(resultReceiver, json);
-        mServiceHandler.sendMessage(msg);
+        if (intent.getExtras() != null) {
+            if (intent.hasExtra("receiver")) {
+                final ResultReceiver resultReceiver = intent.getParcelableExtra("receiver");
+                if (intent.hasExtra("json")) {
+                    String json = intent.getStringExtra("json");
+                    msg.obj = new ServerTask(resultReceiver, json);
+                    mServiceHandler.sendMessage(msg);
+                }
+                else {
+                    Log.i(TAG, "intent has no json extra");
+                }
+            }
+            else {
+                Log.i(TAG, "intent has no receiver extra");
+            }
+        }
+        else {
+            Log.i(TAG, "intent has no extras");
+        }
 
         // If we get killed, after returning from here, restart
         return START_STICKY;
