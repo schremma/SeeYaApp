@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.group16.seeyaapp.R;
-import com.group16.seeyaapp.activity.list.TestListActivity;
 import com.group16.seeyaapp.activity.list.mainlist.TestMainListActivity;
 
 public class DemoPage extends AppCompatActivity {
@@ -23,12 +22,6 @@ public class DemoPage extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.btnGoToOwnActivitiesList).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToOwnActivitiesList();
-            }
-        });
 
         findViewById(R.id.btnGoToBrowseActivities).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,10 +36,6 @@ public class DemoPage extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void goToOwnActivitiesList() {
-        Intent intent = new Intent(this, TestListActivity.class);
-        startActivity(intent);
-    }
 
     private void goToBrowseByCategoryPage() {
         Intent intent = new Intent(this, TestMainListActivity.class);

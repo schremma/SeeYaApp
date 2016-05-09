@@ -96,7 +96,10 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
     @Override
     public void aboutToDisplayActivity(int activityId) {
         editing = false;
-        String json = JsonConverter.getActivityJson(activityId);
+
+        final SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
+        String currentUser = preferences.getString(LocalConstants.SP_CURRENT_USER, null);
+        String json = JsonConverter.getActivityJson(activityId, currentUser);
 
         sendJsonString(json);
 
@@ -150,7 +153,7 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
                 //onActionSuccess(message);
             }
             else if (msgType.equals(ComConstants.USER_EXISTS)) {
-                String username =  (String)jsonObject.get(ComConstants.USERNAME);
+                String username =  (String)jsonObject.get(ComConstants.MESSAGE);
                 onUserExistConfirmed(true, username);
             }
             else if (msgType.equals(ComConstants.LOCATIONS)) {

@@ -23,18 +23,6 @@
         />
 
 
-    <Button
-        android:id="@+id/btnGoToOwnActivitiesList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/viewCreated"
-        android:background="@drawable/rounded_green_rectangle"
-        android:layout_marginTop="100dp"
-        android:layout_below="@+id/activityChoice"
-        android:textSize="20sp"
-        android:typeface="serif"
-
-        />
 
     <Button
         android:id="@+id/btnGoToCreatePage"
@@ -43,7 +31,7 @@
         android:text="@string/createNew"
         android:background="@drawable/rounded_green_rectangle"
         android:layout_marginTop="32dp"
-        android:layout_below="@+id/btnGoToOwnActivitiesList"
+        android:layout_below="@+id/activityChoice"
         android:textSize="20sp"
         android:typeface="serif"
         />

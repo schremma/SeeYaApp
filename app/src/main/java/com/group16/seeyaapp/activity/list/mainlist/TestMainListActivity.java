@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.RadioButton;
 
 import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
@@ -18,6 +19,8 @@ public class TestMainListActivity extends AppCompatActivity implements MainListV
 
     private MainListPresenterImpl presenter;
     private Filter currentListFilter;
+    private RadioButton rbtnInvited;
+    private RadioButton rbtnOwn;
 
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
@@ -54,6 +57,25 @@ public class TestMainListActivity extends AppCompatActivity implements MainListV
             }
         });
 
+        rbtnInvited = (RadioButton)findViewById(R.id.rbtnInvitedTo);
+        rbtnOwn = (RadioButton)findViewById(R.id.rbtnOwn);
+        rbtnInvited.setChecked(true);
+
+        rbtnInvited.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onRadioButtonClicked(v);
+            }
+        });
+
+        rbtnOwn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onRadioButtonClicked(v);
+            }
+        });
+
+
     }
 
 
@@ -78,14 +100,30 @@ public class TestMainListActivity extends AppCompatActivity implements MainListV
     }
 
     @Override
+    public void navigateToHeadlineDisplay(String headlines) {
+        Intent intent = new Intent(this, TestHeadlineListActivity.class);
+
+        // the headline list needs groupId and listFilter to know what kind of list to display
+        intent.putExtra("headlines", headlines);
+        intent.putExtra("listFilter", currentListFilter); // good to know if it is own or invited to activities
+        startActivity(intent);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
         presenter.bindView(this);
 
-        // default for now
-        currentListFilter = Filter.CategoriesForInvitedToActivities;
-        presenter.aboutToListActivities(currentListFilter);
+//        // set filter based on GUI, default for now instead
+//        currentListFilter = Filter.InvitedToActivitiesByCategories;
+
+        if (rbtnOwn.isChecked())
+            currentListFilter = Filter.OwnActivitiesByCategories;
+        else
+            currentListFilter = Filter.InvitedToActivitiesByCategories;
+
+        presenter.aboutToPresentMainList(currentListFilter);
     }
 
     @Override
@@ -100,6 +138,30 @@ public class TestMainListActivity extends AppCompatActivity implements MainListV
         super.onSaveInstanceState(outState);
 
         PresenterManager.getInstance().savePresenter(presenter, outState);
+    }
+
+    public void onRadioButtonClicked(View view) {
+
+        boolean checked = ((RadioButton) view).isChecked();
+
+        Filter tempFilter = currentListFilter;
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.rbtnInvitedTo:
+                if (checked)
+                    tempFilter = Filter.InvitedToActivitiesByCategories;
+                    break;
+            case R.id.rbtnOwn:
+                if (checked)
+                    tempFilter = Filter.OwnActivitiesByCategories;
+                    break;
+        }
+
+        // Only reload if a new filtering has been selected
+        if (!currentListFilter.equals(tempFilter)) {
+            currentListFilter = tempFilter;
+            presenter.aboutToPresentMainList(currentListFilter);
+        }
     }
 
 

@@ -76,24 +76,13 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, UserLo
             JSONObject jsonObject = new JSONObject(loginResultJson);
             String msgType = (String)jsonObject.get(ComConstants.TYPE);
 
-            if (msgType.equals(ComConstants.CONFIRMATION)) {
-                String confirmationType = (String)jsonObject.get(ComConstants.CONFIRMATION_TYPE);
-                if (confirmationType.equals(ComConstants.LOGIN_OK)) {
+            if (msgType.equals(ComConstants.LOGIN_OK)) {
+                String message = (String)jsonObject.get(ComConstants.MESSAGE);
 
-                    // on success, it would also contain an auth token (?) that we would save in shared preferences
-                    /*String mockAuthToken = "whatever";
+                final SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
+                preferences.edit().putString(LocalConstants.SP_CURRENT_USER, model.getUserName()).commit();
 
-                    final SharedPreferences prefs = new ObscuredSharedPreferences(
-                            ctx, ctx.getSharedPreferences("ObscuredSharedPreferences", Context.MODE_PRIVATE) );
-
-                    prefs.edit().putString("authToken", mockAuthToken).commit();*/
-
-                    // And store username also for later use
-                    final SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
-                    preferences.edit().putString(LocalConstants.SP_CURRENT_USER, model.getUserName()).commit();
-
-                    loginSuccess();
-                }
+                loginSuccess();
             }
             else {
                 String message =  (String)jsonObject.get(ComConstants.MESSAGE);

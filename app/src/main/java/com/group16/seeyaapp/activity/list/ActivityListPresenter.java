@@ -10,4 +10,8 @@ public interface ActivityListPresenter {
     void onActivitySelected(int activityId);
 
     void aboutToListActivities(int groupId, Filter listFilter);
+
+    // About to list activity-headlines as specified in the headlines String parameter
+    // received from the previous view
+    void aboutToListActivities(String headlines);   // headlines: json String with headlines
 }

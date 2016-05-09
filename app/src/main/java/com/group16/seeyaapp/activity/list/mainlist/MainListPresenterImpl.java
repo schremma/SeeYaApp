@@ -32,6 +32,7 @@ public class MainListPresenterImpl extends CommunicatingPresenter<MainListView, 
     private List<String> listHeader;
     private HashMap<String, List<String>> listChild;
     private List<Map.Entry<String,Integer>> idStringPairs= new ArrayList<>(); //ids corresponding to strings in listChild
+    private HashMap<String, String> headlineJsonsForSubcategories;
 
     private String categoriesVersion;
 
@@ -39,8 +40,12 @@ public class MainListPresenterImpl extends CommunicatingPresenter<MainListView, 
 
     /**
      * The json String returned form the server might be:
-     * 1. ARRAY_MAINCATEGORY: a list with up-to-date main and subcategories
-     * 2. a confirmation that we already have the right version of categories
+     * 1. MAINCATEGORY_SUBCATEGORY_HEADLINES_FOR_USER: only those main categories with subcategories
+     * that contain at least one activity that the user is invited to, and headlines for each such activity
+     * 2. MAINCATEGORY_SUBCATEGORY_HEADLINES_FOR_USER_OWND_ACTIVITIES: only those main categories with subcategories
+     * that contain at least one activity that the user has created, and headlines for each such activity
+     * 3. ARRAY_MAINCATEGORY: an up-to-date list with all main and subcategories
+     * 4. a confirmation that we already have the right version of categories
      * @param json
      */
     @Override
@@ -52,7 +57,13 @@ public class MainListPresenterImpl extends CommunicatingPresenter<MainListView, 
             JSONObject jsonObject = new JSONObject(json);
             String msgType = (String)jsonObject.get(ComConstants.TYPE);
 
-            if (msgType.equals(ComConstants.ACTIVITY_CATEGORIES)) {
+            //
+            if (msgType.equals(ComConstants.MAINCATEGORY_SUBCATEGORY_HEADLINES_FOR_USER) ||
+                msgType.equals(ComConstants.MAINCATEGORY_SUBCATEGORY_HEADLINES_FOR_USER_OWND_ACTIVITIES)) {
+                jsonToCategories(jsonObject);
+                onUpdatedListData();
+            }
+            else if (msgType.equals(ComConstants.ACTIVITY_CATEGORIES)) {
 
                 Log.i(TAG, "Categories update...");
 
@@ -100,9 +111,16 @@ public class MainListPresenterImpl extends CommunicatingPresenter<MainListView, 
         }
     }
 
+    /**
+     * Extracts headings, subheadings and headlines under each subheading from json String.
+     * The headlines stored as json Strings associated with their subheading.
+     * @param jsonObject
+     * @throws JSONException
+     */
     private void jsonToCategories(JSONObject jsonObject) throws JSONException{
         listHeader = new ArrayList<String>();
         listChild = new HashMap<String, List<String>>();
+        headlineJsonsForSubcategories = new HashMap<String, String>();
 
         JSONArray mainArr = jsonObject.getJSONArray(ComConstants.ARRAY_MAINCATEGORY);
 
@@ -124,7 +142,12 @@ public class MainListPresenterImpl extends CommunicatingPresenter<MainListView, 
                 int subCatId = subCat.getInt(ComConstants.ID);
                 String subCatName = subCat.getString(ComConstants.NAME);
 
+                JSONObject headlineJsonObject = new JSONObject();
+                headlineJsonObject.put(ComConstants.ARRAY_HEADLINE, subCat.getJSONArray(ComConstants.ARRAY_HEADLINE));
+                String headlineJsonString = headlineJsonObject.toString();
+
                 listChild.get(mainCatName).add(subCatName);
+                headlineJsonsForSubcategories.put(subCatName, headlineJsonString);
 
                 idStringPairs.add(new AbstractMap.SimpleEntry<>(subCatName, subCatId));
             }
@@ -197,24 +220,26 @@ public class MainListPresenterImpl extends CommunicatingPresenter<MainListView, 
 
     }
 
+    /**
+     * Initiates retrieving list headings, subheadings and activity headlines based on the way
+     * the list is to be filtered.
+     * @param activityListFilter Specifies what kind of activities are to be browsed through
+     *                           the displayed list, e.g. own activities or invited to activities
+     */
     @Override
-    public void aboutToListActivities(Filter activityListFilter) {
+    public void aboutToPresentMainList(Filter activityListFilter) {
 
         SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
         String currentUser = preferences.getString(LocalConstants.SP_CURRENT_USER, null);
 
         switch (activityListFilter) {
-            case CategoriesForOwnActivities:
-                // TODO send json to get only those categories in which the user has created at least one activity
-                JsonConverter.getFilteredCategoriesJson(activityListFilter, currentUser);
+            case InvitedToActivitiesByCategories:
+            case OwnActivitiesByCategories:
+                // send json to get only those categories in which the user is invited to or has created at least one activity
+                String json = JsonConverter.getFilteredCategoriesJson(activityListFilter, currentUser);
+                sendJsonString(json);
                 break;
-            case CategoriesForInvitedToActivities:
-                //TODO now it retrieves all categories but change it to this:
-                //JsonConverter.getFilteredCategoriesJson(activityListFilter, currentUser);
-                // instead of this:
-                retrieveAllCategories();
-                break;
-            case CategoriesForPastActivties:
+            case PastActivtiesByCategories:
                 break;
             default:
                 retrieveAllCategories();
@@ -222,25 +247,36 @@ public class MainListPresenterImpl extends CommunicatingPresenter<MainListView, 
         }
     }
 
+    // TODO remove list filter from parameters
     @Override
     public void selectedListItem(String selectedItem, Filter listFilter) {
 
-        // get id of selectedItem
-        int id = -1;
-        for (int i = 0; i < idStringPairs.size() && id == -1; i++) {
-            if (idStringPairs.get(i).getKey().equals(selectedItem)) {
-                id = idStringPairs.get(i).getValue();
-                Log.i(TAG, "selected list item id for " + idStringPairs.get(i).getKey() + ": " + id);
-            }
-        }
+//        // get id of selectedItem
+//        int id = -1;
+//        for (int i = 0; i < idStringPairs.size() && id == -1; i++) {
+//            if (idStringPairs.get(i).getKey().equals(selectedItem)) {
+//                id = idStringPairs.get(i).getValue();
+//                Log.i(TAG, "selected list item id for " + idStringPairs.get(i).getKey() + ": " + id);
+//            }
+//        }
+//
+//        if (id != -1) {
+//            // call view to navigate to a list with activity headlines, send selectedItem id and listFilter
+//            view().navigateToHeadlineDisplay(id, listFilter);
+//
+//        }
+//        else {
+//            // call view to show error message
+//        }
 
-        if (id != -1) {
-            // call view to navigate to a list with activity headlines, send selectedItem id and listFilter
-            view().navigateToHeadlineDisplay(id, listFilter);
-
+        String headlinesJson = headlineJsonsForSubcategories.get(selectedItem);
+        if (headlinesJson != null) {
+            view().navigateToHeadlineDisplay(headlinesJson);
+            Log.i(TAG, "Sending headlines json to activity:" + headlinesJson);
         }
         else {
             // TODO call view to show error message
+            Log.i(TAG, "could not find headline json for subcategory: " + selectedItem);
         }
 
     }

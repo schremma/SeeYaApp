@@ -73,11 +73,24 @@ public class DetailPresenterImpl extends CommunicatingPresenter<DetailView, Acti
 
     @Override
     public void aboutToDisplayActivity(int activityId) {
-        String json = JsonConverter.getActivityJson(activityId);
+        final SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
+        String currentUser = preferences.getString(LocalConstants.SP_CURRENT_USER, null);
+        String json = JsonConverter.getActivityJson(activityId, currentUser);
 
         sendJsonString(json);
     }
 
+    /**
+     * Communication result might be
+     * 1. ACTIVITY: a specific existing activity
+     * 2. SIGNUP_CONFIRMATION: user has successfully registered for an activity
+     * 3. UNREGISTER_FROM_ACTIVITY_CONFIRMATION: user has successfully unregistered for an activity
+     * 4. Error:
+     *  a, signup error
+     *  b, unregistering error
+     *  c, other, such as activity retrieval error
+     * @param json
+     */
     @Override
     protected void communicationResult(String json) {
         try {
@@ -89,6 +102,7 @@ public class DetailPresenterImpl extends CommunicatingPresenter<DetailView, Acti
             }
             else if (msgType.equals(ComConstants.SIGNUP_CONFIRMATION)) {
 
+                Log.i(TAG, "sign up confirmed");
                 // TODO update the number of attending here, get it from server as part of sign up confirmation?
                 // for now, just increment the number of attendees
                 model.setNbrSignedUp(model.getNbrSignedUp() +1);
@@ -100,8 +114,10 @@ public class DetailPresenterImpl extends CommunicatingPresenter<DetailView, Acti
                 onError(message);
             }
             else if (msgType.equals(ComConstants.UNREGISTER_FROM_ACTIVITY_CONFIRMATION)) {
-
+                // TODO update the number of attending here, get it from server as part of sign up confirmation?
+                model.setNbrSignedUp(model.getNbrSignedUp() -1);
                 view().updateSignedUpStatus(false);
+                view().updateNbrAttending((int)model.getNbrSignedUp());
             }
             else if (msgType.equals(ComConstants.UNREGISTER_FROM_ACTIVITY_ERROR)) {
                 String message =  (String)jsonObject.get(ComConstants.MESSAGE);
@@ -124,6 +140,10 @@ public class DetailPresenterImpl extends CommunicatingPresenter<DetailView, Acti
         }
     }
 
+    /**
+     * Retrieves the content of the provided json string into Activity model object
+     * @param json
+     */
     private void setActivity(String json) {
         Log.i(TAG, json);
 
@@ -143,6 +163,10 @@ public class DetailPresenterImpl extends CommunicatingPresenter<DetailView, Acti
             model.setOwner(jsonObject.getString(ComConstants.ACTIVITY_OWNER));
             model.setHeadline(jsonObject.getString(ComConstants.HEADLINE));
             model.setNbrSignedUp(jsonObject.getLong(ComConstants.NBR_OF_SIGNEDUP));
+
+            String signedUpStatus = jsonObject.getString(ComConstants.SIGNED_UP);
+            boolean attending = signedUpStatus.equals(ComConstants.YES);
+            model.setAttending(attending);
 
             //Date published might be null, which means that Activity has not been published yet
             try {

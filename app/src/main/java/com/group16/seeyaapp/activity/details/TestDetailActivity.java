@@ -83,6 +83,7 @@ public class TestDetailActivity extends AppCompatActivity implements DetailView 
         TextView tv = (TextView)findViewById(R.id.tvActivityInfo);
         tv.setText(activity.toString());
         tvNbrAttending.setText("Attending: " + activity.getNbrSignedUp());
+        updateSignedUpStatus(activity.isAttending());
 
     }
 

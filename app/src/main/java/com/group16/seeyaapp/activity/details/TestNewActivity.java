@@ -110,21 +110,6 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
                 });
 
 
-//                //This is just for testing
-//                activity.setLocation("Malmö");
-//                activity.setHeadline("Another test activity");
-//                activity.setMessage("Message here");
-//                activity.setLocationDetails("Street 23A");
-//                activity.setMinNbrOfParticipants(4);
-//                activity.setMaxNbrOfParticipants(12);
-//                Date date = new GregorianCalendar(2016, 04, 30).getTime();
-//                activity.setDate(date);
-//                Calendar cal = Calendar.getInstance();
-//                cal.set(Calendar.HOUR_OF_DAY, 10);
-//                Date time = cal.getTime();
-//                activity.setTime(time);
-//                //tv.setText(activity.toString());
-
                 findViewById(R.id.btnCreateActivity).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -242,9 +227,12 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
 
         if (activity.getDatePublished() != null) {
             btnPublish.setVisibility(View.INVISIBLE);
+            addInviteesContainer.setVisibility(View.GONE);
         }
         else {
             btnPublish.setVisibility(View.VISIBLE);
+            addInviteesContainer.setVisibility(View.VISIBLE);
+
         }
 
 
@@ -258,6 +246,7 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
             activity.setDatePublished(new Date());
             tv.setText(activity.toString());
             btnPublish.setVisibility(View.INVISIBLE);
+            addInviteesContainer.setVisibility(View.GONE);
             Toast toast = Toast.makeText(this, "Activity has been published!", Toast.LENGTH_SHORT);
             toast.show();
         }
@@ -281,7 +270,8 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
             Toast toast = Toast.makeText(this, "User confirmed", Toast.LENGTH_SHORT);
             toast.show();
 
-            tvInvitedList.setText(tvInvitedList.getText() + "; " + username);
+            txtInvitedUser.setText("");
+            tvInvitedList.setText(tvInvitedList.getText() + username + "; " );
             lstInvited.add(username);
         }
     }

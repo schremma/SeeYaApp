@@ -9,9 +9,27 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.group16.seeyaapp.activity.list.mainlist.TestMainListActivity">
 
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="100dp">
+        <RadioButton
+            android:id="@+id/rbtnInvitedTo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Invited"/>
+        <RadioButton
+            android:id="@+id/rbtnOwn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My activities"/>
+    </RadioGroup>
+
     <ExpandableListView
         android:id="@+id/lvExp"
         android:layout_height="match_parent"
-        android:layout_width="match_parent"/>
+        android:layout_width="match_parent"
+        android:layout_marginTop="50dp"/>
 
 </RelativeLayout>

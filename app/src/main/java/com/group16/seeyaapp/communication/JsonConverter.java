@@ -103,7 +103,8 @@ public final class JsonConverter {
             JSONObject jsonObject = new JSONObject();
 
             //TODO check correct message type:
-            jsonObject.put(ComConstants.TYPE, "0");
+            jsonObject.put(ComConstants.TYPE, ComConstants.PUBLISH_ACTIVITY_TO_SPECIFIC_USERS);
+
             jsonObject.put(ComConstants.ID, activityId);
 
             JSONArray jArray = new JSONArray();
@@ -114,8 +115,8 @@ public final class JsonConverter {
                 jArray.put(inviteeJson);
             }
 
-            // TODO correct constant for user name array: "ARRAY_USERNAME"
-            jsonObject.put("0", jArray);
+            // TODO check correct constant for user name array: "ARRAY_USERNAME"
+            jsonObject.put(ComConstants.ARRAY_USERNAME, jArray);
             json = jsonObject.toString();
         }
         catch (JSONException e) {
@@ -183,11 +184,11 @@ public final class JsonConverter {
             JSONObject jsonObject = new JSONObject();
 
             switch (filter) {
-                case CategoriesForInvitedToActivities:
-                    jsonObject.put(ComConstants.TYPE, ComConstants.GET_CATEGORIES_WITH_ACTIVITIES);
+                case InvitedToActivitiesByCategories:
+                    jsonObject.put(ComConstants.TYPE, ComConstants.GET_MAINCATEGORY_SUBCATEGORY_HEADLINES_FOR_USER);
                     break;
-                case CategoriesForOwnActivities:
-                    jsonObject.put(ComConstants.TYPE, ComConstants.GET_CATEGORIES_WITH_OWNED_ACTIVITIES);
+                case OwnActivitiesByCategories:
+                    jsonObject.put(ComConstants.TYPE, ComConstants.GET_MAINCATEGORY_SUBCATEGORY_HEADLINES_FOR_USER_OWND_ACTIVITIES);
                     break;
             }
 
@@ -201,31 +202,6 @@ public final class JsonConverter {
         return json;
     }
 
-    public static String getFilteredHeadlinesJson(Filter filter, String userName, int groupId) {
-        String json = null;
-        try
-        {
-            JSONObject jsonObject = new JSONObject();
-
-            switch (filter) {
-                case CategoriesForInvitedToActivities:
-                    jsonObject.put(ComConstants.TYPE, ComConstants.GET_HEADLINES_FOR_CATEGORY);
-                    break;
-                case CategoriesForOwnActivities:
-                    jsonObject.put(ComConstants.TYPE, ComConstants.GET_HEADLINES_FOR_CATEGORY_FOR_OWN_ACTIVITIES);
-                    break;
-            }
-
-            jsonObject.put(ComConstants.USERNAME, userName);
-            jsonObject.put(ComConstants.ID, groupId);
-
-            json = jsonObject.toString();
-        }
-        catch (JSONException e) {
-            Log.d(TAG, e.getMessage());}
-
-        return json;
-    }
 
     public static String getLocationsJson(String version) {
         String json = null;
@@ -243,7 +219,7 @@ public final class JsonConverter {
         return json;
     }
 
-    public static String getActivityJson(int activityId) {
+    public static String getActivityJson(int activityId, String username) {
         String json = null;
         try
         {
@@ -251,6 +227,7 @@ public final class JsonConverter {
 
             jsonObject.put(ComConstants.TYPE, ComConstants.ACTIVITIY);
             jsonObject.put(ComConstants.ID, activityId);
+            jsonObject.put(ComConstants.USERNAME, username);
 
             json = jsonObject.toString();
         }

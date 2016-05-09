@@ -13,13 +13,14 @@ import android.widget.Toast;
 
 import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
+import com.group16.seeyaapp.activity.details.TestDetailActivity;
 import com.group16.seeyaapp.activity.details.TestNewActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class TestHeadlineListActivity extends AppCompatActivity implements ActivityListView{
+public class TestHeadlineListActivity extends AppCompatActivity implements ActivityListView {
 
     private ActivityListPresenterImpl presenter;
     private ListView listview;
@@ -27,6 +28,8 @@ public class TestHeadlineListActivity extends AppCompatActivity implements Activ
 
     private Filter listFilter;
     private int groupId;
+    private String headlines;
+
 
 
     @Override
@@ -44,7 +47,6 @@ public class TestHeadlineListActivity extends AppCompatActivity implements Activ
         listview = (ListView) findViewById(R.id.lstActivities);
 
 
-
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -52,7 +54,7 @@ public class TestHeadlineListActivity extends AppCompatActivity implements Activ
                                     int position, long id) {
                 final String item = (String) parent.getItemAtPosition(position);
 
-                int idInt = (int)map.get(item);
+                int idInt = (int) map.get(item);
 
                 presenter.onActivitySelected(idInt);
             }
@@ -62,14 +64,25 @@ public class TestHeadlineListActivity extends AppCompatActivity implements Activ
 
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
+            if (intent.hasExtra("listFilter")) {
+                listFilter = (Filter) intent.getSerializableExtra("listFilter");
 
+                Log.i("HeadlineListActivity", "Got extra: " + listFilter.name());
+            }
 
-            groupId = intent.getIntExtra("groupId", -1);
-            listFilter = (Filter) intent.getSerializableExtra("listFilter");
+            if (intent.hasExtra("headlines")) {
+                headlines = intent.getStringExtra("headlines");
 
-            Log.i("HeadlineListActivity", "Got extras: " + groupId + ", " + listFilter.name());
+                Log.i("HeadlineListActivity", "Got extra: " + headlines);
 
+            } else if (intent.hasExtra("groupId")) { // TODO remove this?
+
+                groupId = intent.getIntExtra("groupId", -1);
+                Log.i("HeadlineListActivity", "Got extras: " + groupId + ", " + listFilter.name());
+
+            }
         }
+
     }
 
     @Override
@@ -80,7 +93,7 @@ public class TestHeadlineListActivity extends AppCompatActivity implements Activ
         }
         map.clear();
         List<String> idStrings = new ArrayList<String>();
-        for(int i = 0; i < headlines.length; i++) {
+        for (int i = 0; i < headlines.length; i++) {
             String content = headlines[i] + "    date:" + dates[i];
             idStrings.add(content);
             map.put(content, ids[i]);
@@ -93,9 +106,18 @@ public class TestHeadlineListActivity extends AppCompatActivity implements Activ
 
     @Override
     public void navigateToActivityDisplay(int activityId) {
-        Intent intent = new Intent(this, TestNewActivity.class);
-        intent.putExtra("activityId", activityId);
-        startActivity(intent);
+        // TODO set this in presenter instead?
+        if (listFilter.equals(Filter.InvitedToActivitiesByCategories)) {
+            Intent intent = new Intent(this, TestDetailActivity.class);
+            intent.putExtra("activityId", activityId);
+            startActivity(intent);
+        }
+        // TODO only editable own activities should start this Activity
+        else if (listFilter.equals(Filter.OwnActivitiesByCategories)) {
+            Intent intent = new Intent(this, TestNewActivity.class);
+            intent.putExtra("activityId", activityId);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -110,7 +132,10 @@ public class TestHeadlineListActivity extends AppCompatActivity implements Activ
 
         presenter.bindView(this);
 
-        if (listFilter != null) {
+
+        if (headlines != null) {
+            presenter.aboutToListActivities(headlines);
+        } else if (listFilter != null) {    // TODO remove?
             presenter.aboutToListActivities(groupId, listFilter);
         }
     }
@@ -128,6 +153,7 @@ public class TestHeadlineListActivity extends AppCompatActivity implements Activ
 
         PresenterManager.getInstance().savePresenter(presenter, outState);
     }
+
 
     //region testlist
 

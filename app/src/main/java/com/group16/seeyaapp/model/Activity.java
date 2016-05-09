@@ -2,7 +2,9 @@ package com.group16.seeyaapp.model;
 
 import com.group16.seeyaapp.helpers.DateHelper;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Andrea on 11/04/16.
@@ -27,6 +29,12 @@ public class Activity {
     private Date datePublished;
 
     private long nbrSignedUp;
+
+
+
+    private List<String> lstInvited;
+
+    private boolean attending;
 
     private String errorMsg;
 
@@ -75,9 +83,26 @@ public class Activity {
         return (today.after(date));
     }
 
-    // True if at least one more participant can still sign up
+    // True if at least one more participant can still sign up.
+    // Assumes that 0 or negative upper limit means no limit
     public boolean stillHasSpace() {
-        return maxNbrOfParticipants > nbrSignedUp;
+        if (maxNbrOfParticipants > 0) {
+            return maxNbrOfParticipants > nbrSignedUp;
+        }
+        return true;
+    }
+
+    // TODO use this
+    public void addInvitedUser(String username) {
+        if (lstInvited == null)
+                lstInvited = new ArrayList<>();
+        lstInvited.add(username);
+    }
+
+    public boolean isUserAlreadyInvited(String username) {
+        if (lstInvited == null)
+            return false;
+        return lstInvited.contains(username);
     }
 
     //region Getters and setters for all fields
@@ -195,6 +220,21 @@ public class Activity {
     public void setNbrSignedUp(long nbrSignedUp) {
         this.nbrSignedUp = nbrSignedUp;
     }
+
+    public List<String> getLstInvited() {
+        if (lstInvited != null)
+            return lstInvited;
+        else
+            return new ArrayList<>();
+    }
+    public boolean isAttending() {
+        return attending;
+    }
+
+    public void setAttending(boolean attending) {
+        this.attending = attending;
+    }
+
     //endregion
 
 
