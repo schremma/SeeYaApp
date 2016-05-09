@@ -12,7 +12,7 @@
 
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/signInText"
         android:text="@string/loginBtn"
@@ -20,12 +20,9 @@
         android:textColor="@color/white"
         android:typeface="serif"
         android:background="@drawable/rounded_green_rectangle"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        android:paddingLeft="110dp"
-        android:paddingRight="110dp"
         android:gravity="center"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:padding="20dp" />
 
     <EditText
         android:id="@+id/txtusername"

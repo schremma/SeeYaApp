@@ -10,7 +10,7 @@
     android:background="#f2f2f2">
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/signUpText"
         android:text="@string/sign_up"
@@ -18,11 +18,9 @@
         android:textColor="@color/white"
         android:typeface="serif"
         android:background="@drawable/rounded_green_rectangle"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        android:paddingLeft="110dp"
-        android:paddingRight="110dp"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:padding="20dp" />
 
     <Button
         android:layout_width="200dp"
