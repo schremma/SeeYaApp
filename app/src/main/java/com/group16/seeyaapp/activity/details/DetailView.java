@@ -5,7 +5,7 @@ import com.group16.seeyaapp.model.Activity;
 /**
  * Created by Andrea on 22/04/16.
  *
- * Show details about an activity ("View activity"). The user can join the activiy,
+ * Show details about an activity ("View activity"). The user can join the activity,
  * or unjoin if he or she has already signed up.
  */
 public interface DetailView {

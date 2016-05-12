@@ -63,6 +63,7 @@ public final class JsonConverter {
 
             jsonObject.put(ComConstants.NAME, activity.getOwner());
             jsonObject.put(ComConstants.PLACE, locationId);
+            jsonObject.put(ComConstants.ADDRESS, activity.getAddress());
             jsonObject.put(ComConstants.SUBCATEGORY, activity.getSubcategory());
             jsonObject.put(ComConstants.MAX_NBROF_PARTICIPANTS, activity.getMaxNbrOfParticipants());
             jsonObject.put(ComConstants.MIN_NBR_OF_PARTICIPANTS, activity.getMinNbrOfParticipants());
