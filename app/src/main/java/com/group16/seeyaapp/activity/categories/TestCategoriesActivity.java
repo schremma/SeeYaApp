@@ -80,7 +80,6 @@ public class TestCategoriesActivity extends AppCompatActivity implements Categor
 
     @Override
     public void setMainCategories(String[] mainCategories) {
-
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mainCategories);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerMain.setAdapter(spinnerArrayAdapter);
