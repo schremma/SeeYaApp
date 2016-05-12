@@ -10,7 +10,7 @@ import java.util.List;
  * It could be a still blank activity, if the user wishes to create a new activity.
  * It could also be an already created activity by the current user, which the user wishes to publish.
  */
-public interface ActivityPresenter {
+public interface EditableActivityPresenter {
 
     // On pressing the button for creating a new activity
     void onCreateActivity(Activity activity);

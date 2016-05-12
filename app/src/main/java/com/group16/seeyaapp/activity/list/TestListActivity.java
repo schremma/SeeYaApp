@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
-import com.group16.seeyaapp.activity.details.TestNewActivity;
+import com.group16.seeyaapp.activity.details.EditableActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,7 +76,7 @@ public class TestListActivity extends AppCompatActivity implements ActivityListV
 
     @Override
     public void navigateToActivityDisplay(int activityId) {
-        Intent intent = new Intent(this, TestNewActivity.class);
+        Intent intent = new Intent(this, EditableActivity.class);
         intent.putExtra("activityId", activityId);
         startActivity(intent);
     }

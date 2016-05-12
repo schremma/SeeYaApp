@@ -33,10 +33,10 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <!--<activity android:name=".main.MainActivity" />-->
         <activity
-            android:name=".activity.details.TestNewActivity"
+            android:name=".activity.details.EditableActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
-            android:name=".activity.details.TestDetailActivity"
+            android:name=".activity.details.DetailActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".activity.list.TestListActivity"

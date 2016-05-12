@@ -33,8 +33,8 @@ import java.util.List;
  * The view communicates to the presenter which if these two scenarios are to take place,
  * by calling the aboutToPublishActivity() or aboutToCreateActivity(), just before it is displayed.
  */
-public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, Activity> implements ActivityPresenter {
-    private static final String TAG = "ActivityPresenter";
+public class EditableActivityPresenterImpl extends CommunicatingPresenter<EditableActivityView, Activity> implements EditableActivityPresenter {
+    private static final String TAG = "EditableActivityPresenter";
     private HashMap<String, List<Location>> locations;
     private String locationsVersion;
 
@@ -412,7 +412,7 @@ public class ActivityPresenterImpl extends CommunicatingPresenter<ActivityView, 
     }
 
     @Override
-    public void bindView(@NonNull ActivityView view) {
+    public void bindView(@NonNull EditableActivityView view) {
         super.bindView(view);
 
         //we do not need to retrieve locations if the activity is just displayed without editing

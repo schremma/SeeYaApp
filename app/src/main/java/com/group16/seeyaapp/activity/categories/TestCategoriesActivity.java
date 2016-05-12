@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
 //import android.R;
-import com.group16.seeyaapp.activity.details.TestNewActivity;
+import com.group16.seeyaapp.activity.details.EditableActivity;
 
 public class TestCategoriesActivity extends AppCompatActivity implements CategoryView {
     private CategoryPresenterImpl presenter;
@@ -95,7 +95,7 @@ public class TestCategoriesActivity extends AppCompatActivity implements Categor
 
     @Override
     public void navigateToCreateActivityDetails(int subCategoryId) {
-        Intent intent = new Intent(this, TestNewActivity.class);
+        Intent intent = new Intent(this, EditableActivity.class);
         intent.putExtra(SUBCATID, subCategoryId);
         startActivity(intent);
     }

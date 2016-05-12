@@ -8,7 +8,7 @@ import com.group16.seeyaapp.model.Activity;
  * Displays editable activities, i.e. activities the user himself or herself
  * created but has not published yet, or activities that are in the process of being created by the user.
  */
-public interface ActivityView {
+public interface EditableActivityView {
 
     // Set a list with all possible locations
     void setLocationList(String[] locations);

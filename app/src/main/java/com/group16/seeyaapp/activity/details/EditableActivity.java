@@ -27,9 +27,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class TestNewActivity extends AppCompatActivity implements ActivityView {
+public class EditableActivity extends AppCompatActivity implements EditableActivityView {
 
-    private ActivityPresenterImpl presenter;
+    private EditableActivityPresenterImpl presenter;
     private Activity activity;
     private Spinner spinnerLocations;
     private boolean newActivity;
@@ -56,10 +56,10 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test_new);
+        setContentView(R.layout.activity_editable);
 
         if (savedInstanceState == null) {
-            presenter = new ActivityPresenterImpl();
+            presenter = new EditableActivityPresenterImpl();
         } else {
             presenter = PresenterManager.getInstance().restorePresenter(savedInstanceState);
         }

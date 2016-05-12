@@ -13,8 +13,8 @@ import android.widget.Toast;
 
 import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
-import com.group16.seeyaapp.activity.details.TestDetailActivity;
-import com.group16.seeyaapp.activity.details.TestNewActivity;
+import com.group16.seeyaapp.activity.details.DetailActivity;
+import com.group16.seeyaapp.activity.details.EditableActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,13 +108,13 @@ public class TestHeadlineListActivity extends AppCompatActivity implements Activ
     public void navigateToActivityDisplay(int activityId) {
         // TODO set this in presenter instead?
         if (listFilter.equals(Filter.InvitedToActivitiesByCategories)) {
-            Intent intent = new Intent(this, TestDetailActivity.class);
+            Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra("activityId", activityId);
             startActivity(intent);
         }
         // TODO only editable own activities should start this Activity
         else if (listFilter.equals(Filter.OwnActivitiesByCategories)) {
-            Intent intent = new Intent(this, TestNewActivity.class);
+            Intent intent = new Intent(this, EditableActivity.class);
             intent.putExtra("activityId", activityId);
             startActivity(intent);
         }

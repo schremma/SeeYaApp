@@ -36,7 +36,7 @@ public class ActivityListPresenterImpl extends CommunicatingPresenter<ActivityLi
     public void onActivitySelected(int activityId) {
 
         // TODO navigate to different kinds of displays based on model (list filter)? - done in view now
-        // i.e. if it concerns own editable activities (before publishing them) - ActivityView
+        // i.e. if it concerns own editable activities (before publishing them) - EditableActivityView
         // but if it concerns non-editable activities - DetailView
         view().navigateToActivityDisplay(activityId);
     }

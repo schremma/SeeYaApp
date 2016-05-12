@@ -13,7 +13,7 @@ import com.group16.seeyaapp.R;
 import com.group16.seeyaapp.model.Activity;
 
 // Displays an Activity in a non-editable form, i.e. the user can view the activity details and (un)register
-public class TestDetailActivity extends AppCompatActivity implements DetailView {
+public class DetailActivity extends AppCompatActivity implements DetailView {
 
     private DetailPresenterImpl presenter;
     private int activityId;
@@ -24,7 +24,7 @@ public class TestDetailActivity extends AppCompatActivity implements DetailView 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test_detail);
+        setContentView(R.layout.activity_detail);
 
         if (savedInstanceState == null) {
             presenter = new DetailPresenterImpl();
