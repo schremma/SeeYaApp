@@ -156,6 +156,7 @@ public class DetailPresenterImpl extends CommunicatingPresenter<DetailView, Acti
             model.setSubcategoryString(jsonObject.getString(ComConstants.SUBCATEGORY));
 
             model.setLocation(jsonObject.getString(ComConstants.PLACE));
+            model.setAddress(jsonObject.getString(ComConstants.ADDRESS));
             model.setMaxNbrOfParticipants(jsonObject.getInt(ComConstants.MAX_NBROF_PARTICIPANTS));
             model.setMinNbrOfParticipants(jsonObject.getInt(ComConstants.MIN_NBR_OF_PARTICIPANTS));
 

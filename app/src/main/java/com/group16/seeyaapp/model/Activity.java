@@ -25,7 +25,7 @@ public class Activity {
 
     private String subcategoryString;
 
-    private String locationDetails;
+    private String address;
     private Date datePublished;
 
     private long nbrSignedUp;
@@ -179,12 +179,12 @@ public class Activity {
     }
 
 
-    public String getLocationDetails() {
-        return locationDetails;
+    public String getAddress() {
+        return address;
     }
 
-    public void setLocationDetails(String locationDetails) {
-        this.locationDetails = locationDetails;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Date getDatePublished() {

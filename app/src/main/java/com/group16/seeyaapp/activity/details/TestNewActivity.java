@@ -311,6 +311,7 @@ public class TestNewActivity extends AppCompatActivity implements ActivityView {
             TextView tvMessage = (TextView) findViewById(R.id.txtMessage);
 
             activity.setLocation(location);
+            //TODO set address
             activity.setHeadline(tvHeadline.getText().toString());
             activity.setMessage(tvMessage.getText().toString());
 

@@ -186,6 +186,9 @@ public final class ComConstants {
     // Används som value till SIGNED_UP om användaren inte är signed up för aktiviteten.
     public static final String NO = "66";
 
+    // Används som address vid inbjudan till aktivitet och när man hämtar en aktivitet
+    public static final String ADDRESS = "67";
+
     public static final String LOG_INFO = "INFO";
     public static final String LOG_ERROR = "ERROR";
 }
