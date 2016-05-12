@@ -15,14 +15,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/colorPrimaryDark"
-        android:layout_marginBottom="200dp"/>
+        android:layout_marginBottom="200dp"
+        android:padding="8dp"
+        android:background="@drawable/rounded_white_rectangle"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tvNbrAttending"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textColor="@color/colorPrimaryDark" />
+        android:textColor="@color/colorPrimaryDark"
+        android:background="@drawable/rounded_white_rectangle"
+        android:textSize="24sp"
+        android:padding="4dp" />
 
 
 
@@ -37,7 +43,8 @@
         android:background= "@drawable/rounded_green_rectangle"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        android:padding="4dp" />
 
 
 

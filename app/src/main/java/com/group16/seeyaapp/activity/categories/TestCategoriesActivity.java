@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
+//import android.R;
 import com.group16.seeyaapp.activity.details.TestNewActivity;
 
 public class TestCategoriesActivity extends AppCompatActivity implements CategoryView {
