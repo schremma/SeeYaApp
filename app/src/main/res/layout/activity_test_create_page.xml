@@ -33,12 +33,25 @@
         android:text="Activity"
         android:layout_marginTop="30dp"
         android:background="@drawable/rounded_green_rectangle"
-        android:textSize="26sp"
+        android:textSize="@dimen/button_text"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
-        android:padding="4dp" />
+        android:padding="@dimen/button_padding" />
 
-
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GROUP?"
+        android:background="@drawable/rounded_green_rectangle"
+        android:textSize="@dimen/button_text"
+        android:padding="@dimen/button_padding"
+        android:layout_below="@+id/btnGoToCreate"
+        android:layout_alignLeft="@+id/btnGoToCreate"
+        android:layout_alignStart="@+id/btnGoToCreate"
+        android:layout_marginTop="30dp"
+        android:layout_alignRight="@+id/btnGoToCreate"
+        android:layout_alignEnd="@+id/btnGoToCreate" />
 
 
 </RelativeLayout>
