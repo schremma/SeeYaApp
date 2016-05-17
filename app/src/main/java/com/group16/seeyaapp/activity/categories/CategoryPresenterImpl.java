@@ -136,6 +136,21 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
             if (json != null)
                 failMsg +=" : " + json;
 
+            // If it cannot get categories, try to load it from local storage
+            // TODO is it ok?
+            SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
+            String categoriesJsonString = preferences.getString(LocalConstants.SP_CATEGORIES, null);
+            if (categoriesJsonString != null) {
+                String versionInPrefs = preferences.getString(LocalConstants.SP_VERSION_CATEGORIES, null);
+                try {
+                    JSONObject jsonCategories = new JSONObject(categoriesJsonString);
+                    jsonToCategories(jsonCategories);
+                    categoriesVersion = versionInPrefs;
+                    failMsg +="; " + "categories are loaded from local storage";
+                    onRetrievalSuccess();
+                } catch (JSONException ex) {}
+            }
+
             onRetrievalError(failMsg);
         }
     }

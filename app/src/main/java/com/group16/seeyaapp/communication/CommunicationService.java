@@ -18,7 +18,7 @@ import java.net.Socket;
 
 /**
  * Created by Andrea on 10/04/16.
- * !! Not communicating yet with server
+ *
  */
 public class CommunicationService extends Service {
 
@@ -26,6 +26,7 @@ public class CommunicationService extends Service {
     private ServiceHandler mServiceHandler;
     private Socket socket;
     private String ip = "10.0.2.2"; //localhost from emulator
+    //private String ip = "213.65.110.13";
     private int port = 7500;
 
 

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
+
+    <TextView
+        android:id="@+id/tvListOfInvited"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/txtInvitedUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:hint="name of invited user"
+        android:textColor="@color/black"
+        android:textColorHint="@color/darkerGray"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:background="@drawable/rounded_white_rectangle"
+        android:drawablePadding="8dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="80dp"/>
+
+    <Button
+        android:id="@+id/btnAddInvitee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:typeface="serif"
+        android:padding="5dp"
+        android:background= "@drawable/rounded_green_rectangle"
+        android:text="Add invited user"
+        />
+
+
+</LinearLayout>

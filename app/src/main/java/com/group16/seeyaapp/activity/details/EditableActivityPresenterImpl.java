@@ -34,7 +34,7 @@ import java.util.List;
  * by calling the aboutToPublishActivity() or aboutToCreateActivity(), just before it is displayed.
  */
 public class EditableActivityPresenterImpl extends CommunicatingPresenter<EditableActivityView, Activity> implements EditableActivityPresenter {
-    private static final String TAG = "EditableActivityPresenter";
+    private static final String TAG = "EditableActivityPres";
     private HashMap<String, List<Location>> locations;
     private String locationsVersion;
 
@@ -114,7 +114,7 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
 
     @Override
     public void checkIfUserExists(String userName) {
-        // TODO implement
+
         String json = JsonConverter.userExistsJson(userName);
         sendJsonString(json);
     }
