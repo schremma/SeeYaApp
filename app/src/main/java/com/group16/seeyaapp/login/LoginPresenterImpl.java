@@ -23,10 +23,6 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, UserLo
 
     private static final String TAG = "LoginPresenter";
 
-    @Override
-    protected void updateView() {
-
-    }
 
     @Override
     public void validateCredentials(String username, String password) {

@@ -14,9 +14,6 @@ public abstract class BasePresenter<V, M> {
     public void setModel(M model) {
         resetState();
         this.model = model;
-        if (setupDone()) {
-            updateView();
-        }
     }
 
     protected void resetState() {
@@ -24,9 +21,6 @@ public abstract class BasePresenter<V, M> {
 
     public void bindView(@NonNull V view) {
         this.view = new WeakReference<>(view);
-        if (setupDone()) {
-            updateView();
-        }
     }
 
     public void unbindView() {
@@ -40,8 +34,6 @@ public abstract class BasePresenter<V, M> {
             return view.get();
         }
     }
-
-    protected abstract void updateView();
 
     protected boolean setupDone() {
         return view() != null && model != null;

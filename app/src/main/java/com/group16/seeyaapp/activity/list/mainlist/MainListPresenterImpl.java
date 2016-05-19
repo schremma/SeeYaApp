@@ -215,10 +215,6 @@ public class MainListPresenterImpl extends CommunicatingPresenter<MainListView, 
         // TODO call view to show error message
     }
 
-    @Override
-    protected void updateView() {
-
-    }
 
     /**
      * Initiates retrieving list headings, subheadings and activity headlines based on the way

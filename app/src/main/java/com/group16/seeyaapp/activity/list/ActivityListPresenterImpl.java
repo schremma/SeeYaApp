@@ -180,8 +180,4 @@ public class ActivityListPresenterImpl extends CommunicatingPresenter<ActivityLi
         sendJsonString(json);
     }
 
-    @Override
-    protected void updateView() {
-
-    }
 }

@@ -73,8 +73,4 @@ public class AddInvitedPresenterImpl extends CommunicatingPresenter<AddInvitedVi
         }
     }
 
-    @Override
-    protected void updateView() {
-
-    }
 }

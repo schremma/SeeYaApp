@@ -181,9 +181,4 @@ public class PublishableActivityPresenterImpl extends CommunicatingPresenter<Pub
     }
 
 
-    @Override
-    protected void updateView() {
-
-    }
-
 }

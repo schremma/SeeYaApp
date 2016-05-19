@@ -204,8 +204,4 @@ public class DetailPresenterImpl extends CommunicatingPresenter<DetailView, Acti
         view().showOnError(error);
     }
 
-    @Override
-    protected void updateView() {
-
-    }
 }

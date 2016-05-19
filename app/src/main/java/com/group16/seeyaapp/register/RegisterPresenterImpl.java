@@ -19,11 +19,6 @@ public class RegisterPresenterImpl extends CommunicatingPresenter<RegisterView, 
 
     private static final String TAG = "RegisterPresenter";
 
-    @Override
-    protected void updateView() {
-
-    }
-
 
 
     @Override

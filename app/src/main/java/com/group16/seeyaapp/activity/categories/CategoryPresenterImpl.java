@@ -32,7 +32,7 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
     private String categoriesVersion;
 
     /**
-     * When the user has selected a main catgory,
+     * When the user has selected a main category,
      * a list with all the subcategories under this main category
      * is sent to the view.
      * @param mainCategory
@@ -188,11 +188,6 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
         SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
         boolean performCheckWithServer = true;
 
-//        //remove key from preferences
-//        SharedPreferences.Editor editor = preferences.edit();
-//        editor.remove(LocalConstants.SP_VERSION_CATEGORIES);
-//        editor.apply();
-
         String version = "0";
 
         if (preferences.contains(LocalConstants.SP_VERSION_CATEGORIES)) {
@@ -259,10 +254,5 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
     public void bindView(@NonNull CategoryView view) {
         super.bindView(view);
         retrieveCategories();
-    }
-
-    @Override
-    protected void updateView() {
-
     }
 }

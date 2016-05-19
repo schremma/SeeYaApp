@@ -375,10 +375,6 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
     }
 
 
-    @Override
-    protected void updateView() {
-
-    }
 
 
     private enum ActionType {

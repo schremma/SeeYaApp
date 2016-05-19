@@ -323,7 +323,7 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
             presenter.onCreateActivity(activity);
 
         } catch(NumberFormatException e1) {
-            Toast toast = Toast.makeText(this, "Invalid number format: " + e1.getMessage(), Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(this, "Invalid number format for participant limit(s): " + e1.getMessage(), Toast.LENGTH_SHORT);
             toast.show();
         } catch (ParseException e2) {
             Toast toast = Toast.makeText(this, "Invalid time format: " + e2.getMessage(), Toast.LENGTH_SHORT);
