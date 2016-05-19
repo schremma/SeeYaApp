@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
 import com.group16.seeyaapp.activity.details.DetailActivity;
-import com.group16.seeyaapp.activity.details.EditableActivity;
+import com.group16.seeyaapp.activity.details.PublishableActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -114,7 +114,7 @@ public class TestHeadlineListActivity extends AppCompatActivity implements Activ
         }
         // TODO only editable own activities should start this Activity
         else if (listFilter.equals(Filter.OwnActivitiesByCategories)) {
-            Intent intent = new Intent(this, EditableActivity.class);
+            Intent intent = new Intent(this, PublishableActivity.class);
             intent.putExtra("activityId", activityId);
             startActivity(intent);
         }

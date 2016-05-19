@@ -5,10 +5,17 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundColor">
 
-    <TextView
-        android:id="@+id/tvListOfInvited"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lvUsers"
+        android:choiceMode="singleChoice"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="#DAD2D2"></ListView>
+
 
     <EditText
         android:id="@+id/txtInvitedUserName"
@@ -24,19 +31,44 @@
         android:drawablePadding="8dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="80dp"/>
+        android:layout_marginBottom="10dp"/>
 
-    <Button
-        android:id="@+id/btnAddInvitee"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:typeface="serif"
-        android:padding="5dp"
-        android:background= "@drawable/rounded_green_rectangle"
-        android:text="Add invited user"
-        />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnAddInvitee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:typeface="serif"
+            android:padding="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background= "@drawable/rounded_green_rectangle"
+            android:text="Add invited user"
+            />
+
+        <Button
+            android:id="@+id/btnRemoveSelected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:typeface="serif"
+            android:padding="5dp"
+            android:background= "@drawable/rounded_green_rectangle"
+            android:text="Remove selected"
+            />
+
+    </LinearLayout>
+
+
 
 
 </LinearLayout>

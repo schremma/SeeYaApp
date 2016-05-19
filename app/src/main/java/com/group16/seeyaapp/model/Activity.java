@@ -40,6 +40,7 @@ public class Activity {
 
     public String getValidationErrorMessage() {return errorMsg;}
 
+    //TODO add checking if date has passed
     public boolean validateActivity() {
         errorMsg = "";
         if (date == null) {
@@ -61,6 +62,29 @@ public class Activity {
         if (errorMsg.length() > 0)
             return false;
         return true;
+    }
+
+    public String dateLocationString() {
+        return String.format("%s, %s at %s", location, DateHelper.DateToDateOnlyString(date),
+                DateHelper.DateToTimeOnlyString(time));
+    }
+
+    public String participantInfoString() {
+        String maximumParticipants = "";
+        if (maxNbrOfParticipants != 0) {
+            maximumParticipants = Integer.toString(maxNbrOfParticipants);
+        }
+        else {
+            maximumParticipants = "no limit is defined";
+        }
+        String minimumParticipants = "";
+        if (minNbrOfParticipants != 0) {
+            minimumParticipants = Integer.toString(minNbrOfParticipants);
+        }
+        else {
+            minimumParticipants = "no minimum is defined";
+        }
+        return String.format("Minimum participants: %s\nMaximum participants: %s", minimumParticipants, maximumParticipants);
     }
 
     @Override

@@ -7,9 +7,12 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.group16.seeyaapp.PresenterManager;
@@ -23,11 +26,14 @@ import java.util.List;
  */
 public class AddInvitedFragment extends DialogFragment implements AddInvitedView {
     private AddInvitedPresenterImpl presenter;
-    private List<String> lstInvited;
+    private ArrayList<String> lstInvited;
+    private ArrayList<String> lstInvitedOnDialogStart;
 
-    private TextView tvInvitedList;
     private EditText txtInvitedUser;
     private Button btnAddInvitee;
+    private Button btnRemoveSelected;
+    private ListView lvUsers;
+    private ArrayAdapter<String> arrayAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,7 +45,24 @@ public class AddInvitedFragment extends DialogFragment implements AddInvitedView
             presenter = PresenterManager.getInstance().restorePresenter(savedInstanceState);
         }
 
+        ArrayList<String> lstFromActivity = getArguments().getStringArrayList("invitedList");
+        lstFromActivity = getArguments().getStringArrayList("invitedList");
+        lstInvited = new ArrayList<>();
+        lstInvitedOnDialogStart = new ArrayList<>();
+        for(String i : lstFromActivity) {
+            lstInvited.add(i);
+            lstInvitedOnDialogStart.add(i);
+        }
+    }
 
+    public static AddInvitedFragment newInstance(ArrayList<String> inivitedList) {
+        AddInvitedFragment f = new AddInvitedFragment();
+
+        Bundle args = new Bundle();
+        args.putStringArrayList("invitedList", inivitedList);
+        f.setArguments(args);
+
+        return f;
     }
 
     @Override
@@ -61,20 +84,22 @@ public class AddInvitedFragment extends DialogFragment implements AddInvitedView
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
+        presenter.setInvitedList(lstInvited);
         PresenterManager.getInstance().savePresenter(presenter, outState);
     }
 
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.add_invited_fragment_dialog, null);
 
 
         btnAddInvitee = (Button)view.findViewById(R.id.btnAddInvitee);
         txtInvitedUser = (EditText)view.findViewById(R.id.txtInvitedUserName);
-        tvInvitedList = (TextView)view.findViewById(R.id.tvListOfInvited);
+        lvUsers = (ListView)view.findViewById(R.id.lvUsers);
+        btnRemoveSelected = (Button)view.findViewById(R.id.btnRemoveSelected);
+        btnRemoveSelected.setEnabled(false);
 
 
         btnAddInvitee.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +110,30 @@ public class AddInvitedFragment extends DialogFragment implements AddInvitedView
             }
         });
 
+        btnRemoveSelected.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = lvUsers.getCheckedItemPosition();
+                if (position >= 0) {
+                    String selected = lvUsers.getItemAtPosition(position).toString();
+                    removeInvitedUser(selected);
+                }
+            }
+        });
+
+        lvUsers.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+        updateInvitedListDisplay();
+
+
+        lvUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!btnRemoveSelected.isEnabled())
+                    btnRemoveSelected.setEnabled(true);
+            }
+        });
+
+
         builder.setView(view)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -93,11 +142,19 @@ public class AddInvitedFragment extends DialogFragment implements AddInvitedView
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // do something
+                        ((AddInvitedListener) getActivity()).setListOfInvitedUsers(lstInvitedOnDialogStart);
                     }
                 });
 
         return builder.create();
+    }
+
+    private void removeInvitedUser(String selected) {
+        int index = lstInvited.indexOf(selected);
+        if (index >= 0) {
+            lstInvited.remove(index);
+        }
+        updateInvitedListDisplay();
     }
 
     @Override
@@ -108,7 +165,6 @@ public class AddInvitedFragment extends DialogFragment implements AddInvitedView
             toast.show();
 
             txtInvitedUser.setText("");
-            tvInvitedList.setText(tvInvitedList.getText() + username + "; " );
             addInvited(username);
         }
         else {
@@ -116,6 +172,16 @@ public class AddInvitedFragment extends DialogFragment implements AddInvitedView
         }
 
     }
+
+    @Override
+    public void setInvitedUserList(List<String> invitedUserList) {
+
+        lstInvited = new ArrayList<>();
+        for(String i : invitedUserList)
+            lstInvited.add(i);
+        updateInvitedListDisplay();
+    }
+
 
     @Override
     public void showOnError(String errorMessage) {
@@ -127,5 +193,16 @@ public class AddInvitedFragment extends DialogFragment implements AddInvitedView
         if (lstInvited == null)
             lstInvited = new ArrayList<>();
         lstInvited.add(username);
+
+        updateInvitedListDisplay();
+    }
+
+    private void updateInvitedListDisplay() {
+        arrayAdapter = new ArrayAdapter<String>(
+                getActivity(),
+                R.layout.list_users_item,
+                lstInvited);
+
+        lvUsers.setAdapter(arrayAdapter);
     }
 }

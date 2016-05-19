@@ -44,13 +44,12 @@
         <activity
             android:name=".navigation.TestCreatePage"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <!-- <activity -->
-        android:name=".navigation.DemoPage"
-        <!-- android:theme="@style/Theme.AppCompat.NoActionBar" /> -->
+
         <activity android:name=".activity.list.mainlist.TestMainListActivity" />
         <activity android:name=".activity.list.TestHeadlineListActivity" />
-        <!--<activity android:name=".navigation.DemoPage"></activity>-->
+         <!--<activity android:name=".navigation.DemoPage"></activity>-->
 
+        <activity android:name=".activity.details.PublishableActivity"></activity>
     </application>
 
 </manifest>

@@ -3,6 +3,7 @@ package com.group16.seeyaapp.activity.details;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,6 +21,12 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
     private Button btnSignUp;
     private boolean signedUp;
     private TextView tvNbrAttending;
+
+    private TextView tvHeadline;
+    private TextView tvAddress;
+    private TextView tvDateLocation;
+    private TextView tvNbrOfParticipants;
+    private TextView tvActivityInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +59,14 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
         });
 
         tvNbrAttending = (TextView)findViewById(R.id.tvNbrAttending);
+        tvActivityInfo = (TextView)findViewById(R.id.tvActivityInfo);
+        tvHeadline = (TextView) findViewById(R.id.tvHeadline);
+        tvAddress = (TextView)findViewById(R.id.tvAddress);
+        tvDateLocation = (TextView)findViewById(R.id.tvDateLocationString);
+        tvNbrOfParticipants = (TextView)findViewById(R.id.tvNbrOfParticipants);
+
+        tvActivityInfo.setMovementMethod(new ScrollingMovementMethod());
+
     }
 
     @Override
@@ -80,10 +95,14 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
 
     @Override
     public void displayActivityDetails(Activity activity) {
-        TextView tv = (TextView)findViewById(R.id.tvActivityInfo);
-        tv.setText(activity.toString());
         tvNbrAttending.setText("Attending: " + activity.getNbrSignedUp());
         updateSignedUpStatus(activity.isAttending());
+
+        tvNbrOfParticipants.setText(activity.participantInfoString());
+        tvDateLocation.setText(activity.dateLocationString());
+        tvActivityInfo.setText(activity.getMessage());
+        tvHeadline.setText(activity.getHeadline());
+        tvAddress.setText(activity.getAddress() != null ? "Address: " + activity.getAddress() : "");
 
     }
 

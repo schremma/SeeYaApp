@@ -1,18 +1,13 @@
 package com.group16.seeyaapp.activity.details;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -20,46 +15,34 @@ import android.widget.Toast;
 
 import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
+import com.group16.seeyaapp.activity.list.mainlist.TestMainListActivity;
 import com.group16.seeyaapp.helpers.DateHelper;
 import com.group16.seeyaapp.model.Activity;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
-public class EditableActivity extends AppCompatActivity implements EditableActivityView, AddInvitedListener {
+public class EditableActivity extends AppCompatActivity implements EditableActivityView, DateTimeDialogListener {
 
     private EditableActivityPresenterImpl presenter;
     private Activity activity;
     private Spinner spinnerLocations;
-    private boolean newActivity;
     private int activityId;
     private Button btnCreate;
-    private Button btnPublish;
-    private Button btnAddInvitee;
-    private TextView tvInvitedList;
-    private EditText txtInvitedUser;
-    private List<String> lstInvited;
+    private boolean newActivity;
 
     private TextView tvHeadline;
     private TextView tvMessage;
     private TextView tvAddress;
     private TextView tvTime;
 
-    private TextView tv;
     private LinearLayout createViewContainer;
-    private LinearLayout addInviteesContainer;
 
-    //private DatePicker dpResult;
-    private Button btnChangeDate;
     private TextView tvDisplayDate;
-    private Button btnChangeTime;
     private int year;
     private int month;
     private int day;
-    static final int DATE_DIALOG_ID = 999;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,10 +56,6 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
         }
 
         btnCreate = (Button)findViewById(R.id.btnCreateActivity);
-        btnPublish = (Button)findViewById(R.id.btnPublishActivity);
-        btnPublish.setVisibility(View.INVISIBLE);
-        btnChangeTime = (Button)findViewById(R.id.btnTimePickerDialog);
-        tv = (TextView)findViewById(R.id.txtActivity);
         spinnerLocations = (Spinner) findViewById(R.id.spinnerLocations);
         tvHeadline = (TextView) findViewById(R.id.txtHeadline);
         tvMessage = (TextView) findViewById(R.id.txtMessage);
@@ -85,10 +64,6 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
 
 
         createViewContainer = (LinearLayout)findViewById(R.id.createActivityContainer);
-        addInviteesContainer = (LinearLayout)findViewById(R.id.addInviteeContainer);
-        btnAddInvitee = (Button)findViewById(R.id.btnAddInviteeDialog);
-        txtInvitedUser = (EditText)findViewById(R.id.txtInvitedUserName);
-        tvInvitedList = (TextView)findViewById(R.id.tvListOfInvited);
 
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
@@ -97,13 +72,10 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
             int subCatId = intent.getIntExtra("subCatId", -1);
 
             if (subCatId != -1) {
-
                 newActivity = true;
                 //There is a new activity to be created, set up GUI for that
                 btnCreate.setVisibility(View.VISIBLE);
-                btnPublish.setVisibility(View.INVISIBLE);
                 createViewContainer.setVisibility(View.VISIBLE);
-                addInviteesContainer.setVisibility(View.GONE);
 
 
                 activity = new Activity();
@@ -124,7 +96,6 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
                     }
                 });
 
-
                 findViewById(R.id.btnCreateActivity).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -138,71 +109,51 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
                 activityId = intent.getIntExtra("activityId", -1);
                 newActivity = false;
                 if (activityId != -1) {
-                    //There is an activity to be displayed set up GUI for that
+                    // TODO implement one day
+                    //There is an activity to be displayed for editing set up GUI for that
                     btnCreate.setVisibility(View.INVISIBLE);
-                    btnPublish.setVisibility(View.VISIBLE);
-                    //createViewContainer.setVisibility(View.GONE);
-                    addInviteesContainer.setVisibility(View.VISIBLE);
-                    lstInvited = new ArrayList<>();
-
-                    btnPublish.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (lstInvited == null || lstInvited.size() < 1) {
-                                presenter.onPublishActivity(activity.getId());
-                            }
-                            else {
-                                presenter.onPublishActivity(activity.getId(), lstInvited);
-                            }
-                        }
-                    });
-
-                    btnAddInvitee.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //String usr = txtInvitedUser.getText().toString();
-                            //checkIfInvitedUserExists(usr);
-                            addInvitedUsers();
-                        }
-                    });
 
                 }
             }
         }
 
-        //dpResult = (DatePicker) findViewById(R.id.datePicker);
-        btnChangeDate = (Button) findViewById(R.id.btnChangeDate);
         tvDisplayDate = (TextView) findViewById(R.id.tvDate);
 
-        btnChangeDate.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btnTimePickerDialog).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onTimePickerButtonClicked(v);
+            }
+        });
+        findViewById(R.id.btnChangeDate).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-
-                showDialog(DATE_DIALOG_ID);
-
+                onDatePickerButtonClicked(v);
             }
 
         });
 
+        setDefaultDate();
+        setDefaultTime();
+
+    }
+    //Sets current date to be shown
+    private void setDefaultDate() {
         final Calendar c = Calendar.getInstance();
         year = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);
         day = c.get(Calendar.DAY_OF_MONTH);
+        tvDisplayDate.setText(DateHelper.FormatDate(year, month, day));
 
+    }
+    //Sets current time to be shown
+    private void setDefaultTime() {
+        final Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
-
-        // set current date and time into textview
-        tvDisplayDate.setText(new StringBuilder()
-                // Month is 0 based, just add 1
-                .append(month + 1).append("-").append(day).append("-")
-                .append(year).append(" "));
-        tvTime.setText(hour + ":" + minute + ":00");
+        tvTime.setText(DateHelper.FormatTime(hour, minute, 0));
     }
-
-
-
 
     @Override
     protected void onResume() {
@@ -228,90 +179,92 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
+        getActivityInput();
+        presenter.onSetActivity(activity);
         PresenterManager.getInstance().savePresenter(presenter, outState);
+    }
+
+    /**
+     * Gets the activity input from GUI and stores it in the Activity object,
+     * without saving in into database.
+     */
+    private void getActivityInput() {
+        TextView tvMin = (TextView)findViewById(R.id.txtMinParticipants);
+        TextView tvMax = (TextView)findViewById(R.id.txtMaxParticipants);
+        int min = 0;
+        int max = 0; // 0 for max means unlimited
+
+        try {
+            if (tvMin.getText().length() > 0) {
+                min = Integer.parseInt(tvMin.getText().toString());
+            }
+            if (tvMax.getText().length() > 0) {
+                max = Integer.parseInt(tvMax.getText().toString());
+            }
+        } catch(NumberFormatException e1) {}
+
+        Date activityDate = new Date();
+        Date activityTime = new Date();
+
+        try {
+            activityDate = DateHelper.StringDateToDate(tvDisplayDate.getText().toString());
+            activityTime = DateHelper.StringTimeToDate(tvTime.getText().toString());
+        } catch (ParseException e) {}
+
+        activity.setDate(activityDate);
+        activity.setTime(activityTime);
+        String location = spinnerLocations.getSelectedItem().toString();
+
+        activity.setLocation(location);
+        activity.setAddress(tvAddress.getText().toString());
+        activity.setHeadline(tvHeadline.getText().toString());
+        activity.setMessage(tvMessage.getText().toString());
+
+        activity.setMinNbrOfParticipants(min);
+        activity.setMaxNbrOfParticipants(max);
+
     }
 
     @Override
     public void setLocationList(String[] locations) {
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, locations);
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, R.layout.my_spinner_item, locations);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerLocations.setAdapter(spinnerArrayAdapter);
-        Log.i("Editableactivity", "Set location string: " + locations.toString());
 
+        // set a preselected location from activity if there is any
+        if (activity.getLocation() !=null) {
+
+            int locationIndex = spinnerArrayAdapter.getPosition(activity.getLocation());
+            if (locationIndex >= 0) {
+                spinnerLocations.setSelection(locationIndex);
+            }
+        }
     }
 
-
-    // The view is to display an already created activity
+    // The view is to display an already created activity for editing
+    // Or a not yet saved activity, if a configiration change took place while entering input
     @Override
     public void displayActivityDetails(Activity activity) {
-
         this.activity = activity;
-
-        if (activity.getDatePublished() != null) {
-            btnPublish.setVisibility(View.INVISIBLE);
-            addInviteesContainer.setVisibility(View.GONE);
-        }
-        else {
-            btnPublish.setVisibility(View.VISIBLE);
-            addInviteesContainer.setVisibility(View.VISIBLE);
-            spinnerLocations.setVisibility(View.GONE);
-            btnChangeDate.setVisibility(View.GONE);
-            btnChangeTime.setVisibility(View.GONE);
-        }
 
         TextView tvMin = (TextView)findViewById(R.id.txtMinParticipants);
         TextView tvMax = (TextView)findViewById(R.id.txtMaxParticipants);
-        TextView tvLocation = (TextView)findViewById(R.id.tvLocationString);
-        tvLocation.setVisibility(View.VISIBLE);
-        tvLocation.setText(activity.getLocation());
 
         tvMin.setText(Integer.toString(activity.getMinNbrOfParticipants()));
         tvMax.setText(Integer.toString(activity.getMaxNbrOfParticipants()));
-        tvMax.setEnabled(false);
-        tvMin.setEnabled(false);
-
         tvDisplayDate.setText(DateHelper.DateToDateOnlyString(activity.getDate()));
-
         tvTime.setText(DateHelper.DateToTimeOnlyString(activity.getTime()));
-
-
-//        ArrayAdapter<String> adapter = (ArrayAdapter<String>)spinnerLocations.getAdapter();
-//        int spinnerPosition = adapter.getPosition(activity.getLocation());
-//        spinnerLocations.setSelection(spinnerPosition);
-//        spinnerLocations.setEnabled(false);
-
         tvAddress.setText(activity.getAddress() != null ? activity.getAddress() : "");
-        tvHeadline.setText(activity.getHeadline());
-        tvMessage.setText(activity.getMessage().toString());
-
-        enableEditing(false);
+        tvHeadline.setText(activity.getHeadline() != null ? activity.getHeadline() : "");
+        tvMessage.setText(activity.getMessage() != null ? activity.getMessage() : "");
     }
 
-    private void enableEditing(boolean enabledStatus) {
-        TextView tvMin = (TextView)findViewById(R.id.txtMinParticipants);
-        TextView tvMax = (TextView)findViewById(R.id.txtMaxParticipants);
-        TextView tvLocation = (TextView)findViewById(R.id.tvLocationString);
-
-        tvMax.setEnabled(enabledStatus);
-        tvMin.setEnabled(enabledStatus);
-        tvLocation.setEnabled(enabledStatus);
-        tvDisplayDate.setEnabled(enabledStatus);
-        tvTime.setEnabled(enabledStatus);
-        tvAddress.setEnabled(enabledStatus);
-        tvHeadline.setEnabled(enabledStatus);
-        tvMessage.setEnabled(enabledStatus);
-
-    }
 
     @Override
-    public void updatePublishedStatus(boolean published) {
-        if (published) {
-            activity.setDatePublished(new Date());
-            tv.setText(activity.toString());
-            btnPublish.setVisibility(View.INVISIBLE);
-            addInviteesContainer.setVisibility(View.GONE);
-            Toast toast = Toast.makeText(this, "Activity has been published!", Toast.LENGTH_SHORT);
-            toast.show();
+    public void updateStatus(boolean changesSaved) {
+        if (changesSaved) {
+            // TODO implement one day
+            // displaying changed activity after editing
         }
     }
 
@@ -319,24 +272,18 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
     public void updateCreateStatus(boolean created) {
         if (created) {
             btnCreate.setVisibility(View.INVISIBLE);
+            Toast toast = Toast.makeText(this, "Activity has been created!", Toast.LENGTH_SHORT);
+            toast.show();
         }
-
-        Toast toast = Toast.makeText(this, "Activity has been created!", Toast.LENGTH_SHORT);
-        toast.show();
 
     }
 
     @Override
-    public void onUserExistenceChecked(boolean userExists, String username) {
-        if (userExists) {
-            Toast toast = Toast.makeText(this, "User confirmed", Toast.LENGTH_SHORT);
-            toast.show();
-
-            txtInvitedUser.setText("");
-            tvInvitedList.setText(tvInvitedList.getText() + username + "; " );
-            lstInvited.add(username);
-        }
+    public void navigateToBrowseActivities() {
+        Intent intent = new Intent(this, TestMainListActivity.class);
+        startActivity(intent);
     }
+
 
     @Override
     public void showOnError(String errorMessage) {
@@ -350,22 +297,18 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
         TextView tvMin = (TextView)findViewById(R.id.txtMinParticipants);
         TextView tvMax = (TextView)findViewById(R.id.txtMaxParticipants);
         int min = 0;
-        int max = 0;
+        int max = 0; // 0 for max means unlimited
 
         try {
-            min = Integer.parseInt(tvMin.getText().toString());
-            max = Integer.parseInt(tvMax.getText().toString());
+            if (tvMin.getText().length() > 0){
+                min = Integer.parseInt(tvMin.getText().toString());
+            }
+            if (tvMax.getText().length() > 0) {
+                max = Integer.parseInt(tvMax.getText().toString());
+            }
 
 
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.YEAR, year);
-            cal.set(Calendar.MONTH, month);
-            cal.set(Calendar.DAY_OF_MONTH, day);
-
-            Date date = cal.getTime();
-
-            activity.setDate(date);
-
+            activity.setDate(DateHelper.StringDateToDate(tvDisplayDate.getText().toString()));
             activity.setTime(DateHelper.StringTimeToDate(tvTime.getText().toString()));
             String location = spinnerLocations.getSelectedItem().toString();
 
@@ -388,55 +331,25 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
         }
     }
 
+    public void onDatePickerButtonClicked(View v) {
+        DialogFragment picker = new DatePickerFragment();
+        picker.show(getFragmentManager(), "datePicker");
+    }
 
     public void onTimePickerButtonClicked(View v){
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(getFragmentManager(),"TimePicker");
     }
 
+
     @Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case DATE_DIALOG_ID:
-                // set date picker as current date
-                return new DatePickerDialog(this, datePickerListener,
-                        year, month,day);
-        }
-        return null;
+    public void onDateSelected(int year, int month, int day) {
+        tvDisplayDate.setText(DateHelper.FormatDate(year, month, day));
     }
 
-    private DatePickerDialog.OnDateSetListener datePickerListener
-            = new DatePickerDialog.OnDateSetListener() {
-
-        // when dialog box is closed, below method will be called.
-        public void onDateSet(DatePicker view, int selectedYear,
-                              int selectedMonth, int selectedDay) {
-            year = selectedYear;
-            month = selectedMonth;
-            day = selectedDay;
-
-
-            //set selected date into textview
-            tvDisplayDate.setText(new StringBuilder().append(month + 1)
-                    .append("-").append(day).append("-").append(year)
-                    .append(" "));
-
-        }
-    };
-
-    private void checkIfInvitedUserExists(String userName) {
-        if (userName != null) {
-            presenter.checkIfUserExists(userName);
-        }
-    }
-
-    private void addInvitedUsers() {
-        DialogFragment invitedFragment = new AddInvitedFragment();
-        invitedFragment.show(getFragmentManager(),"Add invited users");
-
-    }
-
-    public void setListOfInvitedUsers(List<String> lstInvited) {
-        this.lstInvited = lstInvited;
+    @Override
+    public void onTimeSelected(int hour, int minute, int second) {
+        TextView tv = (TextView)findViewById(R.id.tvTime);
+        tv.setText(DateHelper.FormatTime(hour, minute, 0));
     }
 }

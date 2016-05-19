@@ -1,5 +1,6 @@
 package com.group16.seeyaapp.activity.details;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.group16.seeyaapp.communication.ComConstants;
@@ -23,6 +24,11 @@ public class AddInvitedPresenterImpl extends CommunicatingPresenter<AddInvitedVi
     public void checkIfUserExists(String userName) {
         String json = JsonConverter.userExistsJson(userName);
         sendJsonString(json);
+    }
+
+    @Override
+    public void setInvitedList(List<String> invited) {
+        model = invited;
     }
 
     @Override
@@ -55,6 +61,16 @@ public class AddInvitedPresenterImpl extends CommunicatingPresenter<AddInvitedVi
             view().showOnError(failMsg);
         }
 
+    }
+
+    @Override
+    public void bindView(@NonNull AddInvitedView view) {
+        super.bindView(view);
+
+        if (model !=null) {
+                view().setInvitedUserList(model);
+
+        }
     }
 
     @Override

@@ -25,20 +25,16 @@ import java.util.List;
 
 /**
  * Created by Andrea on 14/04/16.
- * Manages the display of editable activities, i.e. activities the user himself or herself
- * created but has not published yet, or activities that are in the process of being created by the user.
- * If the presenter is to display a specific activity - a created but has not published one:
- * it gets the whole activity from server using the provided id.
- * If it is to create a new activity, it gets the list of locations and sends it to the view.
- * The view communicates to the presenter which if these two scenarios are to take place,
- * by calling the aboutToPublishActivity() or aboutToCreateActivity(), just before it is displayed.
+ * Manages the display of editable activities, i.e. activities that are in the process of being created by the user,
+ * and as a future functionality, own activities being editied by the user.
+ * If the presenter is to display a specific activity - earlier created by the user:
+ * it gets the whole activity from server using the provided id in onCreateActivity.
  */
 public class EditableActivityPresenterImpl extends CommunicatingPresenter<EditableActivityView, Activity> implements EditableActivityPresenter {
     private static final String TAG = "EditableActivityPres";
     private HashMap<String, List<Location>> locations;
     private String locationsVersion;
 
-    private boolean editing;    // TODO Remove these?
     private ActionType actionType;
 
     @Override
@@ -79,23 +75,13 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
     }
 
     @Override
-    public void onPublishActivity(long activityId) {
-        String json = JsonConverter.publishActivityJson(activityId);
-        actionType = ActionType.Publish;
-        sendJsonString(json);
+    public void onSetActivity(Activity activity) {
+        model = activity;
     }
 
-    @Override
-    public void onPublishActivity(long activityId, List<String> invitees) {
-        // TODO convert to json in JsonConverter - complete method
-        String json = JsonConverter.publishActivityToSpecificUsersJson(activityId, invitees);
-        sendJsonString(json);
-        // send to server
-    }
 
     @Override
     public void aboutToDisplayActivity(int activityId) {
-        editing = false;
 
         final SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
         String currentUser = preferences.getString(LocalConstants.SP_CURRENT_USER, null);
@@ -107,25 +93,16 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
 
     @Override
     public void aboutToCreateActivity() {
-        editing = true;
         if (locations == null)
             retrieveLocations();
     }
 
-    @Override
-    public void checkIfUserExists(String userName) {
-
-        String json = JsonConverter.userExistsJson(userName);
-        sendJsonString(json);
-    }
 
     /**
      * The json response could be:
      * 1. CONFIRMATION
      *      1a: confirmation that an activity has been created
-     *      1b: confirmation that an activity has been published
-     *      1c: confirmation that a user exists (a user to publish an activity to)
-     * 2. LOCATIONS
+\     * 2. LOCATIONS
      *      2a: an array with locations
      *      2b: a confirmation that we already have the right version
      * 3. ACTIVITY: an already created activity that is to be displayed
@@ -139,22 +116,11 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
             JSONObject jsonObject = new JSONObject(json);
             String msgType = (String)jsonObject.get(ComConstants.TYPE);
 
-            if (msgType.equals(ComConstants.PUBLISH_ACTIVITY_CONFIRMATION)) {
-
-                String message =  (String)jsonObject.get(ComConstants.MESSAGE);
-
-                view().updatePublishedStatus(true);
-                //onActionSuccess(message);
-            }
-            else if (msgType.equals(ComConstants.NEW_ACTIVTIY_CONFIRMATION)) {
+            if (msgType.equals(ComConstants.NEW_ACTIVTIY_CONFIRMATION)) {
 
                 String message = (String) jsonObject.get(ComConstants.MESSAGE);
                 view().updateCreateStatus(true);
-                //onActionSuccess(message);
-            }
-            else if (msgType.equals(ComConstants.USER_EXISTS)) {
-                String username =  (String)jsonObject.get(ComConstants.MESSAGE);
-                onUserExistConfirmed(true, username);
+                view().navigateToBrowseActivities();
             }
             else if (msgType.equals(ComConstants.LOCATIONS)) {
                 updateLocationList(json);
@@ -183,17 +149,9 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
             else if (msgType.equals(ComConstants.ACTIVITIY)) {
                 setActivity(json);
             }
-            else if (msgType.equals(ComConstants.PUBLISH_ACTIVITY_ERROR)){
-                String message =  (String)jsonObject.get(ComConstants.MESSAGE);
-                onActionFail(message);
-            }
             else if (msgType.equals(ComConstants.NEW_ACTIVITY_ERROR)){
                 String message =  (String)jsonObject.get(ComConstants.MESSAGE);
                 onActionFail(message);
-            }
-            else if (msgType.equals(ComConstants.INVALID_USERNAME)){
-                String username =  (String)jsonObject.get(ComConstants.USERNAME);
-                onUserExistConfirmed(false, username);
             }
             else {
                 String message =  (String)jsonObject.get(ComConstants.MESSAGE);
@@ -212,9 +170,6 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
 
     }
 
-    private void onUserExistConfirmed(boolean exists, String username) {
-        view().onUserExistenceChecked(exists, username);
-    }
 
     private void setActivity(String json) {
         Log.i(TAG, json);
@@ -269,9 +224,7 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
     }
 
     private void onActionSuccess(String message) {
-        if (actionType.equals(ActionType.Publish))
-            view().updatePublishedStatus(true);
-        else if (actionType.equals(ActionType.CreateNew)) {
+        if (actionType.equals(ActionType.CreateNew)) {
             view().updateCreateStatus(true);
         }
     }
@@ -394,7 +347,7 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
 
 
     // TODO now locations are only shown as simple list of specific location
-    // changed it so that it is an embedded list with 'Landskap' and 'stad'
+    // change it so that it is an embedded list with 'Landskap' and 'stad'
     private void onLocationsRetrievalSuccess() {
         List<String> loc = new ArrayList<String>();
         for (String k : locations.keySet()) {
@@ -415,9 +368,10 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
     public void bindView(@NonNull EditableActivityView view) {
         super.bindView(view);
 
-        //we do not need to retrieve locations if the activity is just displayed without editing
-        if (editing)
-            retrieveLocations();
+        retrieveLocations();
+        if (model != null) {
+            view().displayActivityDetails(model);
+        }
     }
 
 
@@ -429,7 +383,6 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
 
     private enum ActionType {
         CreateNew,
-        Publish,
         Edit
     }
 }

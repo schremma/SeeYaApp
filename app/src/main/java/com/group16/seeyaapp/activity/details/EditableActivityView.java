@@ -17,12 +17,12 @@ public interface EditableActivityView {
     void displayActivityDetails(Activity activity);
 
     // if published == true: activity has just been successfully published
-    void updatePublishedStatus(boolean published);
+    void updateStatus(boolean changesSaved);
 
     // if created == true: activity has just been successfully created
     void updateCreateStatus(boolean created);
 
-    void onUserExistenceChecked(boolean userExists, String username);
+    void navigateToBrowseActivities();
 
     void showOnError(String errorMessage);
 

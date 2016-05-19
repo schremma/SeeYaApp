@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:fillViewport="true"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -12,9 +12,10 @@
     android:background="@color/backgroundColor">
 
 <RelativeLayout
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    tools:context="com.group16.seeyaapp.activity.details.PublishableActivity">
 
     <TextView
         android:id="@+id/tvHeadline"
@@ -35,7 +36,6 @@
         android:layout_gravity="center_horizontal"
         android:textColor="@color/black"
         android:layout_below="@+id/tvHeadline"
-        android:layout_centerHorizontal="true"
         android:textSize="20sp"
         android:padding="8dp"
         android:layout_marginRight="10dp"
@@ -81,30 +81,78 @@
         android:layout_marginBottom="10dp"
         android:padding="8dp"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/containerAddInvitee"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/tvNbrOfParticipants"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/containerInviteeList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/containerAddInvitee">
+
+            <TextView
+                android:id="@+id/lblListOfInvited"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="Invited users: "/>
+
+            <TextView
+                android:id="@+id/tvListOfInvited"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/black"
+                android:layout_below="@+id/lblListOfInvited"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnAddInviteeDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_below="@+id/containerInviteeList"
+            android:text="Add invited user"
+            android:typeface="serif"
+            android:background= "@drawable/rounded_green_rectangle"
+            android:padding="@dimen/button_padding"/>
+
+
+
+    </LinearLayout>
+
     <TextView
-        android:id="@+id/tvNbrAttending"
+        android:id="@+id/tvPublishedStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvNbrOfParticipants"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/containerAddInvitee"
         android:textColor="@color/black"
-        android:textSize="20sp"
-        android:padding="4dp"
-        android:layout_centerHorizontal="true"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
-        />
-
+        android:padding="8dp"/>
 
 
     <Button
-        android:id="@+id/btnSignUpForActivity"
+        android:id="@+id/btnPublishActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sign up"
+        android:text="Publish activity"
         android:textSize="30sp"
         android:typeface="serif"
-        android:layout_below="@+id/tvNbrAttending"
         android:background= "@drawable/rounded_green_rectangle"
+        android:layout_below="@+id/tvPublishedStatus"
         android:layout_marginTop="10dp"/>
 
 

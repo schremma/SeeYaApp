@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/backgroundColor"
+    >
+
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -85,7 +97,6 @@
                 android:layout_width="120dp"
                 android:layout_height="40dp"
                 android:layout_alignParentRight="true"
-                android:onClick="onTimePickerButtonClicked"
                 android:typeface="serif"
                 android:padding="5dp"
                 android:background= "@drawable/rounded_green_rectangle"
@@ -148,6 +159,7 @@
             android:text="Number of participants"/>
 
         <RelativeLayout
+            android:id="@+id/containerLimits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -192,62 +204,12 @@
         android:typeface="serif"
         android:background= "@drawable/rounded_green_rectangle"
         android:text="Create activity"
+        android:layout_below="@+id/containerLimits"
         />
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/txtActivity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"/>
-
-    <TextView
-        android:id="@+id/txtActivityId"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <LinearLayout
-        android:id="@+id/addInviteeContainer"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <EditText
-            android:id="@+id/txtInvitedUserName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:hint="name of invited user"
-            android:drawablePadding="8dp"
-            android:layout_marginTop="200dp"/>
-
-        <Button
-            android:id="@+id/btnAddInviteeDialog"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add invited user"
-            />
-
-        <TextView
-            android:id="@+id/tvListOfInvited"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-    <Button
-        android:id="@+id/btnPublishActivity"
-        android:visibility="invisible"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Publish activity"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        />
 
 
 </RelativeLayout>
+
+</ScrollView>
