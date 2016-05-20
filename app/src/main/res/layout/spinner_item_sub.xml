@@ -6,7 +6,7 @@
     android:textSize="24sp"
     android:textColor="@color/white"
     android:padding="6dp"
-    android:background="@drawable/rounded_spinner"
+    android:background="@drawable/rounded_spinner_sub"
     android:typeface="serif">
 
 </TextView>

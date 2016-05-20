@@ -3,6 +3,10 @@ package com.group16.seeyaapp.activity.list.mainlist;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.RadioButton;
@@ -11,6 +15,8 @@ import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
 import com.group16.seeyaapp.activity.list.Filter;
 import com.group16.seeyaapp.activity.list.TestHeadlineListActivity;
+import com.group16.seeyaapp.navigation.DemoPage;
+import com.group16.seeyaapp.navigation.TestCreatePage;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +27,7 @@ public class TestMainListActivity extends AppCompatActivity implements MainListV
     private Filter currentListFilter;
     private RadioButton rbtnInvited;
     private RadioButton rbtnOwn;
+    private Toolbar toolbar;
 
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
@@ -31,6 +38,11 @@ public class TestMainListActivity extends AppCompatActivity implements MainListV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_main_list);
+
+        toolbar = (Toolbar)findViewById(R.id.tbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setIcon(R.mipmap.seeyalogo_smaller);
 
         if (savedInstanceState == null) {
             presenter = new MainListPresenterImpl();
@@ -78,6 +90,31 @@ public class TestMainListActivity extends AppCompatActivity implements MainListV
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.toolbarhome) {
+            Intent intent = new Intent(this, DemoPage.class);
+            startActivity(intent);
+        } else if(id == R.id.toolbarsettings) {
+
+        } else if(id == R.id.toolbarinfo) {
+
+        } else if(id == R.id.toolbarbrowse) {
+            Intent intent = new Intent(this, TestMainListActivity.class);
+            startActivity(intent);
+        } else if(id == R.id.toolbaradd) {
+            Intent intent = new Intent(this, TestCreatePage.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void setNestedListHeaders(List<String> mainHeaders, HashMap<String, List<String>> subHeaders) {
@@ -129,7 +166,7 @@ public class TestMainListActivity extends AppCompatActivity implements MainListV
     @Override
     protected void onPause() {
         super.onPause();
-
+        System.gc();
         presenter.unbindView();
     }
 

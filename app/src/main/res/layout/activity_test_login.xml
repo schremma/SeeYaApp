@@ -11,7 +11,7 @@
     >
 
 
-    <EditText
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/signInText"
@@ -22,7 +22,8 @@
         android:gravity="center"
         android:layout_centerHorizontal="true"
         android:padding="20dp"
-        android:elevation="12dp" />
+        android:elevation="4dp"
+        android:layout_margin="4dp" />
 
     <EditText
         android:id="@+id/txtusername"
@@ -64,25 +65,25 @@
 
     <Button
         android:id="@+id/btnLogin"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/loginBtn"
         android:textSize="@dimen/button_text"
         android:typeface="serif"
-        android:layout_marginBottom="71dp"
+        android:layout_marginBottom="77dp"
         android:background= "@drawable/rounded_green_rectangle"
+        android:padding="@dimen/button_padding"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:padding="@dimen/button_padding" />
+        android:layout_centerHorizontal="true" />
 
     <ProgressBar
         android:id="@+id/barprogress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:visibility="gone"
-        />
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/signInText"
+        android:visibility="gone" />
 
 
 

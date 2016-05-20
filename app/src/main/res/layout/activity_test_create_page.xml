@@ -4,11 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".navigation.TestCreatePage"
-    android:background="@color/backgroundColor">
+    android:background="@color/backgroundColor"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin">
 
     <include
         layout="@layout/tool_bar"
-        android:id="@+id/tbar"
         ></include>
 
     <TextView
@@ -19,30 +22,35 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:gravity="center"
-        android:textColor="#000000"
-        android:textSize="24sp"
+        android:textColor="@color/black"
         android:background="@drawable/rounded_white_rectangle"
         android:padding="4dp"
-        android:layout_margin="8dp"
-        android:id="@+id/textView" />
+        android:id="@+id/textView"
+        android:elevation="8dp"
+        android:textSize="@dimen/headline_text"
+        android:typeface="serif"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp" />
 
     <Button
         android:id="@+id/btnGoToCreate"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Activity"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="120dp"
         android:background="@drawable/rounded_green_rectangle"
         android:textSize="@dimen/button_text"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
-        android:padding="@dimen/button_padding" />
+        android:padding="@dimen/button_padding"
+        android:typeface="serif" />
 
     <Button
         android:id="@+id/button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="GROUP?"
         android:background="@drawable/rounded_green_rectangle"
         android:textSize="@dimen/button_text"
         android:padding="@dimen/button_padding"
@@ -51,7 +59,9 @@
         android:layout_alignStart="@+id/btnGoToCreate"
         android:layout_marginTop="30dp"
         android:layout_alignRight="@+id/btnGoToCreate"
-        android:layout_alignEnd="@+id/btnGoToCreate" />
+        android:layout_alignEnd="@+id/btnGoToCreate"
+        android:typeface="serif"
+        android:text="@string/group" />
 
 
 </RelativeLayout>

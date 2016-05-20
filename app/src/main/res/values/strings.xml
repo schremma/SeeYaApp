@@ -15,5 +15,7 @@
     <string name="btnRegister">Register</string>
     <string name="viewCreated">View created activities</string>
     <string name="createNew">Create New activity</string>
+    <string name="create">CREATE</string>
+    <string name="group">GROUP</string>
     <string name="goToBrowseActivities">Browse Activities</string>
 </resources>

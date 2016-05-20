@@ -33,9 +33,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void signIn(View view) {
         startActivity(new Intent(MainActivity.this, TestLoginActivity.class));
+        finish();
     }
     public void signUp(View view){
         Intent intent = new Intent(this, TestRegisterActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 }

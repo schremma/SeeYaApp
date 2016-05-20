@@ -227,7 +227,6 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
             }
         }
 
-
         if (performCheckWithServer) {
             String json = JsonConverter.getCategoriesJson(version);
             sendJsonString(json);

@@ -1,6 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item
+        android:id="@+id/toolbarhome"
+        app:showAsAction="always"
+        android:title="home"
+        android:icon="@mipmap/house_small"
+        >
+    </item>
 
+    <item
+        android:id="@+id/toolbarsettings"
+        app:showAsAction="never"
+        android:title="settings"
+        android:icon="@mipmap/gear_small"
+        >
+    </item>
 
+    <item
+        android:id="@+id/toolbarinfo"
+        android:title="info"
+        app:showAsAction="never"
+        android:icon="@mipmap/info_small">
+
+    </item>
+
+    <item
+        android:id="@+id/toolbarbrowse"
+        app:showAsAction="always"
+        android:title="browse"
+        android:icon="@mipmap/closer_small"
+        >
+    </item>
+
+    <item
+        android:id="@+id/toolbaradd"
+        app:showAsAction="always"
+        android:title="add"
+        android:icon="@mipmap/add_small"
+        >
+    </item>
+
+<!--
+    <item
+        android:id="@+id/toolbarcoffee"
+        app:showAsAction="always"
+        android:title="coffee"
+        android:icon="@drawable/greeting"
+        >
+    </item>
+
+    <item
+        android:id="@+id/toolbarpingu"
+        app:showAsAction="always"
+        android:title="pingu"
+        android:icon="@drawable/animal"
+        >
+    </item>
+-->
 </menu>

@@ -7,29 +7,61 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.group16.seeyaapp.activity.list.mainlist.TestMainListActivity">
+    tools:context="com.group16.seeyaapp.activity.list.mainlist.TestMainListActivity"
+    android:background="@color/backgroundColor">
+
+    <include
+        layout="@layout/tool_bar"
+        ></include>
 
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="100dp">
+        android:gravity="center"
+        android:id="@+id/radioGroup"
+        android:layout_below="@+id/tbar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp">
         <RadioButton
             android:id="@+id/rbtnInvitedTo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Invited"/>
+            android:text="Invited"
+            android:textColor="@color/black"
+            android:typeface="serif"
+            android:textSize="18sp"
+            android:padding="@dimen/button_padding"
+            android:buttonTint="@color/colorLightCyan"
+            android:elevation="8dp" />
         <RadioButton
             android:id="@+id/rbtnOwn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="My activities"/>
+            android:text="My activities"
+            android:textColor="@color/black"
+            android:typeface="serif"
+            android:textSize="18sp"
+            android:padding="@dimen/button_padding"
+            android:buttonTint="@color/colorLightCyan"
+            android:elevation="8dp" />
     </RadioGroup>
 
-    <ExpandableListView
-        android:id="@+id/lvExp"
-        android:layout_height="match_parent"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_marginTop="50dp"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/radioGroup"
+        android:layout_marginTop="10dp">
+
+        <ExpandableListView
+            android:id="@+id/lvExp"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:elevation="8dp"
+            android:padding="4dp"
+            android:layout_margin="2dp" />
+    </LinearLayout>
 
 </RelativeLayout>
