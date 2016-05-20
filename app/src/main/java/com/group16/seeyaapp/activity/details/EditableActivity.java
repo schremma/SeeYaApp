@@ -4,6 +4,9 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +21,8 @@ import com.group16.seeyaapp.R;
 import com.group16.seeyaapp.activity.list.mainlist.TestMainListActivity;
 import com.group16.seeyaapp.helpers.DateHelper;
 import com.group16.seeyaapp.model.Activity;
+import com.group16.seeyaapp.navigation.DemoPage;
+import com.group16.seeyaapp.navigation.TestCreatePage;
 
 import java.text.ParseException;
 import java.util.Calendar;
@@ -44,10 +49,18 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
     private int month;
     private int day;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editable);
+
+        toolbar = (Toolbar)findViewById(R.id.tbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setIcon(R.mipmap.seeyalogo_smaller);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         if (savedInstanceState == null) {
             presenter = new EditableActivityPresenterImpl();
@@ -171,7 +184,9 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
     @Override
     protected void onPause() {
         super.onPause();
-
+        toolbar = null;
+        finish();
+        System.gc();
         presenter.unbindView();
     }
 
@@ -351,5 +366,31 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
     public void onTimeSelected(int hour, int minute, int second) {
         TextView tv = (TextView)findViewById(R.id.tvTime);
         tv.setText(DateHelper.FormatTime(hour, minute, 0));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.toolbarhome) {
+            Intent intent = new Intent(this, DemoPage.class);
+            startActivity(intent);
+        } else if(id == R.id.toolbarsettings) {
+
+        } else if(id == R.id.toolbarinfo) {
+
+        } else if(id == R.id.toolbaradd) {
+            Intent intent = new Intent(this, TestCreatePage.class);
+            startActivity(intent);
+        } else if(id == R.id.toolbarbrowse) {
+            Intent intent = new Intent(this, TestMainListActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

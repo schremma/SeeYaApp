@@ -69,14 +69,14 @@ public class DemoPage extends AppCompatActivity {
         int id = item.getItemId();
         if(id == R.id.toolbarhome) {
 
-        } else if(id ==R.id.toolbarsettings) {
+        } else if(id == R.id.toolbarsettings) {
 
         } else if(id == R.id.toolbarinfo) {
 
         } else if(id == R.id.toolbaradd) {
             Intent intent = new Intent(this, TestCreatePage.class);
             startActivity(intent);
-        } else if (id == R.id.toolbarbrowse) {
+        } else if(id == R.id.toolbarbrowse) {
             Intent intent = new Intent(this, TestMainListActivity.class);
             startActivity(intent);
         }

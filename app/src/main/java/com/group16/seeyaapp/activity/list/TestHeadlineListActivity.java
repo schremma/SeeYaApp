@@ -2,9 +2,13 @@ package com.group16.seeyaapp.activity.list;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,7 +18,14 @@ import android.widget.Toast;
 import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
 import com.group16.seeyaapp.activity.details.DetailActivity;
+//<<<<<<< Updated upstream
 import com.group16.seeyaapp.activity.details.PublishableActivity;
+//=======
+import com.group16.seeyaapp.activity.details.EditableActivity;
+import com.group16.seeyaapp.activity.list.mainlist.TestMainListActivity;
+import com.group16.seeyaapp.navigation.DemoPage;
+import com.group16.seeyaapp.navigation.TestCreatePage;
+//>>>>>>> Stashed changes
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,12 +41,17 @@ public class TestHeadlineListActivity extends AppCompatActivity implements Activ
     private int groupId;
     private String headlines;
 
-
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_headline_list);
+
+        toolbar = (Toolbar)findViewById(R.id.tbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setIcon(R.mipmap.seeyalogo_smaller);
 
         if (savedInstanceState == null) {
             presenter = new ActivityListPresenterImpl();
@@ -86,6 +102,32 @@ public class TestHeadlineListActivity extends AppCompatActivity implements Activ
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.toolbarhome) {
+            Intent intent = new Intent(this, DemoPage.class);
+            startActivity(intent);
+        } else if(id == R.id.toolbarsettings) {
+
+        } else if(id == R.id.toolbarinfo) {
+
+        } else if(id == R.id.toolbarbrowse) {
+            Intent intent = new Intent(this, TestMainListActivity.class);
+            startActivity(intent);
+        } else if(id == R.id.toolbaradd) {
+            Intent intent = new Intent(this, TestCreatePage.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void setHeadlineList(String[] headlines, String[] dates, int[] ids) {
 
         for (int i = 0; i < headlines.length; i++) {
@@ -94,7 +136,7 @@ public class TestHeadlineListActivity extends AppCompatActivity implements Activ
         map.clear();
         List<String> idStrings = new ArrayList<String>();
         for (int i = 0; i < headlines.length; i++) {
-            String content = headlines[i] + "    date:" + dates[i];
+            String content = headlines[i] + "\n    date:" + dates[i];
             idStrings.add(content);
             map.put(content, ids[i]);
         }
@@ -163,7 +205,7 @@ public class TestHeadlineListActivity extends AppCompatActivity implements Activ
 
         public StableArrayAdapter(Context context, int textViewResourceId,
                                   List<String> objects) {
-            super(context, textViewResourceId, objects);
+            super(context, R.layout.list_layout_a, R.id.tvlist, objects);
             for (int i = 0; i < objects.size(); ++i) {
                 mIdMap.put(objects.get(i), i);
             }
