@@ -25,21 +25,31 @@ import java.util.Map;
 
 /**
  * Created by Andrea on 25/04/16.
+ * Handles the logic behind presenting the browsable list of the main page of the application.
+ * The list is nested, with a number of main categories (listHeaders), each of which may
+ * have a number of subcategories (listChildren). The exact kind of list presented this way
+ * may vary. E.g. the main categories might be main activity subcategories such as Sport, with
+ * specific activity subcategories such as tennis under each. Alternatively, the main categories
+ * might be Swedish regions such as Skåne, with specific towns under each.
+ * The presenter also stores json strings containing a list of activity headlines associated with
+ * each subcategory. Once the user has browsed to a specific subcategory, the approporiate headlines should be
+ * sent for the next view displaying these.
  */
 public class MainListPresenterImpl extends CommunicatingPresenter<MainListView, String> implements MainListPresenter {
     private static final String TAG = "MainListPresenter";
 
     private List<String> listHeader;
-    private HashMap<String, List<String>> listChild;
-    private List<Map.Entry<String,Integer>> idStringPairs= new ArrayList<>(); //ids corresponding to strings in listChild
-    private HashMap<String, String> headlineJsonsForSubcategories;
+    private HashMap<String, List<String>> listChild; // key: header, value: subcategories under header
+    private List<Map.Entry<String,Integer>> idStringPairs= new ArrayList<>(); //ids corresponding to subcategory string in listChild
+    private HashMap<String, String> headlineJsonsForSubcategories; // associated each subcategory with a json string
+                                                                    // containing a list of activity headlines
 
     private String categoriesVersion;
 
 
 
     /**
-     * The json String returned form the server might be:
+     * Handles the json String returned form the server, which might be:
      * 1. MAINCATEGORY_SUBCATEGORY_HEADLINES_FOR_USER: only those main categories with subcategories
      * that contain at least one activity that the user is invited to, and headlines for each such activity
      * 2. MAINCATEGORY_SUBCATEGORY_HEADLINES_FOR_USER_OWND_ACTIVITIES: only those main categories with subcategories
@@ -113,7 +123,7 @@ public class MainListPresenterImpl extends CommunicatingPresenter<MainListView, 
 
     /**
      * Extracts headings, subheadings and headlines under each subheading from json String.
-     * The headlines stored as json Strings associated with their subheading.
+     * The headlines stored as json Strings, associated with their subheading.
      * @param jsonObject
      * @throws JSONException
      */
@@ -206,9 +216,15 @@ public class MainListPresenterImpl extends CommunicatingPresenter<MainListView, 
         }
     }
 
+    /**
+     * Sends updated list main- and subcategories to the view.
+     */
     private void onUpdatedListData() {
-
-        view().setNestedListHeaders(listHeader, listChild);
+        synchronized (this) {
+            if (view() != null) {
+                view().setNestedListHeaders(listHeader, listChild);
+            }
+        }
     }
 
     private void onRetrievalError(String error) {
@@ -244,26 +260,16 @@ public class MainListPresenterImpl extends CommunicatingPresenter<MainListView, 
     }
 
     // TODO remove list filter from parameters
+
+    /**
+     * Called when the user has selected a subcategory for the list.
+     * Appropriate json string with the assoicated headlines under that
+     * subcategory is retrieved and sent to the next view for display.
+     * @param selectedItem
+     * @param listFilter
+     */
     @Override
     public void selectedListItem(String selectedItem, Filter listFilter) {
-
-//        // get id of selectedItem
-//        int id = -1;
-//        for (int i = 0; i < idStringPairs.size() && id == -1; i++) {
-//            if (idStringPairs.get(i).getKey().equals(selectedItem)) {
-//                id = idStringPairs.get(i).getValue();
-//                Log.i(TAG, "selected list item id for " + idStringPairs.get(i).getKey() + ": " + id);
-//            }
-//        }
-//
-//        if (id != -1) {
-//            // call view to navigate to a list with activity headlines, send selectedItem id and listFilter
-//            view().navigateToHeadlineDisplay(id, listFilter);
-//
-//        }
-//        else {
-//            // call view to show error message
-//        }
 
         String headlinesJson = headlineJsonsForSubcategories.get(selectedItem);
         if (headlinesJson != null) {

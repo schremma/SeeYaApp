@@ -4,7 +4,6 @@ import com.group16.seeyaapp.model.Activity;
 
 /**
  * Created by Andrea on 13/04/16.
- *
  * Displays editable activities, i.e. activities the user himself or herself
  * created but has not published yet, or activities that are in the process of being created by the user.
  */

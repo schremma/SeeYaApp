@@ -5,7 +5,7 @@ package com.group16.seeyaapp.activity.categories;
  * Interface for the Activity/fragment where the user selects the main category
  * and the subcategory of the activity to be created.
  * When the user goes on to the next view to fill in details about the new activity,
- * the id of the subcategoy chosen on this view should be sent along.
+ * the id of the subcategory chosen on this view should be sent along.
  */
 public interface CategoryView {
 

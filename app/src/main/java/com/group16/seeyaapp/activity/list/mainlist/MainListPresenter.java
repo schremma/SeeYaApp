@@ -4,6 +4,7 @@ import com.group16.seeyaapp.activity.list.Filter;
 
 /**
  * Created by gustav on 2016-04-20.
+ * Handles the logic behind presenting the browsable list of the main page of the application.
  */
 public interface MainListPresenter {
 

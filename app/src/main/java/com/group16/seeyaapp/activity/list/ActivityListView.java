@@ -2,6 +2,9 @@ package com.group16.seeyaapp.activity.list;
 
 /**
  * Created by Andrea on 15/04/16.
+ * Displays a list showing short information, headlines, about activities.
+ * The user may select one of these headlines to be navigated to the next view
+ * that displays detailed information about the activity.
  */
 public interface ActivityListView {
 

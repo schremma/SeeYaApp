@@ -19,6 +19,9 @@ import java.util.List;
 
 /**
  * Created by Andrea on 15/04/16.
+ * Presenter showing a list of activities: headline and date for each activity (with activity id).
+ * This information is extracted by the presenter from a json string - the model - received through its
+ * associated view.
  */
 public class ActivityListPresenterImpl extends CommunicatingPresenter<ActivityListView, JSONObject> implements ActivityListPresenter  {
     private List<String> headlines;
@@ -32,12 +35,14 @@ public class ActivityListPresenterImpl extends CommunicatingPresenter<ActivityLi
 
     //TODO: some field that shows what kind of activity list to be presented, i.e. own or for a specific location etc.
 
+    /**
+     * The user has chosen one of the listed activities to be able to see the details.
+     * For now, the view is simply instructed the navigate to the view displaying the activity details.
+     * @param activityId the id of activity associated with the headlines selected by the user
+     */
     @Override
     public void onActivitySelected(int activityId) {
 
-        // TODO navigate to different kinds of displays based on model (list filter)? - done in view now
-        // i.e. if it concerns own editable activities (before publishing them) - EditableActivityView
-        // but if it concerns non-editable activities - DetailView
         view().navigateToActivityDisplay(activityId);
     }
 
@@ -53,6 +58,14 @@ public class ActivityListPresenterImpl extends CommunicatingPresenter<ActivityLi
         retrieveHeadlines();
     }
 
+    /**
+     * Transforms the provided json string into separate lists of headlines, dates and ids.
+     * Info for each activity is stored at the same index position in each array
+     * i.e. for the first activity on the list has headlines[0], dates[0] and ids[0]
+     * the second has headlines[1], dates[1] and ids[1] etc.
+     * These separate lists are sent to the view for display.
+     * @param headlines json String containing a list of activity headlines
+     */
     @Override
     public void aboutToListActivities(String headlines) {
 
@@ -115,6 +128,12 @@ public class ActivityListPresenterImpl extends CommunicatingPresenter<ActivityLi
 
     }
 
+    /**
+     * Extracts activity headline information from the provided JSONObject
+     * into a number of separate lists.
+     * @param jsonObject The JSONObjetc to parse into activity headline lists.
+     * @throws JSONException
+     */
     private void setHeadlinesFromJson(JSONObject jsonObject) throws JSONException {
 
         JSONArray arr = jsonObject.getJSONArray(ComConstants.ARRAY_HEADLINE);
@@ -134,10 +153,17 @@ public class ActivityListPresenterImpl extends CommunicatingPresenter<ActivityLi
         }
     }
 
+    /**
+     * Notifies the user of failure parsing the activity headlines for display
+     * @param failMsg error message
+     */
     private void onRetrievalError(String failMsg) {
         view().showOnError(failMsg);
     }
 
+    /**
+     * Sends the parsed headlines for the view to display as a list.
+     */
     private void onRetrievalSuccess() {
 
         view().setHeadlineList(headlines.toArray(new String[0]), dates.toArray(new String[0]), Ints.toArray(ids));

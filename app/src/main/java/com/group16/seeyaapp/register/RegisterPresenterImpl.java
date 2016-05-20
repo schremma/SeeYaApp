@@ -14,13 +14,26 @@ import org.json.JSONObject;
 
 /**
  * Created by Andrea on 11/04/16.
+ * Presenter that handles the logic behind registering a new user in the app,
+ * storing user information in a Account object - the model.
+ * After local validation, user information is sent to the server,
+ * and the associated RegisterView is notified of registration success or failure based
+ * on the server's response.
  */
 public class RegisterPresenterImpl extends CommunicatingPresenter<RegisterView, Account> implements RegisterPresenter {
 
     private static final String TAG = "RegisterPresenter";
 
 
-
+    /**
+     * Stores the provided credentials in an Account object through which
+     * local validation is performed. If this validation has checked out,
+     * it initiates sending a json string to the server requesting registration of the user.
+     * Otherwise, the view is notified of specific validation errors.
+     * @param username
+     * @param email
+     * @param password
+     */
     @Override
     public void registerNewUser(String username, String email, String password) {
 
@@ -48,6 +61,12 @@ public class RegisterPresenterImpl extends CommunicatingPresenter<RegisterView, 
 
     }
 
+    /**
+     * Handles json response received from the server:
+     * a) the user mught have been successfully registered
+     * b) the registration failed
+     * @param registerResultJson
+     */
     @Override
     protected void communicationResult(String registerResultJson) {
         Log.i(TAG, registerResultJson);
@@ -82,11 +101,18 @@ public class RegisterPresenterImpl extends CommunicatingPresenter<RegisterView, 
     }
 
 
+    /**
+     * Notifies view of successful registration
+     */
     private void registerSuccess() {
         view().navigateToHome();
     }
 
-    // Registration error from server is shown as username error... for now
+    /**
+     * Notifies view of unsuccessful registration.
+     * Registration error from server is shown as username error, for now.
+     * @param errorMsg error message sent ot the view
+     */
     private void registerFail(String errorMsg) {
         view().showUserNameError(errorMsg);
     }

@@ -2,6 +2,7 @@ package com.group16.seeyaapp;
 
 /**
  * Created by Andrea on 21/04/16.
+ * List of constant values used locally in the application.
  */
 public final class LocalConstants {
 
@@ -9,7 +10,7 @@ public final class LocalConstants {
     // [date2.getTime() - date1.getTime() returns difference in long and ms]
     //public static final long VERSION_CHECK_INTERVAL = 43200000; // 12 hours
     //public static final long VERSION_CHECK_INTERVAL = 3600000; // 2 hours
-    public static final long VERSION_CHECK_INTERVAL = 360; // test
+    public static final long VERSION_CHECK_INTERVAL = 360; // short interval for test
 
     // current user name in SharedPreferences
     public static final String SP_CURRENT_USER = "currentUser";

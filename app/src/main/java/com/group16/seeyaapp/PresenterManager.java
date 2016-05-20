@@ -9,6 +9,13 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by Andrea on 09/04/16.
+ * Based on code sample: https://github.com/remind101/android-arch-sample
+ *
+ * The PresenterManager handles associating views with their Presenters (each inheriting BasePresenter)
+ * across configuration changes. It stores presenters passed into the savePresenter() method,
+ * storing the key identifying that presenter into the savedInstanceState Bundle of the invoking
+ * view. If, onCreate(), the view finds that it has a key in its savedInstanceState,
+ * it can retrieve its original presenter through invoking restorePresenter().
  */
 public class PresenterManager {
     private static final String SIS_KEY_PRESENTER_ID = "presenter_id";

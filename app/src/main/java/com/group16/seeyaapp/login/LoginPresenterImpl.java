@@ -16,6 +16,10 @@ import org.json.JSONObject;
 
 /**
  * Created by Andrea on 10/04/16.
+ * Presenter that handles the logic behind logging into the application,
+ * storing login information in a UserLogin object, the model.
+ * Validates the provided user credentials against a remote system and
+ * notifies its associated LoginView of successful or failed authentication.
  */
 public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, UserLogin> implements LoginPresenter {
 
@@ -24,6 +28,14 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, UserLo
     private static final String TAG = "LoginPresenter";
 
 
+    /**
+     * Stores the provided user credentials in a UserLogin object,
+     * and locally validates their format calling the object's
+     * validation methods. If local validation checks out,
+     * remote authentication is initiated.
+     * @param username
+     * @param password
+     */
     @Override
     public void validateCredentials(String username, String password) {
         UserLogin login = new UserLogin(username, password);
@@ -36,8 +48,6 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, UserLo
         }
         else
             view().setError("Please fill in both your username and password");
-
-
     }
 
     @Override
@@ -53,6 +63,11 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, UserLo
         }
     }
 
+    /**
+     * Sends a json string requesting validation of the stored
+     * user credentials to the network interface of the app.
+     * @param login UserLogin object with credentials
+     */
     private void startLogIn(UserLogin login) {
 
         String loginJson = JsonConverter.jsonify(login);
@@ -63,7 +78,12 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, UserLo
 
     }
 
-
+    /**
+     * Handles json response received from the server:
+     * a) successful authentication
+     * b) unsuccessful authentication
+     * @param loginResultJson
+     */
     @Override
     protected void communicationResult(String loginResultJson) {
         Log.i(TAG, loginResultJson);
@@ -82,7 +102,7 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, UserLo
             }
             else {
                 String message =  (String)jsonObject.get(ComConstants.MESSAGE);
-                loginFail(message);
+                loginFail("User name or password is incorrect");
             }
         }
         catch(JSONException e)
@@ -96,11 +116,19 @@ public class LoginPresenterImpl extends CommunicatingPresenter<LoginView, UserLo
         }
     }
 
+    /**
+     * Notifies the view of successful login.
+     */
     private void loginSuccess() {
         loading = false;
         view().navigateToHome();
     }
 
+    /**
+     * Notifies the view of unsuccessful login,
+     * and sends an error message describing the problem
+     * @param message error message to send to view
+     */
     private void loginFail(String message) {
         loading = false;
         view().hideLoading();

@@ -25,17 +25,17 @@ import java.util.List;
 
 /**
  * Created by Andrea on 14/04/16.
- * Manages the display of editable activities, i.e. activities that are in the process of being created by the user,
- * and as a future functionality, own activities being editied by the user.
- * If the presenter is to display a specific activity - earlier created by the user:
- * it gets the whole activity from server using the provided id in onCreateActivity.
+ * Manages the display of editable activities, i.e. activities that are in the process of being
+ * created by the user, and as a future functionality, own activities being edited by the user.
+ * If the presenter is to display a specific activity - earlier created by the user -
+ * it gets the whole activity from the server using the provided id in onCreateActivity.
  */
 public class EditableActivityPresenterImpl extends CommunicatingPresenter<EditableActivityView, Activity> implements EditableActivityPresenter {
     private static final String TAG = "EditableActivityPres";
     private HashMap<String, List<Location>> locations;
     private String locationsVersion;
 
-    private ActionType actionType;
+    private ActionType actionType;  // what kind of editing is done to the activity?
 
     @Override
     public void onCreateActivity(Activity activity) {
@@ -48,7 +48,6 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
                 String currentUser = preferences.getString(LocalConstants.SP_CURRENT_USER, null);
                 model.setOwner(currentUser);
 
-                //TODO find a better way to store locations to avoid this kind of iteration
                 int locationId = -1;
                 for(String k : locations.keySet()) {
                     for(Location l : locations.get(k)) {
@@ -127,10 +126,13 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
             }
             else if (msgType.equals(ComConstants.LOCATIONS_CONFIRMATION)) {
                 Log.i(TAG, "Locations already up-to-date");
-                // We already have the right version, just get it from local storage
-                // maybe we have even already have the right version in this instance
 
+                // update the last check date for now
                 SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
+                preferences.edit().putString(LocalConstants.SP_LOCATIONS_CHECK_DATE, DateHelper.CompleteDateToString(new Date())).commit();
+
+                // since we already have the right version, just get it from local storage
+                // Maybe we even already have the right version in this instance
                 String versionInPrefs = preferences.getString(LocalConstants.SP_VERSION_LOCATIONS, null);
 
                 if (locationsVersion != null && versionInPrefs != null && locationsVersion.equals(versionInPrefs)) {
