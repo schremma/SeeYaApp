@@ -106,10 +106,6 @@ public class TestCategoriesActivity extends AppCompatActivity implements Categor
     @Override
     protected void onPause() {
         super.onPause();
-        Menu menu = toolbar.getMenu();
-        menu.clear();
-        menu = null;
-        toolbar = null;
         System.gc();
         presenter.unbindView();
     }
