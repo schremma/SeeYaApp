@@ -4,8 +4,11 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -14,7 +17,10 @@ import android.widget.Toast;
 
 import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
+import com.group16.seeyaapp.activity.list.mainlist.TestMainListActivity;
 import com.group16.seeyaapp.model.Activity;
+import com.group16.seeyaapp.navigation.DemoPage;
+import com.group16.seeyaapp.navigation.TestCreatePage;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,10 +45,18 @@ public class PublishableActivity extends AppCompatActivity implements Publishabl
     private TextView tvPublishedStatus;
     private TextView lblInvited;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publishable);
+
+        toolbar = (Toolbar)findViewById(R.id.tbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setIcon(R.mipmap.seeyalogo_smaller);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         if (savedInstanceState == null) {
             presenter = new PublishableActivityPresenterImpl();
@@ -116,8 +130,10 @@ public class PublishableActivity extends AppCompatActivity implements Publishabl
     @Override
     protected void onPause() {
         super.onPause();
-
         presenter.unbindView();
+        toolbar = null;
+        finish();
+        System.gc();
     }
 
     @Override
@@ -212,5 +228,31 @@ public class PublishableActivity extends AppCompatActivity implements Publishabl
         else {
             lblInvited.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.toolbarhome) {
+            Intent intent = new Intent(this, DemoPage.class);
+            startActivity(intent);
+        } else if(id == R.id.toolbarsettings) {
+
+        } else if(id == R.id.toolbarinfo) {
+
+        } else if(id == R.id.toolbaradd) {
+            Intent intent = new Intent(this, TestCreatePage.class);
+            startActivity(intent);
+        } else if(id == R.id.toolbarbrowse) {
+            Intent intent = new Intent(this, TestMainListActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
