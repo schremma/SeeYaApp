@@ -96,11 +96,5 @@ public class DemoPage extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Menu menu = toolbar.getMenu();
-        menu.clear();
-        menu = null;
-        toolbar = null;
-        System.gc();
-        finish();
     }
 }

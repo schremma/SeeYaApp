@@ -20,6 +20,7 @@ import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
 import com.group16.seeyaapp.activity.list.mainlist.TestMainListActivity;
 import com.group16.seeyaapp.helpers.DateHelper;
+import com.group16.seeyaapp.main.MainActivity;
 import com.group16.seeyaapp.model.Activity;
 import com.group16.seeyaapp.navigation.DemoPage;
 import com.group16.seeyaapp.navigation.TestCreatePage;
@@ -61,6 +62,12 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setIcon(R.mipmap.seeyalogo_smaller);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startMain();
+            }
+        });
 
         if (savedInstanceState == null) {
             presenter = new EditableActivityPresenterImpl();
@@ -151,6 +158,12 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
         setDefaultTime();
 
     }
+
+    private void startMain() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
     //Sets current date to be shown
     private void setDefaultDate() {
         final Calendar c = Calendar.getInstance();
