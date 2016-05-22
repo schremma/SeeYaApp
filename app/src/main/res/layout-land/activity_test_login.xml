@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#f2f2f2"
+    >
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/signInText"
+        android:text="@string/loginBtn"
+        android:textSize="32sp"
+        android:textColor="@color/black"
+        android:typeface="serif"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:padding="18dp"
+        android:elevation="4dp"
+        android:layout_margin="4dp" />
+
+    <EditText
+        android:id="@+id/txtusername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="15"
+        android:hint="@string/username"
+        android:textColor="@color/black"
+        android:textColorHint="@color/darkerGray"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:background="@drawable/rounded_white_rectangle"
+        android:layout_below="@+id/txtpassword"
+        android:layout_alignLeft="@+id/txtpassword"
+        android:layout_alignStart="@+id/txtpassword"
+        android:layout_marginTop="8dp">
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/txtpassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="15"
+        android:textColor="@color/black"
+        android:hint="@string/password"
+        android:textColorHint="@color/darkerGray"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:background="@drawable/rounded_white_rectangle"
+        android:autoText="false"
+        android:password="false"
+        android:layout_centerInParent="true" />
+
+
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/loginBtn"
+        android:textSize="@dimen/button_text"
+        android:typeface="serif"
+        android:background= "@drawable/rounded_green_rectangle"
+        android:padding="@dimen/button_padding"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="4dp" />
+
+    <ProgressBar
+        android:id="@+id/barprogress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/signInText"
+        android:visibility="gone" />
+
+
+
+</RelativeLayout>
