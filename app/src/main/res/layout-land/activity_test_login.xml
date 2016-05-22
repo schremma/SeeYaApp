@@ -37,10 +37,7 @@
         android:padding="10dp"
         android:singleLine="true"
         android:background="@drawable/rounded_white_rectangle"
-        android:layout_below="@+id/txtpassword"
-        android:layout_alignLeft="@+id/txtpassword"
-        android:layout_alignStart="@+id/txtpassword"
-        android:layout_marginTop="8dp">
+        android:layout_centerInParent="true">
         <requestFocus />
     </EditText>
 
@@ -58,7 +55,10 @@
         android:background="@drawable/rounded_white_rectangle"
         android:autoText="false"
         android:password="false"
-        android:layout_centerInParent="true" />
+        android:layout_below="@+id/txtusername"
+        android:layout_alignLeft="@+id/txtusername"
+        android:layout_alignStart="@+id/txtusername"
+        android:layout_marginTop="8dp" />
 
 
 
