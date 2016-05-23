@@ -188,7 +188,8 @@
                 android:singleLine="true"
                 android:background="@drawable/rounded_white_rectangle"
                 android:hint="Minimum number of participants"
-                android:drawablePadding="8dp"/>
+                android:drawablePadding="8dp"
+                android:inputType="number" />
 
             <EditText
                 android:id="@+id/txtMaxParticipants"
@@ -202,7 +203,8 @@
                 android:singleLine="true"
                 android:background="@drawable/rounded_white_rectangle"
                 android:hint="Maximum number of participants"
-                android:drawablePadding="8dp"/>
+                android:drawablePadding="8dp"
+                android:inputType="number" />
 
         </RelativeLayout>
 
