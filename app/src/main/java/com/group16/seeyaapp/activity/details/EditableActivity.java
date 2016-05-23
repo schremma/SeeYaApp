@@ -191,14 +191,11 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
             presenter.aboutToCreateActivity();
         else
             presenter.aboutToDisplayActivity(activityId);
-
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        toolbar = null;
-        finish();
         System.gc();
         presenter.unbindView();
     }
