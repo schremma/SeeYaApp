@@ -12,6 +12,7 @@ import android.view.View;
 import com.group16.seeyaapp.R;
 import com.group16.seeyaapp.activity.categories.TestCategoriesActivity;
 import com.group16.seeyaapp.activity.list.mainlist.TestMainListActivity;
+import com.group16.seeyaapp.main.MainActivity;
 
 public class TestCreatePage extends AppCompatActivity {
 
@@ -26,6 +27,12 @@ public class TestCreatePage extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setIcon(R.mipmap.seeyalogo_smaller);
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startMain();
+            }
+        });
 
         findViewById(R.id.btnGoToCreate).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -33,6 +40,11 @@ public class TestCreatePage extends AppCompatActivity {
                 goToCreateActivity();
             }
         });
+    }
+
+    private void startMain() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     @Override

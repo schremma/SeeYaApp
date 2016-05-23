@@ -15,6 +15,7 @@ import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
 import com.group16.seeyaapp.activity.list.Filter;
 import com.group16.seeyaapp.activity.list.TestHeadlineListActivity;
+import com.group16.seeyaapp.main.MainActivity;
 import com.group16.seeyaapp.navigation.DemoPage;
 import com.group16.seeyaapp.navigation.TestCreatePage;
 
@@ -43,6 +44,12 @@ public class TestMainListActivity extends AppCompatActivity implements MainListV
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setIcon(R.mipmap.seeyalogo_smaller);
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startMain();
+            }
+        });
 
         if (savedInstanceState == null) {
             presenter = new MainListPresenterImpl();
@@ -88,6 +95,11 @@ public class TestMainListActivity extends AppCompatActivity implements MainListV
         });
 
 
+    }
+
+    private void startMain() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     @Override
