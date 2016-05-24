@@ -128,13 +128,13 @@ public class PublishableActivityPresenterImpl extends CommunicatingPresenter<Pub
 
             //Date published might be null, which means that Activity has not been published yet
             try {
-                Date published = DateHelper.StringDateToDate(jsonObject.getString(ComConstants.DATE_PUBLISHED));
+                Date published = DateHelper.stringDateToDate(jsonObject.getString(ComConstants.DATE_PUBLISHED));
                 model.setDatePublished(published);
             } catch (ParseException e) {}
 
             try {
-                Date date = DateHelper.StringDateToDate(jsonObject.getString(ComConstants.DATE));
-                Date time = DateHelper.StringTimeToDate(jsonObject.getString(ComConstants.TIME));
+                Date date = DateHelper.stringDateToDate(jsonObject.getString(ComConstants.DATE));
+                Date time = DateHelper.stringTimeToDate(jsonObject.getString(ComConstants.TIME));
                 model.setDate(date);
                 model.setTime(time);
 

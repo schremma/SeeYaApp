@@ -114,6 +114,11 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
         tvNbrAttending.setText("Attending: " + activity.getNbrSignedUp());
         updateSignedUpStatus(activity.isAttending());
 
+        if (!activity.isAttending() && activity.expired()) {
+            btnSignUp.setEnabled(false);
+            btnSignUp.setText("Date passed");
+        }
+
         tvNbrOfParticipants.setText(activity.participantInfoString());
         tvDateLocation.setText(activity.dateLocationString());
         tvActivityInfo.setText(activity.getMessage());

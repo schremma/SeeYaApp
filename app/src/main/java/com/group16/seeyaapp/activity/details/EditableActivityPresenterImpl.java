@@ -117,9 +117,18 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
 
             if (msgType.equals(ComConstants.NEW_ACTIVTIY_CONFIRMATION)) {
 
-                String message = (String) jsonObject.get(ComConstants.MESSAGE);
-                view().updateCreateStatus(true);
-                view().navigateToBrowseActivities();
+                //String message = (String) jsonObject.get(ComConstants.MESSAGE);
+
+                synchronized (this) {
+                    if (view() != null) {
+                        view().updateCreateStatus(true);
+                    }
+                }
+                synchronized (this) {
+                    if (view() != null) {
+                        view().navigateToBrowseActivities();
+                    }
+                }
             }
             else if (msgType.equals(ComConstants.LOCATIONS)) {
                 updateLocationList(json);
@@ -129,7 +138,7 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
 
                 // update the last check date for now
                 SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
-                preferences.edit().putString(LocalConstants.SP_LOCATIONS_CHECK_DATE, DateHelper.CompleteDateToString(new Date())).commit();
+                preferences.edit().putString(LocalConstants.SP_LOCATIONS_CHECK_DATE, DateHelper.completeDateToString(new Date())).commit();
 
                 // since we already have the right version, just get it from local storage
                 // Maybe we even already have the right version in this instance
@@ -196,13 +205,13 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
 
             //Date published might be null, which means that Activity has not been published yet
             try {
-                Date published = DateHelper.StringDateToDate(jsonObject.getString(ComConstants.DATE_PUBLISHED));
+                Date published = DateHelper.stringDateToDate(jsonObject.getString(ComConstants.DATE_PUBLISHED));
                 model.setDatePublished(published);
             } catch (ParseException e) {}
 
             try {
-                Date date = DateHelper.StringDateToDate(jsonObject.getString(ComConstants.DATE));
-                Date time = DateHelper.StringTimeToDate(jsonObject.getString(ComConstants.TIME));
+                Date date = DateHelper.stringDateToDate(jsonObject.getString(ComConstants.DATE));
+                Date time = DateHelper.stringTimeToDate(jsonObject.getString(ComConstants.TIME));
                 model.setDate(date);
                 model.setTime(time);
 
@@ -251,11 +260,11 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
                 String lastCheckString = preferences.getString(LocalConstants.SP_LOCATIONS_CHECK_DATE, null);
 
                 try {
-                    Date lastCheck = DateHelper.CompleteStringDateToDate(lastCheckString);
+                    Date lastCheck = DateHelper.completeStringDateToDate(lastCheckString);
                     if (new Date().getTime() - lastCheck.getTime() < LocalConstants.VERSION_CHECK_INTERVAL) {
                         performCheckWithServer = false;
 
-                        Log.i(TAG, String.format("Locations version: %s, last check was: %s, have to check with server: %b", version, DateHelper.CompleteDateToString(lastCheck), performCheckWithServer));
+                        Log.i(TAG, String.format("Locations version: %s, last check was: %s, have to check with server: %b", version, DateHelper.completeDateToString(lastCheck), performCheckWithServer));
                     }
 
                 } catch (ParseException e) {
@@ -303,7 +312,7 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
 
            SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
            preferences.edit().putString(LocalConstants.SP_LOCATIONS, json).commit();
-           preferences.edit().putString(LocalConstants.SP_LOCATIONS_CHECK_DATE, DateHelper.CompleteDateToString(new Date())).commit();
+           preferences.edit().putString(LocalConstants.SP_LOCATIONS_CHECK_DATE, DateHelper.completeDateToString(new Date())).commit();
            preferences.edit().putString(LocalConstants.SP_VERSION_LOCATIONS, version).commit();
 
             onLocationsRetrievalSuccess();

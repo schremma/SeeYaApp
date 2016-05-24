@@ -46,6 +46,9 @@ public class Activity {
         if (date == null) {
             errorMsg += "Date cannot be empty\n";
         }
+        else if (expired()) {
+            errorMsg += "Date of the activity has already passed";
+        }
         if (time == null) {
             errorMsg += "Time cannot be empty\n";
         }
@@ -65,8 +68,8 @@ public class Activity {
     }
 
     public String dateLocationString() {
-        return String.format("%s, %s at %s", location, DateHelper.DateToDateOnlyString(date),
-                DateHelper.DateToTimeOnlyString(time));
+        return String.format("%s, %s at %s", location, DateHelper.dateToDateOnlyString(date),
+                DateHelper.dateToTimeOnlyString(time));
     }
 
     public String participantInfoString() {
@@ -90,8 +93,8 @@ public class Activity {
     @Override
     public String toString() {
         String strOut = String.format("Activity: %s\n%s, %s at %s\nMessage: %s\nMinimum participants: %d\n" +
-                        "Maximum participants: %d\n", headline, location, DateHelper.DateToDateOnlyString(date),
-                DateHelper.DateToTimeOnlyString(time), message, minNbrOfParticipants, maxNbrOfParticipants);
+                        "Maximum participants: %d\n", headline, location, DateHelper.dateToDateOnlyString(date),
+                DateHelper.dateToTimeOnlyString(time), message, minNbrOfParticipants, maxNbrOfParticipants);
         if (datePublished != null) {
             strOut += "Published on: " + datePublished.toString();
         }
@@ -104,7 +107,7 @@ public class Activity {
     // True if the time of the activity has already passed
     public boolean expired() {
         Date today = new Date();
-        return (today.after(date));
+        return (DateHelper.getZeroTimeDate(today).after(DateHelper.getZeroTimeDate(date)));
     }
 
     // True if at least one more participant can still sign up.

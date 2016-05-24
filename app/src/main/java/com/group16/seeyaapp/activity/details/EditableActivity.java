@@ -170,7 +170,7 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
         year = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);
         day = c.get(Calendar.DAY_OF_MONTH);
-        tvDisplayDate.setText(DateHelper.FormatDate(year, month, day));
+        tvDisplayDate.setText(DateHelper.formatDate(year, month, day));
 
     }
     //Sets current time to be shown
@@ -178,7 +178,7 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
         final Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
-        tvTime.setText(DateHelper.FormatTime(hour, minute, 0));
+        tvTime.setText(DateHelper.formatTime(hour, minute, 0));
     }
 
     @Override
@@ -232,8 +232,8 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
         Date activityTime = new Date();
 
         try {
-            activityDate = DateHelper.StringDateToDate(tvDisplayDate.getText().toString());
-            activityTime = DateHelper.StringTimeToDate(tvTime.getText().toString());
+            activityDate = DateHelper.stringDateToDate(tvDisplayDate.getText().toString());
+            activityTime = DateHelper.stringTimeToDate(tvTime.getText().toString());
         } catch (ParseException e) {}
 
         activity.setDate(activityDate);
@@ -277,8 +277,8 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
 
         tvMin.setText(Integer.toString(activity.getMinNbrOfParticipants()));
         tvMax.setText(Integer.toString(activity.getMaxNbrOfParticipants()));
-        tvDisplayDate.setText(DateHelper.DateToDateOnlyString(activity.getDate()));
-        tvTime.setText(DateHelper.DateToTimeOnlyString(activity.getTime()));
+        tvDisplayDate.setText(DateHelper.dateToDateOnlyString(activity.getDate()));
+        tvTime.setText(DateHelper.dateToTimeOnlyString(activity.getTime()));
         tvAddress.setText(activity.getAddress() != null ? activity.getAddress() : "");
         tvHeadline.setText(activity.getHeadline() != null ? activity.getHeadline() : "");
         tvMessage.setText(activity.getMessage() != null ? activity.getMessage() : "");
@@ -333,8 +333,8 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
             }
 
 
-            activity.setDate(DateHelper.StringDateToDate(tvDisplayDate.getText().toString()));
-            activity.setTime(DateHelper.StringTimeToDate(tvTime.getText().toString()));
+            activity.setDate(DateHelper.stringDateToDate(tvDisplayDate.getText().toString()));
+            activity.setTime(DateHelper.stringTimeToDate(tvTime.getText().toString()));
             String location = spinnerLocations.getSelectedItem().toString();
 
             activity.setLocation(location);
@@ -369,13 +369,13 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
 
     @Override
     public void onDateSelected(int year, int month, int day) {
-        tvDisplayDate.setText(DateHelper.FormatDate(year, month, day));
+        tvDisplayDate.setText(DateHelper.formatDate(year, month, day));
     }
 
     @Override
     public void onTimeSelected(int hour, int minute, int second) {
         TextView tv = (TextView)findViewById(R.id.tvTime);
-        tv.setText(DateHelper.FormatTime(hour, minute, 0));
+        tv.setText(DateHelper.formatTime(hour, minute, 0));
     }
 
     @Override

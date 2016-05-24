@@ -29,16 +29,19 @@ public class DetailPresenterImpl extends CommunicatingPresenter<DetailView, Acti
         if (model != null) {
 
             if (model.stillHasSpace()) {
-                SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
-                String currentUser = preferences.getString(LocalConstants.SP_CURRENT_USER, null);
+                if (!model.expired()) {
+                    SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
+                    String currentUser = preferences.getString(LocalConstants.SP_CURRENT_USER, null);
 
-                if (currentUser != null) {
-                    String json = JsonConverter.signUpForActivityJson(model.getId(), currentUser);
-                    sendJsonString(json);
-                }
-                else {
-                    view().showOnError("Error signing up for activity");
-                    Log.i(TAG, "Error: current user is null");
+                    if (currentUser != null) {
+                        String json = JsonConverter.signUpForActivityJson(model.getId(), currentUser);
+                        sendJsonString(json);
+                    } else {
+                        view().showOnError("Error signing up for activity");
+                        Log.i(TAG, "Error: current user is null");
+                    }
+                } else {
+                    view().showOnError("Cannot sign up for activity: date has already passed");
                 }
             }
             else {
@@ -171,13 +174,13 @@ public class DetailPresenterImpl extends CommunicatingPresenter<DetailView, Acti
 
             //Date published might be null, which means that Activity has not been published yet
             try {
-                Date published = DateHelper.StringDateToDate(jsonObject.getString(ComConstants.DATE_PUBLISHED));
+                Date published = DateHelper.stringDateToDate(jsonObject.getString(ComConstants.DATE_PUBLISHED));
                 model.setDatePublished(published);
             } catch (ParseException e) {}
 
             try {
-                Date date = DateHelper.StringDateToDate(jsonObject.getString(ComConstants.DATE));
-                Date time = DateHelper.StringTimeToDate(jsonObject.getString(ComConstants.TIME));
+                Date date = DateHelper.stringDateToDate(jsonObject.getString(ComConstants.DATE));
+                Date time = DateHelper.stringTimeToDate(jsonObject.getString(ComConstants.TIME));
                 model.setDate(date);
                 model.setTime(time);
 

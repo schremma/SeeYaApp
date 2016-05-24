@@ -84,7 +84,7 @@ public class MainListPresenterImpl extends CommunicatingPresenter<MainListView, 
 
                 SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
                 preferences.edit().putString(LocalConstants.SP_CATEGORIES, json).commit();
-                preferences.edit().putString(LocalConstants.SP_CATEGORIES_CHECK_DATE, DateHelper.CompleteDateToString(new Date())).commit();
+                preferences.edit().putString(LocalConstants.SP_CATEGORIES_CHECK_DATE, DateHelper.completeDateToString(new Date())).commit();
                 preferences.edit().putString(LocalConstants.SP_VERSION_CATEGORIES, version).commit();
                 onUpdatedListData();
             }
@@ -180,11 +180,11 @@ public class MainListPresenterImpl extends CommunicatingPresenter<MainListView, 
                 String lastCheckString = preferences.getString(LocalConstants.SP_CATEGORIES_CHECK_DATE, null);
 
                 try {
-                    Date lastCheck = DateHelper.CompleteStringDateToDate(lastCheckString);
+                    Date lastCheck = DateHelper.completeStringDateToDate(lastCheckString);
                     if (new Date().getTime() - lastCheck.getTime() < LocalConstants.VERSION_CHECK_INTERVAL) {
                         performCheckWithServer = false;
 
-                        Log.i(TAG, String.format("Categories version: %s, last check was: %s, have to check with server: %b", version, DateHelper.CompleteDateToString(lastCheck), performCheckWithServer));
+                        Log.i(TAG, String.format("Categories version: %s, last check was: %s, have to check with server: %b", version, DateHelper.completeDateToString(lastCheck), performCheckWithServer));
                     }
 
                 } catch (ParseException e) {
@@ -217,7 +217,7 @@ public class MainListPresenterImpl extends CommunicatingPresenter<MainListView, 
     }
 
     /**
-     * Sends updated list main- and subcategories to the view.
+     * Sends updated main- and subcategories list to the view.
      */
     private void onUpdatedListData() {
         synchronized (this) {
