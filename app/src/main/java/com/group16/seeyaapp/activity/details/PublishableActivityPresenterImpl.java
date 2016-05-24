@@ -76,7 +76,7 @@ public class PublishableActivityPresenterImpl extends CommunicatingPresenter<Pub
 
             if (msgType.equals(ComConstants.PUBLISH_ACTIVITY_CONFIRMATION)) {
 
-                String message =  (String)jsonObject.get(ComConstants.MESSAGE);
+//                String message =  (String)jsonObject.get(ComConstants.MESSAGE);
 
                 view().updatePublishedStatus(true);
             }
