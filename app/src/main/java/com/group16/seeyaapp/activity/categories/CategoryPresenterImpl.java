@@ -60,7 +60,12 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
                 }
             }
 
-            view().setSubcategories(subcategories.toArray(new String[subcategories.size()]));
+
+            synchronized (this) {
+                if (view() != null) {
+                    view().setSubcategories(subcategories.toArray(new String[subcategories.size()]));
+                }
+            }
         }
     }
 
@@ -88,10 +93,19 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
         }
 
         if (id != -1) {
-            view().navigateToCreateActivityDetails(id);
+            synchronized (this) {
+                if (view() != null) {
+                    view().navigateToCreateActivityDetails(id);
+                }
+            }
         }
-        else
-            view().showError("Select a main and a subcategory");
+        else {
+            synchronized (this) {
+                if (view() != null) {
+                    view().showError("Select a main and a subcategory");
+                }
+            }
+        }
 
     }
 
@@ -217,7 +231,7 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
      * If too much time has passed since the last version check, or there is no category list in local
      * storage yet, a json string is sent to the server initiating the version check.
      * If there is no category list in local storage yet, the version number 0 is sent to the server,
-     * which will lead to recieveing a category list.
+     * which will lead to receiving a category list.
      */
     private void retrieveCategories() {
 
@@ -282,16 +296,23 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
             counter++;
         }
 
-        view().setMainCategories(mainArr);
+        synchronized (this) {
+            if (view() != null) {
+                view().setMainCategories(mainArr);
+            }
+        }
     }
 
     /**
-     * Notifies view of error getting category lists.
+     * Notifies view of error with getting category lists.
      * @param error The error message
      */
     private void onRetrievalError(String error) {
-        view().showError(error);
-    }
+        synchronized (this) {
+            if (view() != null) {
+                view().showError(error);
+            }
+        }}
 
     @Override
     public void bindView(@NonNull CategoryView view) {

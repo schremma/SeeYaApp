@@ -76,7 +76,7 @@ public class RegisterPresenterImpl extends CommunicatingPresenter<RegisterView, 
             String msgType = (String)jsonObject.get(ComConstants.TYPE);
 
             if (msgType.equals(ComConstants.NEW_USER_CONFIRMATION)) {
-                // Store username for later use
+                // Store username locally for later use
                 final SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
                 preferences.edit().putString("currentUser", model.getUserName()).commit();
                 registerSuccess();

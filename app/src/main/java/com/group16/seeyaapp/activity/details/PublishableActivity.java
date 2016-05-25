@@ -137,8 +137,8 @@ public class PublishableActivity extends AppCompatActivity implements Publishabl
     protected void onPause() {
         super.onPause();
         presenter.unbindView();
-        toolbar = null;
-        finish();
+        //toolbar = null;
+        //finish();
         System.gc();
     }
 
