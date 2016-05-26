@@ -285,7 +285,6 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
     }
 
 
-    @Override
     public void updateStatus(boolean changesSaved) {
         if (changesSaved) {
             // TODO implement one day

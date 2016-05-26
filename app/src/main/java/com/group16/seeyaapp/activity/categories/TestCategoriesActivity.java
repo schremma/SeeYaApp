@@ -19,6 +19,13 @@ import com.group16.seeyaapp.activity.list.mainlist.TestMainListActivity;
 import com.group16.seeyaapp.navigation.DemoPage;
 import com.group16.seeyaapp.navigation.TestCreatePage;
 
+
+/**
+ * Displays the view where the user selects the main category
+ * and the subcategory of the activity to be created.
+ * When the user goes on to the next view to fill in details about the new activity,
+ * the id of the subcategory chosen on this view is sent along.
+ */
 public class TestCategoriesActivity extends AppCompatActivity implements CategoryView {
     private CategoryPresenterImpl presenter;
     private Spinner spinnerMain;
@@ -115,6 +122,10 @@ public class TestCategoriesActivity extends AppCompatActivity implements Categor
         PresenterManager.getInstance().savePresenter(presenter, outState);
     }
 
+    /**
+     * Shows the list of all main categories
+     * @param mainCategories the main categories to display
+     */
     @Override
     public void setMainCategories(String[] mainCategories) {
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, R.layout.my_spinner_item, mainCategories);
@@ -123,6 +134,10 @@ public class TestCategoriesActivity extends AppCompatActivity implements Categor
 
     }
 
+    /**
+     * Shows the list of subcategories belonging to a specific main category.
+     * @param subCategories All subcategories under a main category.
+     */
     @Override
     public void setSubcategories(String[] subCategories) {
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item_sub, subCategories);

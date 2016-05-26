@@ -21,27 +21,44 @@ import java.util.List;
 
 /**
  * Created by Andrea on 17/05/16.
+ * Handles the logic of publishing an already created activity,
+ * which involves retrieving an activity with a specific id from the server - stored as an Activity
+ * object, the model.
+ * The presenter might also store a list of users that are to be invited to an activity.
+ * Alternatively, an activity published without some list of invitees are
+ * made visible for all usera of the application.
  */
 public class PublishableActivityPresenterImpl extends CommunicatingPresenter<PublishableActivityView, Activity> implements PublishableActivityPresenter {
 
     private static final String TAG = "PublishableActivityPres";
-    private List<String> lstInvitedUsers;
+    private List<String> lstInvitedUsers; //list of users that are to be invited to an activity
 
-
+    /**
+     * Publishes an already created activity with the provided id, to all users.
+     * @param activityId The id of the activity to be published.
+     */
     @Override
     public void onPublishActivity(long activityId) {
         String json = JsonConverter.publishActivityJson(activityId);
         sendJsonString(json);
     }
 
+    /**
+     * Publishes an already created activity with the provided id
+     * to the users specified in the list of invitees.
+     * @param activityId The id of the activity to be published.
+     * @param invitees List of user names to invite for the activity.
+     */
     @Override
     public void onPublishActivity(long activityId, List<String> invitees) {
-        // TODO convert to json in JsonConverter - complete method
         String json = JsonConverter.publishActivityToSpecificUsersJson(activityId, invitees);
         sendJsonString(json);
-        // send to server
     }
 
+    /**
+     * Sends request to retrieve an already created activity form the server with the given id.
+     * @param activityId The id of the acitivty to retrieve.
+     */
     @Override
     public void aboutToDisplayActivity(int activityId) {
 
@@ -50,9 +67,13 @@ public class PublishableActivityPresenterImpl extends CommunicatingPresenter<Pub
         String json = JsonConverter.getActivityJson(activityId, currentUser);
 
         sendJsonString(json);
-
     }
 
+    /**
+     * Stores the current list of invited users, in case this would need to be preserved betweeon
+     * orientation changes of the view.
+     * @param invited list of invited user names
+     */
     @Override
     public void setInvitedList(List<String> invited) {
         lstInvitedUsers = invited;
@@ -105,6 +126,10 @@ public class PublishableActivityPresenterImpl extends CommunicatingPresenter<Pub
     }
 
 
+    /**
+     * Loads information from a json string into the Activity object stored as the model.
+     * @param json The json string with activity information.
+     */
     private void setActivity(String json) {
         Log.i(TAG, json);
 
@@ -112,8 +137,6 @@ public class PublishableActivityPresenterImpl extends CommunicatingPresenter<Pub
         try {
             JSONObject jsonObject = new JSONObject(json);
             model.setId(jsonObject.getLong(ComConstants.ID));
-
-            //TODO main category string (?)
             model.setSubcategoryString(jsonObject.getString(ComConstants.SUBCATEGORY));
 
             model.setLocation(jsonObject.getString(ComConstants.PLACE));
@@ -157,20 +180,28 @@ public class PublishableActivityPresenterImpl extends CommunicatingPresenter<Pub
         }
     }
 
-    private void onActionSuccess(String message) {
-        view().updatePublishedStatus(true);
-    }
-
+    /**
+     * Send an error message to the view when an action failed.
+     * @param error
+     */
     private void onActionFail(String error) {
         view().showOnError(error);
     }
 
 
-
+    /**
+     * Sends an error message to the view when the retrieval of some information failed.
+     * @param error
+     */
     private void onRetrievalError(String error) {
         view().showOnError(error);
     }
 
+    /**
+     * If the presenter preserved the current list of invited users acrosss orientation
+     * changes, reload this into the view.
+     * @param view
+     */
     @Override
     public void bindView(@NonNull PublishableActivityView view) {
         super.bindView(view);

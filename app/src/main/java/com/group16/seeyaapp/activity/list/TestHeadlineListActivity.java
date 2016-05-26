@@ -17,18 +17,18 @@ import android.widget.Toast;
 import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
 import com.group16.seeyaapp.activity.details.DetailActivity;
-//<<<<<<< Updated upstream
 import com.group16.seeyaapp.activity.details.PublishableActivity;
-//=======
-import com.group16.seeyaapp.activity.details.EditableActivity;
 import com.group16.seeyaapp.activity.list.mainlist.TestMainListActivity;
 import com.group16.seeyaapp.navigation.DemoPage;
 import com.group16.seeyaapp.navigation.TestCreatePage;
-//>>>>>>> Stashed changes
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+//<<<<<<< Updated upstream
+//=======
+//>>>>>>> Stashed changes
 
 public class TestHeadlineListActivity extends AppCompatActivity implements ActivityListView {
 
@@ -147,7 +147,6 @@ public class TestHeadlineListActivity extends AppCompatActivity implements Activ
 
     @Override
     public void navigateToActivityDisplay(int activityId) {
-        // TODO set this in presenter instead?
         if (listFilter.equals(Filter.InvitedToActivitiesByCategories)) {
             Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra("activityId", activityId);

@@ -11,6 +11,9 @@ import java.util.Calendar;
 
 /**
  * Created by Andrea on 13/05/16.
+ * Shows a clock for selecting a time point, in form of a dialog.
+ * The displaying activity should implement DateTimeDialogListener.
+ * The selected time is sent to the displaying view.
  */
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener{
 
@@ -26,7 +29,13 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
                 DateFormat.is24HourFormat(getActivity()));
     }
 
-    //onTimeSet() callback method
+    /**
+     * onTimeSet() callback method
+     * Send the selected time to the displaying view, implementing DateTimeDialogListener.
+     * @param view TimePicker view
+     * @param hourOfDay selected hour
+     * @param minute selected minute
+     */
     public void onTimeSet(TimePicker view, int hourOfDay, int minute){
         ((DateTimeDialogListener)getActivity()).onTimeSelected(hourOfDay,minute, 0);
     }

@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * Created by Andrea on 26/04/16.
+ * Adapter for a list that displays main categories and subcategories under it,
  */
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
 

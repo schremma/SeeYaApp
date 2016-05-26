@@ -18,5 +18,6 @@ public interface CategoryView {
     // navigates to the view showing the form for filling in new activity details
     void navigateToCreateActivityDetails(int subCategoryId);
 
+    // Display en error message
     void showError(String errorMessage);
 }

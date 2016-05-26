@@ -19,10 +19,18 @@ import java.util.Date;
 
 /**
  * Created by Andrea on 25/04/16.
+ * Handles the logic of displaying details of an activity, without providing editing possibilities.
+ * It retrieves activity information from the server based an activity id, and stores it an Activity
+ * object - the model.
+ * It enables the user to sign up or unregister from the activity.
  */
 public class DetailPresenterImpl extends CommunicatingPresenter<DetailView, Activity> implements DetailPresenter {
     private static final String TAG = "DetailPresenter";
 
+    /**
+     * Check if it is possible for the user to sign up for the current activity,
+     * i.e. if it has space, and the activity has not expired yet.
+     */
     @Override
     public void onPressedJoin() {
 
@@ -54,6 +62,9 @@ public class DetailPresenterImpl extends CommunicatingPresenter<DetailView, Acti
 
     }
 
+    /**
+     * Unregisters the current user from the current activity.
+     */
     @Override
     public void onPressedUnjoin() {
         if (model != null) {
@@ -74,6 +85,12 @@ public class DetailPresenterImpl extends CommunicatingPresenter<DetailView, Acti
         }
     }
 
+    /**
+     * Retrieves the activity with the provided id from the server.
+     * The current user name is sent along, so that it can be checked on the server if the user is
+     * already addending the activity.
+     * @param activityId
+     */
     @Override
     public void aboutToDisplayActivity(int activityId) {
         final SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);

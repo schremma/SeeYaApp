@@ -13,6 +13,10 @@ import com.group16.seeyaapp.activity.categories.TestCategoriesActivity;
 import com.group16.seeyaapp.activity.list.mainlist.TestMainListActivity;
 import com.group16.seeyaapp.main.MainActivity;
 
+/**
+ * Activity for navigation to different pages for creating something, e.g. an activity
+ * or a group.
+ */
 public class TestCreatePage extends AppCompatActivity {
 
     private Toolbar toolbar;

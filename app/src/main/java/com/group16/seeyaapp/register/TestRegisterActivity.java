@@ -11,6 +11,9 @@ import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
 import com.group16.seeyaapp.main.MainActivity;
 
+/**
+ *  Displays a view for the user to register in the application.
+ */
 public class TestRegisterActivity extends AppCompatActivity implements RegisterView, View.OnClickListener  {
     private RegisterPresenterImpl presenter;
     private EditText username;
@@ -55,29 +58,48 @@ public class TestRegisterActivity extends AppCompatActivity implements RegisterV
         PresenterManager.getInstance().savePresenter(presenter, outState);
     }
 
+    /**
+     * Event handler for the clicking the register button.
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         presenter.registerNewUser(username.getText().toString(), email.getText().toString(), password.getText().toString());
     }
 
+    /**
+     * Display error related to user name
+     * @param errorMessage the message to show
+     */
     @Override
     public void showUserNameError(String errorMessage) {
         Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
         toast.show();
     }
 
+    /**
+     * Display error related to password
+     * @param errorMessage the message to show
+     */
     @Override
     public void showPasswordError(String errorMessage) {
         Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
         toast.show();
     }
 
+    /**
+     * Display error related to email
+     * @param errorMessage the message to show
+     */
     @Override
     public void showEmailError(String errorMessage) {
         Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
         toast.show();
     }
 
+    /**
+     * Navigate to the home page of the application
+     */
     @Override
     public void navigateToHome() {
         Intent intent = new Intent(this, MainActivity.class);

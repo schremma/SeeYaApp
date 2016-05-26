@@ -35,10 +35,17 @@ public abstract class BasePresenter<V, M> {
     protected void resetState() {
     }
 
+    /**
+     * Associates the presenter with the provided view.
+     * @param view
+     */
     public void bindView(@NonNull V view) {
         this.view = new WeakReference<>(view);
     }
 
+    /**
+     * Disconnects the presenter from its currently associated view.
+     */
     public void unbindView() {
         this.view = null;
     }

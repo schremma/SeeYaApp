@@ -5,8 +5,10 @@ import com.group16.seeyaapp.model.Activity;
 /**
  * Created by Andrea on 22/04/16.
  *
- * Show details about an activity ("View activity"). The user can join the activity,
- * or unjoin if he or she has already signed up.
+ * Displays details of an activity, without providing editing possibilities.
+ * It shows basic information about the activity, the number of users that are signed up
+ * for the activity, and if the current user is signed up.
+ * The user may sign up or unregister from the activity.
  */
 public interface DetailView {
 
@@ -21,6 +23,7 @@ public interface DetailView {
     // If signedUp == true: has just successfully signed up.
     void updateSignedUpStatus(boolean signedUp);
 
+    // Display the provided error message.
     void showOnError(String errorMessage);
 
 }

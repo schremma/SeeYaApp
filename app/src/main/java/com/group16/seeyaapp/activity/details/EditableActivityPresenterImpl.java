@@ -29,6 +29,16 @@ import java.util.List;
  * created by the user, and as a future functionality, own activities being edited by the user.
  * If the presenter is to display a specific activity - earlier created by the user -
  * it gets the whole activity from the server using the provided id in onCreateActivity.
+ * When the user wants to create a new activity,
+ * the list of available locations should be sent to the associated EditableActivityView for display.
+ * It might not be necessary to retrieve the list of possible locations from the server
+ * all the time when these are displayed, since they are not expected to change often. Therefore,
+ * a version number for the current  location list is stored locally in the app.
+ * As certain intervals (defined in LocalConstants, as VERSION_CHECK_INTERVAL) have passed
+ * and  locations are requested for display by the view, the app checks with the server if
+ * it still has the right version. If it does, the locations are loaded from local storage.
+ * If it does not, an updated version of the location list received from the server is
+ * loaded into the view and stored in local storage (with updated version number).
  */
 public class EditableActivityPresenterImpl extends CommunicatingPresenter<EditableActivityView, Activity> implements EditableActivityPresenter {
     private static final String TAG = "EditableActivityPres";
@@ -37,6 +47,11 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
 
     private ActionType actionType;  // what kind of editing is done to the activity?
 
+    /**
+     * Initiates saving data in the provided Activity object as a new activity, after performing
+     * local validation.
+     * @param activity The activity to be saved as a new one.
+     */
     @Override
     public void onCreateActivity(Activity activity) {
         if (activity != null) {
@@ -73,12 +88,19 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
 
     }
 
+    /**
+     * Sets the provided Activity instance as the current activity.
+     * @param activity
+     */
     @Override
     public void onSetActivity(Activity activity) {
         model = activity;
     }
 
-
+    /**
+     * Retieves an activity with a specific id from the server, so that the user can edit that activity.
+     * @param activityId The id of the activity to retrieve
+     */
     @Override
     public void aboutToDisplayActivity(int activityId) {
 
@@ -90,6 +112,10 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
 
     }
 
+    /**
+     * The user has requested a view for creating a new activity:
+     * a list of avaialble activity locations need to be sent to the user.
+     */
     @Override
     public void aboutToCreateActivity() {
         if (locations == null)
@@ -103,7 +129,7 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
      *      1a: confirmation that an activity has been created
 \     * 2. LOCATIONS
      *      2a: an array with locations
-     *      2b: a confirmation that we already have the right version
+     *      2b: a confirmation that we already have the right version of locations
      * 3. ACTIVITY: an already created activity that is to be displayed
      * 4. ERROR
      * @param json
@@ -181,7 +207,10 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
 
     }
 
-
+    /**
+     * Sets the model - Activity - based on information in the provided json string.
+     * @param json
+     */
     private void setActivity(String json) {
         Log.i(TAG, json);
 
@@ -244,6 +273,14 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
         view().showOnError(error);
     }
 
+    /**
+     * Location list needs to be retrieved for display. The method determines whether a check is needed
+     * to be performed with the server, or locations can simply be loaded from local storage.
+     * If too much time has passed since the last version check, or there is no locations list in local
+     * storage yet, a json string is sent to the server initiating the version check.
+     * If there is no location list in local storage yet, the version number 0 is sent to the server,
+     * which will lead to receiving a location list.
+     */
     private void retrieveLocations() {
 
         SharedPreferences preferences = ctx.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
@@ -296,6 +333,11 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
         }
     }
 
+    /**
+     * A new list of locations have been received from the server, and the local stored list
+     * has to be updated to this one.
+     * @param json Json string with the updated list of locations.
+     */
     private void updateLocationList(String json) {
 
         Log.i(TAG, "Locations: " + json);
@@ -328,6 +370,12 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
         }
     }
 
+    /**
+     * Retreives location information form the provided json string and stores it in its locations
+     * hasmap.
+     * @param jsonObject
+     * @throws JSONException
+     */
     private void jsonToLocations(JSONObject jsonObject) throws JSONException {
         locations = new HashMap<String, List<Location>>();
 
@@ -356,9 +404,11 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
         }
     }
 
-
-    // TODO now locations are only shown as simple list of specific location
-    // change it so that it is an embedded list with 'Landskap' and 'stad'
+    /**
+     * Send the current stored location list to the view for display.
+     *  TODO now locations are only shown as simple list of specific location
+     *  change it so that it is an embedded list with 'Landskap' and 'stad'
+     */
     private void onLocationsRetrievalSuccess() {
         List<String> loc = new ArrayList<String>();
         for (String k : locations.keySet()) {
@@ -386,8 +436,9 @@ public class EditableActivityPresenterImpl extends CommunicatingPresenter<Editab
     }
 
 
-
-
+    /**
+     * Is an Activity is newly created one or an already existing one being edited?
+     */
     private enum ActionType {
         CreateNew,
         Edit

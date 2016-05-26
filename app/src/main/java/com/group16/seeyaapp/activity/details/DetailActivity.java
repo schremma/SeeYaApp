@@ -97,8 +97,8 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
     protected void onPause() {
         super.onPause();
         presenter.unbindView();
-        toolbar = null;
-        finish();
+        //toolbar = null;
+        //finish();
         System.gc();
     }
 

@@ -6,7 +6,7 @@ import android.os.ResultReceiver;
 
 /**
  * Created by Andrea on 10/04/16.
- * Class for recieveing result from a Service without binding.
+ * Class for receiving results from a Service without binding.
  */
 public class ComResultReceiver extends ResultReceiver {
 

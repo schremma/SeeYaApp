@@ -12,6 +12,9 @@ import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
 import com.group16.seeyaapp.navigation.DemoPage;
 
+/**
+ * Displays a view for the user to be able to log into the application.
+ */
 public class TestLoginActivity extends AppCompatActivity implements LoginView, View.OnClickListener {
 
     private ProgressBar progressBar;
@@ -37,17 +40,26 @@ public class TestLoginActivity extends AppCompatActivity implements LoginView, V
 
     }
 
-
+    /**
+     * Display visual indication that the log in is in progress
+     */
     @Override
     public void showLoading()  {
         progressBar.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Stop displaying visual indication that the log in is in progress
+     */
     @Override
     public void hideLoading()  {
         progressBar.setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * Show the provided error message
+     * @param errorMessage
+     */
     @Override
     public void setError(String errorMessage) {
 
@@ -78,7 +90,9 @@ public class TestLoginActivity extends AppCompatActivity implements LoginView, V
     }
 
 
-
+    /**
+     * Navigate to the home page of the application.
+     */
     public void navigateToHome() {
 
         // TODO go to a home page instead
@@ -88,7 +102,12 @@ public class TestLoginActivity extends AppCompatActivity implements LoginView, V
         finish();
     }
 
-    @Override public void onClick(View v) {
+    /**
+     * Event handler for clicking the log-in button.
+     * @param v
+     */
+    @Override
+    public void onClick(View v) {
         presenter.validateCredentials(username.getText().toString(), password.getText().toString());
     }
 }

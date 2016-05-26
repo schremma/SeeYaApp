@@ -17,7 +17,7 @@ import javax.crypto.spec.PBEParameterSpec;
 
 /**
  * Andrea on 10/04/16.
- * This is just a class I have nicked from StackOverflow: http://stackoverflow.com/questions/785973/what-is-the-most-appropriate-way-to-store-user-settings-in-android-application/6393502#6393502
+ * This is just a class from StackOverflow: http://stackoverflow.com/questions/785973/what-is-the-most-appropriate-way-to-store-user-settings-in-android-application/6393502#6393502
  * Could be useful for encrytping sensitive info stored in SharedPreferences,
  * giving a (false) sense of security for the user.
  */

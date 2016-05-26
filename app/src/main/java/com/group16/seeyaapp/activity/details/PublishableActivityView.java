@@ -6,6 +6,9 @@ import java.util.List;
 
 /**
  * Created by Andrea on 17/05/16.
+ * Displays an already created activity that has not been published yet.
+ * Shows controls for adding a list of users to be invited to the activity
+ * and control for publishing the activity.
  */
 public interface PublishableActivityView {
 
@@ -15,8 +18,10 @@ public interface PublishableActivityView {
     // if published == true: activity has just been successfully published
     void updatePublishedStatus(boolean published);
 
-    void showOnError(String errorMessage);
-
+    // Display the provided list of invited users
     void setInvitedUserList(List<String> invitedUserList);
+
+    // Display the provided error message
+    void showOnError(String errorMessage);
 
 }

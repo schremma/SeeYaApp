@@ -4,8 +4,9 @@ import com.group16.seeyaapp.model.Activity;
 
 /**
  * Created by Andrea on 13/04/16.
- * Displays editable activities, i.e. activities the user himself or herself
- * created but has not published yet, or activities that are in the process of being created by the user.
+ * Displays a single activity.
+ * It could be a still blank activity, if the user wishes to create a new activity.
+ * It could also be an already created activity by the current user, which the user wishes to edit.
  */
 public interface EditableActivityView {
 
@@ -15,14 +16,13 @@ public interface EditableActivityView {
     // Display information stored in the provided Activity
     void displayActivityDetails(Activity activity);
 
-    // if published == true: activity has just been successfully published
-    void updateStatus(boolean changesSaved);
-
     // if created == true: activity has just been successfully created
     void updateCreateStatus(boolean created);
 
+    // navigate to the view for browsing activities
     void navigateToBrowseActivities();
 
+    // Display the provided error message
     void showOnError(String errorMessage);
 
 }

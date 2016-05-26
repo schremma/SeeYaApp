@@ -16,6 +16,8 @@ import java.util.concurrent.atomic.AtomicLong;
  * storing the key identifying that presenter into the savedInstanceState Bundle of the invoking
  * view. If, onCreate(), the view finds that it has a key in its savedInstanceState,
  * it can retrieve its original presenter through invoking restorePresenter().
+ * PresenterManager is a singleton and reference to it can be obtained through the
+ * getInstance() method.
  */
 public class PresenterManager {
     private static final String SIS_KEY_PRESENTER_ID = "presenter_id";
@@ -41,6 +43,11 @@ public class PresenterManager {
         return instance;
     }
 
+    /**
+     * Retrieves and returns a stored presenter using the key in the provided Bundle.
+     * @param savedInstanceState The Bundle with key for the stored presenter
+     * @return Presenter instance that has been stored
+     */
     public <P extends BasePresenter<?, ?>> P restorePresenter(Bundle savedInstanceState) {
         Long presenterId = savedInstanceState.getLong(SIS_KEY_PRESENTER_ID);
         P presenter = (P) presenters.getIfPresent(presenterId);
@@ -48,6 +55,12 @@ public class PresenterManager {
         return presenter;
     }
 
+    /**
+     * Saves the provided presenter for later use, and
+     * stores the key identifying that presenter into the passed in Bundle.
+     * @param presenter The presenter instance to save
+     * @param outState The Bundle to store the id for later identification of the presenter
+     */
     public void savePresenter(BasePresenter<?, ?> presenter, Bundle outState) {
         long presenterId = currentId.incrementAndGet();
         presenters.put(presenterId, presenter);

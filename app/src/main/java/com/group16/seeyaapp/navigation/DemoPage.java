@@ -12,6 +12,9 @@ import com.group16.seeyaapp.R;
 import com.group16.seeyaapp.activity.list.mainlist.TestMainListActivity;
 import com.group16.seeyaapp.main.MainActivity;
 
+/**
+ * Activity for navigating to a set of different pages.
+ */
 public class DemoPage extends AppCompatActivity {
 
     private Toolbar toolbar;

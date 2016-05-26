@@ -284,7 +284,7 @@ public class CategoryPresenterImpl extends CommunicatingPresenter<CategoryView, 
     }
 
     /**
-     * Categories have been successfuly retrieved so the main category
+     * Categories have been successfully retrieved so the main category
      * list is sent to the view for display
      */
     private void onRetrievalSuccess() {

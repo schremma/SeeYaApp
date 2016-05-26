@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * Created by Andrea on 17/05/16.
- * Handles the logic behind adding invited users to an activity, storing the current list of
+ * Handles the logic behind adding invited users to an activity and it stores the current list of
  * invited users - the model.
  * For each name that the user enters, it needs to be checked with the server if the user actually
  * exists.
@@ -25,7 +25,7 @@ public class AddInvitedPresenterImpl extends CommunicatingPresenter<AddInvitedVi
 
 
     /**
-     * Initiates a request to the server to check if the provided user name represented a registered
+     * Initiates a request to the server to check if the provided user name represents a registered
      * user of the application
      * @param userName
      */

@@ -18,6 +18,8 @@ import java.net.Socket;
 
 /**
  * Created by Andrea on 10/04/16.
+ * Service for sending json requests to a server and receiving json responses from a server.
+ * Responses are forwarded to the object that called the service for sending a request.
  *
  */
 public class CommunicationService extends Service {
@@ -26,9 +28,8 @@ public class CommunicationService extends Service {
     private ServiceHandler mServiceHandler;
     private Socket socket;
     //private String ip = "10.0.2.2"; //localhost from emulator
-    private String ip = "192.168.0.104";
     //private String ip = "89.133.200.141";
-    //private String ip = "213.65.110.13"; // our server :)
+    private String ip = "213.65.110.13"; // our server :)
     private int port = 7500;
 
 
@@ -38,7 +39,12 @@ public class CommunicationService extends Service {
     private static final String TAG = "CommunicationService";
 
 
-    // Handler that receives messages from the thread
+    /**
+     *  Handler that receives messages from the thread
+     *  Each message contains a json string to be sent to a server.
+     *  Response from the server is forwarded to the ComResultReceiver
+     *  contained in the message.
+     */
     private final class ServiceHandler extends Handler {
 
 
@@ -63,11 +69,13 @@ public class CommunicationService extends Service {
 
             Log.i(TAG, "Result sent back from service");
 
-            // Stop the service using the startId, so that we don't stop
-            // the service in the middle of handling another job
-            //stopSelf(msg.arg1);
         }
 
+        /**
+         * Sends a string to the server amd reads the response, also a string.
+         * @param jsonString The string to send to the server
+         * @return The server's response to the string sent
+         */
         private String sendStringToServer(String jsonString) {
             String response = null;
 
@@ -105,12 +113,15 @@ public class CommunicationService extends Service {
         }
     }
 
+    /**
+     *  Start up the thread running the service.
+     * A separate thread is created because the service normally runs in the process's
+     *  main thread, which we don't want to block.  We also make it
+     *  background priority so CPU-intensive work will not disrupt the GUI.
+     */
     @Override
     public void onCreate() {
-        // Start up the thread running the service.  Note that we create a
-        // separate thread because the service normally runs in the process's
-        // main thread, which we don't want to block.  We also make it
-        // background priority so CPU-intensive work will not disrupt our UI.
+
         HandlerThread thread = new HandlerThread("ServiceStartArguments",
                 android.os.Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
@@ -121,14 +132,20 @@ public class CommunicationService extends Service {
         Log.i(TAG, "Service created");
     }
 
+    /**
+     * For each start request, send a message to the handler thread to start a job.
+     * THe message contains a ServerTask with the string to send to the server and
+     * the ResultReceiver instance into which the response from the server is to be placed.
+     * @param intent
+     * @param flags
+     * @param startId
+     * @return
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         Log.i(TAG, "Service started");
 
-
-        // For each start request, send a message to start a job and deliver the
-        // start ID so we know which request we're stopping when we finish the job
         Message msg = mServiceHandler.obtainMessage();
         msg.arg1 = startId;
 
@@ -152,7 +169,7 @@ public class CommunicationService extends Service {
             Log.i(TAG, "intent has no extras");
         }
 
-        // If we get killed, after returning from here, restart
+        // If we get killed, after returning from here, do not restart
         return START_NOT_STICKY;
     }
 
@@ -176,7 +193,11 @@ public class CommunicationService extends Service {
         Log.i(TAG, "Service destroyed");
     }
 
-
+    /**
+     * Represents a job to be sent to the HandlerThread:
+     * it stores the string to send to the server and the ResultReceiver
+     * instance into which the response from the server is to be placed.
+     */
     private class ServerTask
     {
         private ResultReceiver resultReceiver;

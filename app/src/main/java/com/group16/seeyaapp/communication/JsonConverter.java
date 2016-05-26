@@ -16,11 +16,18 @@ import java.util.List;
 
 /**
  * Created by Andrea on 10/04/16.
+ * Helper class for converting data into json messages to be sent to the server in accordance with
+ * to communication protocol.
  */
 public final class JsonConverter {
 
     private static final String TAG = "JsonConverter";
 
+    /**
+     * Converts UserLogin object into a login request.
+     * @param login UserLogin object with user credentials
+     * @return converted json string
+     */
     public static String jsonify(UserLogin login) {
         String json = null;
         try
@@ -37,6 +44,11 @@ public final class JsonConverter {
         return json;
     }
 
+    /**
+     * Converts an Account object into a request for registering a new user.
+     * @param account The Account object with information for registering a new user
+     * @return converted json string
+     */
     public static String jsonify(Account account) {
         String json = null;
         try
@@ -54,6 +66,13 @@ public final class JsonConverter {
         return json;
     }
 
+    /**
+     * Converts an Activity object into a request to create a new activity with the stored
+     * information.
+     * @param activity The activity to be created
+     * @param locationId The is of the location where the activity is to take place
+     * @return converted json string
+     */
     public static String jsonify(Activity activity, long locationId) {
         String json = null;
         try
@@ -80,6 +99,12 @@ public final class JsonConverter {
         return json;
     }
 
+    /**
+     * Creates a request for publishing an already created activity, based on the id of that
+     * activity. The activity is made visible to all users of the application.
+     * @param activityId The id of the already created activity to be published.
+     * @return converted json string
+     */
     public static String publishActivityJson(long activityId) {
         String json = null;
         try
@@ -97,13 +122,18 @@ public final class JsonConverter {
         return json;
     }
 
+    /**
+     * Creates a request for publishing an already created activity, based on the id of that
+     * activity. The activity is made visible to the specified users of the application.
+     * @param activityId The id of the already created activity to be published.
+     * @param invitees Names of those users who should be invited to the activity.
+     * @return converted json string
+     */
     public static String publishActivityToSpecificUsersJson(long activityId, List<String> invitees) {
         String json = null;
         try
         {
             JSONObject jsonObject = new JSONObject();
-
-            //TODO check correct message type:
             jsonObject.put(ComConstants.TYPE, ComConstants.PUBLISH_ACTIVITY_TO_SPECIFIC_USERS);
 
             jsonObject.put(ComConstants.ID, activityId);
@@ -115,8 +145,6 @@ public final class JsonConverter {
                 inviteeJson.put(ComConstants.USERNAME, invitee);
                 jArray.put(inviteeJson);
             }
-
-            // TODO check correct constant for user name array: "ARRAY_USERNAME"
             jsonObject.put(ComConstants.ARRAY_USERNAME, jArray);
             json = jsonObject.toString();
         }
@@ -126,6 +154,12 @@ public final class JsonConverter {
         return json;
     }
 
+    /**
+     * Creates a request for signing up the specified user to an activity with the given id.
+     * @param activityId The is of the activity to sign the user up for
+     * @param username The name of the user to be signed up for the activity
+     * @return converted json string
+     */
     public static String signUpForActivityJson(long activityId, String username) {
         String json = null;
         try
@@ -144,6 +178,12 @@ public final class JsonConverter {
         return json;
     }
 
+    /**
+     * Creates a request to unregister the specified user from an activity with the given id.
+     * @param activityId The id of the activity to unregister the user from
+     * @param username THe name of the user to be unregistered.
+     * @return converted json string
+     */
     public static String unregisterFromActivityJson(long activityId, String username) {
         String json = null;
         try
@@ -162,6 +202,12 @@ public final class JsonConverter {
         return json;
     }
 
+    /**
+     * Creates a request to get the updated list of all possible categories, if the app does
+     * not already have the latest version as shown by the version identifier.
+     * @param version The identifier showing what version of categories the app already has
+     * @return converted json string
+     */
     public static String getCategoriesJson(String version) {
         String json = null;
         try
@@ -178,6 +224,15 @@ public final class JsonConverter {
         return json;
     }
 
+    /**
+     * Creates a request to get activity categories based on different filters:
+     * all the categories in which there is at least one activity the user is invited to,
+     * or all the categories in which there is at least one activity that has been created by
+     * the specified user.
+     * @param filter Condition by which the categories are to be filtered.
+     * @param userName The user for which categories are to be requested
+     * @return converted json string
+     */
     public static String getFilteredCategoriesJson(Filter filter, String userName) {
         String json = null;
         try
@@ -204,6 +259,12 @@ public final class JsonConverter {
     }
 
 
+    /**
+     * Creates a request to get the updated list of all possible activity locations, if the app does
+     * not already have the latest version as shown by the version identifier.
+     * @param version The identifier showing what version of locations the app already has
+     * @return converted json string
+     */
     public static String getLocationsJson(String version) {
         String json = null;
         try
@@ -220,6 +281,12 @@ public final class JsonConverter {
         return json;
     }
 
+    /**
+     * Creates a request to get details of the activity specified by its id.
+     * @param activityId The id of the activity to be requested.
+     * @param username The user for which the activity is to be requested
+     * @return converted json string
+     */
     public static String getActivityJson(int activityId, String username) {
         String json = null;
         try
@@ -238,6 +305,11 @@ public final class JsonConverter {
         return json;
     }
 
+    /**
+     * Creates a request to get headlines for all the activities the given user has created.
+     * @param ownerUserName The user whose activity headlines are to be requested
+     * @return converted json string
+     */
     public static String getOwnActivityHeadlinesJson(String ownerUserName) {
         String json = null;
         try
@@ -254,6 +326,11 @@ public final class JsonConverter {
         return json;
     }
 
+    /**
+     * Creates a request to check if the given user name denotes a registered user in the application.
+     * @param userName The user name to be checked for existance
+     * @return converted json string
+     */
     public static String userExistsJson(String userName) {
         String json = null;
         try

@@ -10,6 +10,9 @@ import java.util.Calendar;
 
 /**
  * Created by Andrea on 19/05/16.
+ * Shows a calender for selecting a date as a dialog.
+ * The displaying activity should implement DateTimeDialogListener.
+ * The selected date is sent to the displaying view.
  */
 public class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {

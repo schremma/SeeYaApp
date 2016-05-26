@@ -10,7 +10,7 @@ import java.util.List;
 public interface AddInvitedPresenter {
 
     // every time a user wants to add a user on the list of invitees,
-    // it needs to be checked with if user name exists
+    // it needs to be checked with the server if user name exists
     void checkIfUserExists(String userName);
 
     // set the list of users already added as invited

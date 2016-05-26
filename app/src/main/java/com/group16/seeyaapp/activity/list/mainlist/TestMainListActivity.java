@@ -21,6 +21,11 @@ import com.group16.seeyaapp.navigation.TestCreatePage;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * A view that shows the list with main and subcategories on the main page of the app.
+ * The list can be used to browse to activities the user is invited to, or to browse to
+ * activities the user has created.
+ */
 public class TestMainListActivity extends AppCompatActivity implements MainListView {
 
     private MainListPresenterImpl presenter;
@@ -127,6 +132,13 @@ public class TestMainListActivity extends AppCompatActivity implements MainListV
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Set the (a) main- and (b) sub- headers of the list.
+     * These might be main categories, e.g. Sport and subcategories under each main category, e.g. Running.
+     * The method argument types assume that ExpandableListAdapter is used to fill the list in the view.
+     * @param mainHeaders
+     * @param subHeaders
+     */
     @Override
     public void setNestedListHeaders(List<String> mainHeaders, HashMap<String, List<String>> subHeaders) {
 
@@ -136,6 +148,12 @@ public class TestMainListActivity extends AppCompatActivity implements MainListV
         expListView.setAdapter(listAdapter);
     }
 
+    /**
+     * Navigate to the view were a list of activity headlines under a category is displayed,
+     * and send along the given arguments
+     * @param selectedItemId
+     * @param listFilter
+     */
     @Override
     public void navigateToHeadlineDisplay(int selectedItemId, Filter listFilter) {
 
@@ -147,6 +165,11 @@ public class TestMainListActivity extends AppCompatActivity implements MainListV
         startActivity(intent);
     }
 
+    /**
+     * Navigate to the view were a list of activity headlines under a category is displayed
+     * the headlines string provided as an argument is sent to that view  as an Intent extra.
+     * @param headlines THe headlines to be displayed by the view that is navigated to now.
+     */
     @Override
     public void navigateToHeadlineDisplay(String headlines) {
         Intent intent = new Intent(this, TestHeadlineListActivity.class);
@@ -157,14 +180,15 @@ public class TestMainListActivity extends AppCompatActivity implements MainListV
         startActivity(intent);
     }
 
+    /**
+     * Here the fitler for presenting the dipslayed view is set, and request is set to the
+     * presenter to provide list data based on the filter.
+     */
     @Override
     protected void onResume() {
         super.onResume();
 
         presenter.bindView(this);
-
-//        // set filter based on GUI, default for now instead
-//        currentListFilter = Filter.InvitedToActivitiesByCategories;
 
         if (rbtnOwn.isChecked())
             currentListFilter = Filter.OwnActivitiesByCategories;
@@ -188,6 +212,11 @@ public class TestMainListActivity extends AppCompatActivity implements MainListV
         PresenterManager.getInstance().savePresenter(presenter, outState);
     }
 
+    /**
+     * Event listener for the radio buttons for controlling hte way the list is filtered.
+     * The list is updated based on the user's choice.
+     * @param view
+     */
     public void onRadioButtonClicked(View view) {
 
         boolean checked = ((RadioButton) view).isChecked();

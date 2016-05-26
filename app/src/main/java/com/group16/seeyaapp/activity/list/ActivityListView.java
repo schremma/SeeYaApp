@@ -21,5 +21,6 @@ public interface ActivityListView {
     // and send the id of the activity to that view
     void navigateToActivityDisplay(int activityId);
 
+    // Display the provided error message
     void showOnError(String errorMessage);
 }
