@@ -2,6 +2,10 @@ package com.group16.seeyaapp.model;
 
 /**
  * Created by Andrea on 21/04/16.
+ * Model class Representing a category of activities.
+ * Each category has a name and an id. Additionally it might have a parent
+ * as well if it is a subcategory under a main category.
+ * Empty values for the parent field means that the it is a main category.
  */
 public class NestedCategory {
     private int id;

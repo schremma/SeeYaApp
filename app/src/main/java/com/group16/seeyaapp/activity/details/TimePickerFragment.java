@@ -31,7 +31,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
     /**
      * onTimeSet() callback method
-     * Send the selected time to the displaying view, implementing DateTimeDialogListener.
+     * Sends the selected time to the displaying view, implementing DateTimeDialogListener.
      * @param view TimePicker view
      * @param hourOfDay selected hour
      * @param minute selected minute

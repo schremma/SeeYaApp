@@ -9,15 +9,15 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.group16.seeyaapp.R;
-import com.group16.seeyaapp.activity.categories.TestCategoriesActivity;
-import com.group16.seeyaapp.activity.list.mainlist.TestMainListActivity;
+import com.group16.seeyaapp.activity.categories.CategoriesActivity;
+import com.group16.seeyaapp.activity.list.mainlist.MainListActivity;
 import com.group16.seeyaapp.main.MainActivity;
 
 /**
  * Activity for navigation to different pages for creating something, e.g. an activity
  * or a group.
  */
-public class TestCreatePage extends AppCompatActivity {
+public class CreatePage extends AppCompatActivity {
 
     private Toolbar toolbar;
 
@@ -67,17 +67,17 @@ public class TestCreatePage extends AppCompatActivity {
         } else if(id == R.id.toolbarinfo) {
 
         } else if (id == R.id.toolbarbrowse) {
-            Intent intent = new Intent(this, TestMainListActivity.class);
+            Intent intent = new Intent(this, MainListActivity.class);
             startActivity(intent);
         } else if (id == R.id.toolbaradd) {
-            Intent intent = new Intent(this, TestCreatePage.class);
+            Intent intent = new Intent(this, CreatePage.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void goToCreateActivity() {
-        Intent intent = new Intent(this, TestCategoriesActivity.class);
+        Intent intent = new Intent(this, CategoriesActivity.class);
         startActivity(intent);
     }
 

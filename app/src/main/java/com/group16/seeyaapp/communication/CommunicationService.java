@@ -30,6 +30,7 @@ public class CommunicationService extends Service {
     //private String ip = "10.0.2.2"; //localhost from emulator
     //private String ip = "89.133.200.141";
     private String ip = "213.65.110.13"; // our server :)
+    //private String ip = "10.2.22.72";
     private int port = 7500;
 
 
@@ -40,10 +41,11 @@ public class CommunicationService extends Service {
 
 
     /**
-     *  Handler that receives messages from the thread
+     *  Handler that receives messages from the thread.
      *  Each message contains a json string to be sent to a server.
      *  Response from the server is forwarded to the ComResultReceiver
-     *  contained in the message.
+     *  contained in the message, so that it eventually gets to the object listening to
+     *  the ResultReceiver.
      */
     private final class ServiceHandler extends Handler {
 

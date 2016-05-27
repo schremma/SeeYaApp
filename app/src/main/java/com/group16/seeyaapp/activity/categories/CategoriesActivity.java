@@ -15,9 +15,9 @@ import android.widget.Toast;
 import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
 import com.group16.seeyaapp.activity.details.EditableActivity;
-import com.group16.seeyaapp.activity.list.mainlist.TestMainListActivity;
+import com.group16.seeyaapp.activity.list.mainlist.MainListActivity;
 import com.group16.seeyaapp.navigation.DemoPage;
-import com.group16.seeyaapp.navigation.TestCreatePage;
+import com.group16.seeyaapp.navigation.CreatePage;
 
 
 /**
@@ -26,7 +26,7 @@ import com.group16.seeyaapp.navigation.TestCreatePage;
  * When the user goes on to the next view to fill in details about the new activity,
  * the id of the subcategory chosen on this view is sent along.
  */
-public class TestCategoriesActivity extends AppCompatActivity implements CategoryView {
+public class CategoriesActivity extends AppCompatActivity implements CategoryView {
     private CategoryPresenterImpl presenter;
     private Spinner spinnerMain;
     private Spinner spinnerSub;
@@ -92,10 +92,10 @@ public class TestCategoriesActivity extends AppCompatActivity implements Categor
         } else if(id == R.id.toolbarinfo) {
 
         } else if (id == R.id.toolbarbrowse) {
-            Intent intent = new Intent(this, TestMainListActivity.class);
+            Intent intent = new Intent(this, MainListActivity.class);
             startActivity(intent);
         } else if (id == R.id.toolbaradd) {
-            Intent intent = new Intent(this, TestCreatePage.class);
+            Intent intent = new Intent(this, CreatePage.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
@@ -145,6 +145,10 @@ public class TestCategoriesActivity extends AppCompatActivity implements Categor
         spinnerSub.setAdapter(spinnerArrayAdapter);
     }
 
+    /**
+     * Navigates to the view showing the form for filling in new activity details
+     * @param subCategoryId The is of the subcategory the user choose for the activity to be created
+     */
     @Override
     public void navigateToCreateActivityDetails(int subCategoryId) {
         Intent intent = new Intent(this, EditableActivity.class);
@@ -152,6 +156,10 @@ public class TestCategoriesActivity extends AppCompatActivity implements Categor
         startActivity(intent);
     }
 
+    /**
+     * Displays error message as a Toast
+     * @param errorMessage the error message to show
+     */
     @Override
     public void showError(String errorMessage) {
         Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);

@@ -13,10 +13,10 @@ import android.widget.RadioButton;
 import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
 import com.group16.seeyaapp.activity.list.Filter;
-import com.group16.seeyaapp.activity.list.TestHeadlineListActivity;
+import com.group16.seeyaapp.activity.list.HeadlineListActivity;
 import com.group16.seeyaapp.main.MainActivity;
 import com.group16.seeyaapp.navigation.DemoPage;
-import com.group16.seeyaapp.navigation.TestCreatePage;
+import com.group16.seeyaapp.navigation.CreatePage;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.List;
  * The list can be used to browse to activities the user is invited to, or to browse to
  * activities the user has created.
  */
-public class TestMainListActivity extends AppCompatActivity implements MainListView {
+public class MainListActivity extends AppCompatActivity implements MainListView {
 
     private MainListPresenterImpl presenter;
     private Filter currentListFilter;
@@ -101,6 +101,9 @@ public class TestMainListActivity extends AppCompatActivity implements MainListV
 
     }
 
+    /**
+     * Starts the main page of the application.
+     */
     private void startMain() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
@@ -123,17 +126,17 @@ public class TestMainListActivity extends AppCompatActivity implements MainListV
         } else if(id == R.id.toolbarinfo) {
 
         } else if(id == R.id.toolbarbrowse) {
-            Intent intent = new Intent(this, TestMainListActivity.class);
+            Intent intent = new Intent(this, MainListActivity.class);
             startActivity(intent);
         } else if(id == R.id.toolbaradd) {
-            Intent intent = new Intent(this, TestCreatePage.class);
+            Intent intent = new Intent(this, CreatePage.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
 
     /**
-     * Set the (a) main- and (b) sub- headers of the list.
+     * Set the main- and sub- headers of the list.
      * These might be main categories, e.g. Sport and subcategories under each main category, e.g. Running.
      * The method argument types assume that ExpandableListAdapter is used to fill the list in the view.
      * @param mainHeaders
@@ -149,15 +152,15 @@ public class TestMainListActivity extends AppCompatActivity implements MainListV
     }
 
     /**
-     * Navigate to the view were a list of activity headlines under a category is displayed,
-     * and send along the given arguments
-     * @param selectedItemId
-     * @param listFilter
+     * Navigates to the view were a list of activity headlines under a category is displayed,
+     * and sends along the given arguments
+     * @param selectedItemId The id of the item selected from the list
+     * @param listFilter The filter according to which the activities are listed
      */
     @Override
     public void navigateToHeadlineDisplay(int selectedItemId, Filter listFilter) {
 
-        Intent intent = new Intent(this, TestHeadlineListActivity.class);
+        Intent intent = new Intent(this, HeadlineListActivity.class);
 
         // the headline list needs groupId and listFilter to know what kind of list to display
         intent.putExtra("groupId", selectedItemId);
@@ -172,7 +175,7 @@ public class TestMainListActivity extends AppCompatActivity implements MainListV
      */
     @Override
     public void navigateToHeadlineDisplay(String headlines) {
-        Intent intent = new Intent(this, TestHeadlineListActivity.class);
+        Intent intent = new Intent(this, HeadlineListActivity.class);
 
         // the headline list needs groupId and listFilter to know what kind of list to display
         intent.putExtra("headlines", headlines);
@@ -181,7 +184,7 @@ public class TestMainListActivity extends AppCompatActivity implements MainListV
     }
 
     /**
-     * Here the fitler for presenting the dipslayed view is set, and request is set to the
+     * Here the filter for presenting the displayed view is set, and request is set to the
      * presenter to provide list data based on the filter.
      */
     @Override

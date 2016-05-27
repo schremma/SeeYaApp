@@ -8,6 +8,10 @@ import java.util.List;
 
 /**
  * Created by Andrea on 11/04/16.
+ *  Model class that stores information about the activity and
+ *  performs local validation of the content.
+ *  It also returns formatted strings representing different parts of the information stored
+ *  in the Activity object.
  */
 public class Activity {
 
@@ -40,7 +44,10 @@ public class Activity {
 
     public String getValidationErrorMessage() {return errorMsg;}
 
-    //TODO add checking if date has passed
+    /**
+     * Validates the content of the object.
+     * @return True if the activity is in valid format, false otherwise
+     */
     public boolean validateActivity() {
         errorMsg = "";
         if (date == null) {
@@ -67,11 +74,19 @@ public class Activity {
         return true;
     }
 
+    /**
+     * Returns the date and the location of the activity as a single formatted string.
+     * @return the date and the location of the activity as a single formatted string
+     */
     public String dateLocationString() {
         return String.format("%s, %s at %s", location, DateHelper.dateToDateOnlyString(date),
                 DateHelper.dateToTimeOnlyString(time));
     }
 
+    /**
+     * Returns information about the limits on attending participants as a single formatted string.
+     * @return
+     */
     public String participantInfoString() {
         String maximumParticipants = "";
         if (maxNbrOfParticipants != 0) {
@@ -90,6 +105,10 @@ public class Activity {
         return String.format("Minimum participants: %s\nMaximum participants: %s", minimumParticipants, maximumParticipants);
     }
 
+    /**
+     * Returns all information in the activity as a single formatted string.
+     * @return string representation of the object
+     */
     @Override
     public String toString() {
         String strOut = String.format("Activity: %s\n%s, %s at %s\nMessage: %s\nMinimum participants: %d\n" +
@@ -104,14 +123,20 @@ public class Activity {
         return strOut;
     }
 
-    // True if the time of the activity has already passed
+    /**
+     * Retruns true if the time of the activity has already passed.
+     * @return True if the time of the activity has already passed
+     */
     public boolean expired() {
         Date today = new Date();
         return (DateHelper.getZeroTimeDate(today).after(DateHelper.getZeroTimeDate(date)));
     }
 
-    // True if at least one more participant can still sign up.
-    // Assumes that 0 or negative upper limit means no limit
+    /**
+     * True if at least one more participant can still sign up.
+     * Assumes that 0 or negative upper limit means no limit
+     * @return
+     */
     public boolean stillHasSpace() {
         if (maxNbrOfParticipants > 0) {
             return maxNbrOfParticipants > nbrSignedUp;
@@ -120,12 +145,21 @@ public class Activity {
     }
 
     // TODO use this
+    /**
+     * Adds one invited user to the list invite users
+     * @param username An invited user name to add
+     */
     public void addInvitedUser(String username) {
         if (lstInvited == null)
                 lstInvited = new ArrayList<>();
         lstInvited.add(username);
     }
 
+    /**
+     * Checks if the provided username  is already for the activity.
+     * @param username
+     * @return True if the user is already invited
+     */
     public boolean isUserAlreadyInvited(String username) {
         if (lstInvited == null)
             return false;

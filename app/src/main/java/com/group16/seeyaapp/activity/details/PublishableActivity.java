@@ -17,16 +17,21 @@ import android.widget.Toast;
 
 import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
-import com.group16.seeyaapp.activity.list.mainlist.TestMainListActivity;
+import com.group16.seeyaapp.activity.list.mainlist.MainListActivity;
 import com.group16.seeyaapp.main.MainActivity;
 import com.group16.seeyaapp.model.Activity;
 import com.group16.seeyaapp.navigation.DemoPage;
-import com.group16.seeyaapp.navigation.TestCreatePage;
+import com.group16.seeyaapp.navigation.CreatePage;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Displays an already created activity that has not been published yet.
+ * Shows controls for initiating adding a list of users to be invited to the activity through an
+ * AddInvitedFragment and control for publishing the activity.
+ */
 public class PublishableActivity extends AppCompatActivity implements PublishableActivityView, AddInvitedListener {
 
     private PublishableActivityPresenterImpl presenter;
@@ -88,6 +93,9 @@ public class PublishableActivity extends AppCompatActivity implements Publishabl
         lblInvited.setVisibility(View.INVISIBLE);
 
         Intent intent = getIntent();
+
+
+        // Gets the id of the activity to be displayed later on
         if (intent.getExtras() != null) {
 
                 activityId = intent.getIntExtra("activityId", -1);
@@ -118,6 +126,9 @@ public class PublishableActivity extends AppCompatActivity implements Publishabl
             }
     }
 
+    /**
+     * Starts the main page of the application.
+     */
     private void startMain() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
@@ -145,13 +156,20 @@ public class PublishableActivity extends AppCompatActivity implements Publishabl
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+
+
+        // Saves the current list of invited users in the presenter
         presenter.setInvitedList(lstInvited);
         PresenterManager.getInstance().savePresenter(presenter, outState);
     }
 
 
-
-    // The view is to display an already created activity
+    /**
+     * Displays information stored in the provided Activity.
+     * It determines based on the value of datePublished if the GUI is tp be set up
+     * for publishing the activity or not.
+     * @param activity The activity information to be displayed.
+     */
     @Override
     public void displayActivityDetails(Activity activity) {
 
@@ -171,6 +189,10 @@ public class PublishableActivity extends AppCompatActivity implements Publishabl
         tvAddress.setText(activity.getAddress() != null ? "Address: " + activity.getAddress() : "");
     }
 
+    /**
+     * Changes the GUI so that the user can publish or not the activity
+     * @param published True if the GUI is to be set up for publishing
+     */
     private void setGUIForPublishedStatus(boolean published) {
         if (published) {
             btnPublish.setVisibility(View.INVISIBLE);
@@ -184,7 +206,10 @@ public class PublishableActivity extends AppCompatActivity implements Publishabl
         }
     }
 
-
+    /**
+     * Changes the GUI as the published status of the activity has been changed.
+     * @param published True if the activity has just been published.
+     */
     @Override
     public void updatePublishedStatus(boolean published) {
         if (published) {
@@ -195,14 +220,22 @@ public class PublishableActivity extends AppCompatActivity implements Publishabl
         }
     }
 
-
-
+    /**
+     * Displays error message as a Toast
+     * @param errorMessage the error message to show
+     */
     @Override
     public void showOnError(String errorMessage) {
         Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
         toast.show();
     }
 
+    /**
+     * PublishableActivityView implementation.
+     * Copies the content of the provided list of invited user onto its own local list
+     * and initiates changing display on the GUI accordingly.
+     * @param invitedUserList List of invited users
+     */
     @Override
     public void setInvitedUserList(List<String> invitedUserList) {
         lstInvited = new ArrayList<>();
@@ -220,11 +253,20 @@ public class PublishableActivity extends AppCompatActivity implements Publishabl
 
     }
 
+    /**
+     * AddInvitedListener implementation.
+     * Changes the currently stored and displayed list of invited users to the provided list.
+     * @param lstInvited List of invited users
+     */
+    @Override
     public void setListOfInvitedUsers(ArrayList<String> lstInvited) {
         this.lstInvited = lstInvited;
         displayListOfInvited();
     }
 
+    /**
+     * Displayes the list of invited users on the GUI
+     */
     private void displayListOfInvited() {
         if (lstInvited != null) {
             String invitedStr = TextUtils.join(", ", lstInvited);
@@ -253,10 +295,10 @@ public class PublishableActivity extends AppCompatActivity implements Publishabl
         } else if(id == R.id.toolbarinfo) {
 
         } else if(id == R.id.toolbaradd) {
-            Intent intent = new Intent(this, TestCreatePage.class);
+            Intent intent = new Intent(this, CreatePage.class);
             startActivity(intent);
         } else if(id == R.id.toolbarbrowse) {
-            Intent intent = new Intent(this, TestMainListActivity.class);
+            Intent intent = new Intent(this, MainListActivity.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

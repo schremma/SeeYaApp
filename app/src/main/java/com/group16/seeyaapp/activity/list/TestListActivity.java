@@ -19,6 +19,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+
+/**
+ * This class is not currently in used, and have been replaced by HeadlineListActivity.
+ */
 public class TestListActivity extends AppCompatActivity implements ActivityListView {
     private ActivityListPresenterImpl presenter;
     private ListView listview;

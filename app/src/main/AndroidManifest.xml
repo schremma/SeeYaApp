@@ -25,13 +25,13 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
         <activity
-            android:name=".login.TestLoginActivity"
+            android:name=".login.LoginActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
-            android:name=".register.TestRegisterActivity"
+            android:name=".register.RegisterActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
-            android:name=".activity.categories.TestCategoriesActivity"
+            android:name=".activity.categories.CategoriesActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <!--<activity android:name=".main.MainActivity" />-->
         <activity
@@ -44,11 +44,11 @@
             android:name=".activity.list.TestListActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
-            android:name=".navigation.TestCreatePage"
+            android:name=".navigation.CreatePage"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
-        <activity android:name=".activity.list.mainlist.TestMainListActivity" />
-        <activity android:name=".activity.list.TestHeadlineListActivity" />
+        <activity android:name=".activity.list.mainlist.MainListActivity" />
+        <activity android:name=".activity.list.HeadlineListActivity" />
          <activity android:name=".navigation.DemoPage"></activity>
 
         <activity android:name=".activity.details.PublishableActivity"></activity>

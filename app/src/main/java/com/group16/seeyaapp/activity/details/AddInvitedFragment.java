@@ -23,11 +23,17 @@ import java.util.List;
 
 /**
  * Created by Andrea on 16/05/16.
+ * Displays a view for selecting a number of user names, representing specific users that are to be
+ * invited to an activity.
+ * The list of already invited users, if there are any, are received from the invoking activity.
+ * Newly added users are appended to that list. The original state of the list is also saved in case
+ * the user cancels the changes made in the dialog.
  */
 public class AddInvitedFragment extends DialogFragment implements AddInvitedView {
     private AddInvitedPresenterImpl presenter;
-    private ArrayList<String> lstInvited;
-    private ArrayList<String> lstInvitedOnDialogStart;
+    private ArrayList<String> lstInvited; //the list to which newly added invited users are appended
+    private ArrayList<String> lstInvitedOnDialogStart; // the list of already invited users as
+                                                        // received from the invoking activity
 
     private EditText txtInvitedUser;
     private Button btnAddInvitee;
@@ -45,6 +51,8 @@ public class AddInvitedFragment extends DialogFragment implements AddInvitedView
             presenter = PresenterManager.getInstance().restorePresenter(savedInstanceState);
         }
 
+        // The invoking activity sends a list that might already contain some names the user
+        // have already added to the invitee list
         ArrayList<String> lstFromActivity = getArguments().getStringArrayList("invitedList");
         lstFromActivity = getArguments().getStringArrayList("invitedList");
         lstInvited = new ArrayList<>();
@@ -55,6 +63,13 @@ public class AddInvitedFragment extends DialogFragment implements AddInvitedView
         }
     }
 
+    /**
+     * Constructor method for the fragment.
+     * Retrieves the array list as an argument that the invoking activity sent so that
+     * it can be accessed in the onCreate() method.
+     * @param inivitedList
+     * @return
+     */
     public static AddInvitedFragment newInstance(ArrayList<String> inivitedList) {
         AddInvitedFragment f = new AddInvitedFragment();
 
@@ -84,11 +99,17 @@ public class AddInvitedFragment extends DialogFragment implements AddInvitedView
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
+        // save the current list of invited users in the presenter
         presenter.setInvitedList(lstInvited);
         PresenterManager.getInstance().savePresenter(presenter, outState);
     }
 
 
+    /**
+     * The GUI of the fragment is set here.
+     * @param savedInstanceState
+     * @return
+     */
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -137,11 +158,13 @@ public class AddInvitedFragment extends DialogFragment implements AddInvitedView
         builder.setView(view)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        // send the updated list back to the invoking activity
                         ((AddInvitedListener) getActivity()).setListOfInvitedUsers(lstInvited);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        // no changes should be saved: send the original list back to the invoking activity
                         ((AddInvitedListener) getActivity()).setListOfInvitedUsers(lstInvitedOnDialogStart);
                     }
                 });
@@ -149,6 +172,10 @@ public class AddInvitedFragment extends DialogFragment implements AddInvitedView
         return builder.create();
     }
 
+    /**
+     * Removes a user with a specific name from the list of invited, and updates the GUI.
+     * @param selected
+     */
     private void removeInvitedUser(String selected) {
         int index = lstInvited.indexOf(selected);
         if (index >= 0) {
@@ -157,6 +184,12 @@ public class AddInvitedFragment extends DialogFragment implements AddInvitedView
         updateInvitedListDisplay();
     }
 
+    /**
+     * Response received from the Presenter that a user exists or not.
+     * If the user exists, add it to the list of invited.
+     * @param userExists True if the name input by the user denotes an existing user
+     * @param username The user name that has been checked for existence
+     */
     @Override
     public void onUserExistenceChecked(boolean userExists, String username) {
 
@@ -173,6 +206,9 @@ public class AddInvitedFragment extends DialogFragment implements AddInvitedView
 
     }
 
+    /**
+     * Update the list of invited users with the provided list
+     */
     @Override
     public void setInvitedUserList(List<String> invitedUserList) {
 
@@ -183,12 +219,21 @@ public class AddInvitedFragment extends DialogFragment implements AddInvitedView
     }
 
 
+    /**
+     * Displays error message as a Toast
+     * @param errorMessage the error message to show
+     */
     @Override
     public void showOnError(String errorMessage) {
         Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
         toast.show();
     }
 
+    /**
+     * Adds the given string to the list of invited users and initiates
+     * updating the GUI accordingly.
+     * @param username
+     */
     private void addInvited(String username) {
         if (lstInvited == null)
             lstInvited = new ArrayList<>();
@@ -197,6 +242,9 @@ public class AddInvitedFragment extends DialogFragment implements AddInvitedView
         updateInvitedListDisplay();
     }
 
+    /**
+     * Updates the list of of invited users reflect the current state of the instance variable list.
+     */
     private void updateInvitedListDisplay() {
         arrayAdapter = new ArrayAdapter<String>(
                 getActivity(),

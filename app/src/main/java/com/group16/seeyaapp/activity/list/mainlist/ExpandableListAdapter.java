@@ -14,7 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by Andrea on 26/04/16.
+ * Created by Andrea on 26/04/16,
+ * based on http://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/
  * Adapter for a list that displays main categories and subcategories under it,
  */
 public class ExpandableListAdapter extends BaseExpandableListAdapter {

@@ -14,12 +14,17 @@ import android.widget.Toast;
 
 import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
-import com.group16.seeyaapp.activity.list.mainlist.TestMainListActivity;
+import com.group16.seeyaapp.activity.list.mainlist.MainListActivity;
 import com.group16.seeyaapp.model.Activity;
 import com.group16.seeyaapp.navigation.DemoPage;
-import com.group16.seeyaapp.navigation.TestCreatePage;
+import com.group16.seeyaapp.navigation.CreatePage;
 
-// Displays an Activity in a non-editable form, i.e. the user can view the activity details and (un)register
+/**
+ * Displays details of an activity, without providing editing possibilities.
+ * It shows basic information about the activity, the number of users that are signed up
+ * for the activity, and if the current user is signed up.
+ * The user may sign up or unregister from the activity.
+ */
 public class DetailActivity extends AppCompatActivity implements DetailView {
 
     private DetailPresenterImpl presenter;
@@ -78,7 +83,6 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
         tvAddress = (TextView)findViewById(R.id.tvAddress);
         tvDateLocation = (TextView)findViewById(R.id.tvDateLocationString);
         tvNbrOfParticipants = (TextView)findViewById(R.id.tvNbrOfParticipants);
-
         tvActivityInfo.setMovementMethod(new ScrollingMovementMethod());
 
     }
@@ -109,6 +113,10 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
         PresenterManager.getInstance().savePresenter(presenter, outState);
     }
 
+    /**
+     * Displays information stored in the provided Activity object
+     * @param activity Activity object with all the information to display.
+     */
     @Override
     public void displayActivityDetails(Activity activity) {
         tvNbrAttending.setText("Attending: " + activity.getNbrSignedUp());
@@ -127,11 +135,20 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
 
     }
 
+    /**
+     * Update the counter that shows the number of users who have signed up.
+     * @param attending The number of users who have signed up for an activity
+     */
     @Override
     public void updateNbrAttending(int attending) {
         tvNbrAttending.setText("Attending: " + attending);
     }
 
+    /**
+     * Updates the GUI as the user has just successfully signed up for or
+     * unregistered from an activity.
+     * @param signedUp Whether the user has just signed up or unregistered from an activity.
+     */
     @Override
     public void updateSignedUpStatus(boolean signedUp) {
         if (signedUp) {
@@ -144,6 +161,10 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
         }
     }
 
+    /**
+     * Displays error message as a Toast
+     * @param errorMessage the error message to show
+     */
     @Override
     public void showOnError(String errorMessage) {
         Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
@@ -167,10 +188,10 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
         } else if(id == R.id.toolbarinfo) {
 
         } else if(id == R.id.toolbaradd) {
-            Intent intent = new Intent(this, TestCreatePage.class);
+            Intent intent = new Intent(this, CreatePage.class);
             startActivity(intent);
         } else if(id == R.id.toolbarbrowse) {
-            Intent intent = new Intent(this, TestMainListActivity.class);
+            Intent intent = new Intent(this, MainListActivity.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

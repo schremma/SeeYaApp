@@ -2,6 +2,8 @@ package com.group16.seeyaapp.model;
 
 /**
  * Created by Andrea on 15/04/16.
+ * Model class representation a single location where an activity can take place.
+ * A location has a name and an id.
  */
 public class Location {
     private String name;

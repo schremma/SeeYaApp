@@ -29,6 +29,14 @@ public class DatePickerFragment extends DialogFragment
         return new DatePickerDialog(getActivity(), this, year, month, day);
     }
 
+    /**
+     * OnDateListener callback method.
+     * Sends the selected time to the displaying view, implementing DateTimeDialogListener.
+     * @param view
+     * @param year selected year
+     * @param month selected month
+     * @param day selected day
+     */
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
         Calendar c = Calendar.getInstance();

@@ -18,17 +18,22 @@ import android.widget.Toast;
 
 import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
-import com.group16.seeyaapp.activity.list.mainlist.TestMainListActivity;
+import com.group16.seeyaapp.activity.list.mainlist.MainListActivity;
 import com.group16.seeyaapp.helpers.DateHelper;
 import com.group16.seeyaapp.main.MainActivity;
 import com.group16.seeyaapp.model.Activity;
 import com.group16.seeyaapp.navigation.DemoPage;
-import com.group16.seeyaapp.navigation.TestCreatePage;
+import com.group16.seeyaapp.navigation.CreatePage;
 
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Displays a single activity.
+ * It could be a still blank activity, if the user wishes to create a new activity.
+ * It could also be an already created activity by the current user, which the user wishes to edit.
+ */
 public class EditableActivity extends AppCompatActivity implements EditableActivityView, DateTimeDialogListener {
 
     private EditableActivityPresenterImpl presenter;
@@ -36,8 +41,8 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
     private Spinner spinnerLocations;
     private int activityId;
     private Button btnCreate;
-    private boolean newActivity;
-
+    private boolean newActivity;    // kepps track of whether it is a new activity being created on
+                                    // the GUI, or it is an old activity neing edited
     private TextView tvHeadline;
     private TextView tvMessage;
     private TextView tvAddress;
@@ -46,9 +51,6 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
     private LinearLayout createViewContainer;
 
     private TextView tvDisplayDate;
-    private int year;
-    private int month;
-    private int day;
 
     private Toolbar toolbar;
 
@@ -85,6 +87,8 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
 
         createViewContainer = (LinearLayout)findViewById(R.id.createActivityContainer);
 
+        // Based on the extras received from the invoking view, decide if GUi is to be set up
+        // for creating a new activity or for display an already created activity.
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
 
@@ -164,16 +168,21 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
         startActivity(intent);
     }
 
-    //Sets current date to be shown
+    /**
+     * Sets current date to be shown on the GUI
+     */
     private void setDefaultDate() {
         final Calendar c = Calendar.getInstance();
-        year = c.get(Calendar.YEAR);
-        month = c.get(Calendar.MONTH);
-        day = c.get(Calendar.DAY_OF_MONTH);
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
         tvDisplayDate.setText(DateHelper.formatDate(year, month, day));
 
     }
-    //Sets current time to be shown
+
+    /**
+     * Sets current time to be shown on the GUI
+     */
     private void setDefaultTime() {
         final Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
@@ -204,6 +213,7 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
+        // Save what the user has input so far in the presenter
         getActivityInput();
         presenter.onSetActivity(activity);
         PresenterManager.getInstance().savePresenter(presenter, outState);
@@ -250,6 +260,10 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
 
     }
 
+    /**
+     * Sets a list with the provided list of locations
+     * @param locations The location list to be displayed
+     */
     @Override
     public void setLocationList(String[] locations) {
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, R.layout.my_spinner_item, locations);
@@ -266,8 +280,11 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
         }
     }
 
-    // The view is to display an already created activity for editing
-    // Or a not yet saved activity, if a configiration change took place while entering input
+    /**
+     * The view is to display an already created activity for editing
+     8 Or a not yet saved activity, if a configuration change took place while entering input
+     * @param activity The activity informaion to be displayed
+     */
     @Override
     public void displayActivityDetails(Activity activity) {
         this.activity = activity;
@@ -292,6 +309,11 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
         }
     }
 
+    /**
+     * Changes the view after an activity has been created, i.e. changes the visibitlity of the
+     * button for initiating creation of an activity.
+     * @param created
+     */
     @Override
     public void updateCreateStatus(boolean created) {
         if (created) {
@@ -302,13 +324,20 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
 
     }
 
+    /**
+     * Navigates to the page where the user can browse activities.
+     */
     @Override
     public void navigateToBrowseActivities() {
-        Intent intent = new Intent(this, TestMainListActivity.class);
+        Intent intent = new Intent(this, MainListActivity.class);
         startActivity(intent);
     }
 
 
+    /**
+     * Displays error message as a Toast
+     * @param errorMessage the error message to show
+     */
     @Override
     public void showOnError(String errorMessage) {
         Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
@@ -316,6 +345,11 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
     }
 
 
+    /**
+     * User has requested to create a new Activity from the data he or she has entered.
+     * Information is gathered from the GUI into the Activity object and sent to
+     * the presenter.
+     */
     private void createNewActivity() {
 
         TextView tvMin = (TextView)findViewById(R.id.txtMinParticipants);
@@ -355,22 +389,43 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
         }
     }
 
+    /**
+     * Shows a DatePicker dialog
+     * @param v
+     */
     public void onDatePickerButtonClicked(View v) {
         DialogFragment picker = new DatePickerFragment();
         picker.show(getFragmentManager(), "datePicker");
     }
 
+    /**
+     * Shows a time picker dialog.
+     * @param v
+     */
     public void onTimePickerButtonClicked(View v){
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(getFragmentManager(),"TimePicker");
     }
 
 
+    /**
+     * Invoked as the user has selected a date in the dialog.
+     * Displays the choice on the GUI
+     * @param year selected year
+     * @param month selected month
+     * @param day selected day
+     */
     @Override
     public void onDateSelected(int year, int month, int day) {
         tvDisplayDate.setText(DateHelper.formatDate(year, month, day));
     }
 
+    /**
+     * Invoked as the user has selected a time in the dialog.
+     * @param hour selected hour
+     * @param minute selected minute
+     * @param second selected second
+     */
     @Override
     public void onTimeSelected(int hour, int minute, int second) {
         TextView tv = (TextView)findViewById(R.id.tvTime);
@@ -394,10 +449,10 @@ public class EditableActivity extends AppCompatActivity implements EditableActiv
         } else if(id == R.id.toolbarinfo) {
 
         } else if(id == R.id.toolbaradd) {
-            Intent intent = new Intent(this, TestCreatePage.class);
+            Intent intent = new Intent(this, CreatePage.class);
             startActivity(intent);
         } else if(id == R.id.toolbarbrowse) {
-            Intent intent = new Intent(this, TestMainListActivity.class);
+            Intent intent = new Intent(this, MainListActivity.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

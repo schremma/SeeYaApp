@@ -18,9 +18,9 @@ import com.group16.seeyaapp.PresenterManager;
 import com.group16.seeyaapp.R;
 import com.group16.seeyaapp.activity.details.DetailActivity;
 import com.group16.seeyaapp.activity.details.PublishableActivity;
-import com.group16.seeyaapp.activity.list.mainlist.TestMainListActivity;
+import com.group16.seeyaapp.activity.list.mainlist.MainListActivity;
 import com.group16.seeyaapp.navigation.DemoPage;
-import com.group16.seeyaapp.navigation.TestCreatePage;
+import com.group16.seeyaapp.navigation.CreatePage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +30,15 @@ import java.util.List;
 //=======
 //>>>>>>> Stashed changes
 
-public class TestHeadlineListActivity extends AppCompatActivity implements ActivityListView {
+/**
+ * Displays a list showing short information, referred to as headlines, about activities.
+ * The user may click on one of these headlines to be navigated to the next view
+ * that displays detailed information about the activity.
+ * The instance variable listFilter keeps track of what kind of activity list is displayed, e.g
+ * own activities or invited to activities. Based on the value of the filter, different views might
+ * be displayed when the user selects a list item.
+ */
+public class HeadlineListActivity extends AppCompatActivity implements ActivityListView {
 
     private ActivityListPresenterImpl presenter;
     private ListView listview;
@@ -117,15 +125,26 @@ public class TestHeadlineListActivity extends AppCompatActivity implements Activ
         } else if(id == R.id.toolbarinfo) {
 
         } else if(id == R.id.toolbarbrowse) {
-            Intent intent = new Intent(this, TestMainListActivity.class);
+            Intent intent = new Intent(this, MainListActivity.class);
             startActivity(intent);
         } else if(id == R.id.toolbaradd) {
-            Intent intent = new Intent(this, TestCreatePage.class);
+            Intent intent = new Intent(this, CreatePage.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     *  Shows a list of activities, displaying the headline and the date for each.
+     * It keeps track of the associated id as well to send it to presenter when an
+     * activity has been selected.
+     * It is assumed that info for each activity is stored at the same index position in each array
+     * i.e. for the first activity on the list has headlines[0], dates[0] and ids[0]
+     * the second has headlines[1], dates[1] and ids[1] etc.
+     * @param headlines List of headlines to be displayed
+     * @param dates List of dates to be displayed each belonging to a headline in the same position
+     * @param ids List of activity ids linked to headlines by their index position
+     */
     @Override
     public void setHeadlineList(String[] headlines, String[] dates, int[] ids) {
 
@@ -145,6 +164,15 @@ public class TestHeadlineListActivity extends AppCompatActivity implements Activ
 
     }
 
+    /**
+     * Navigates to the view that displays the activity with the given id
+     * and sends the id of the activity to that view.
+     * Depending on the list filter value, different kinds of activities might be started here.
+     * E.g. if these are the user's own activities, the details should be displayed giving
+     * opportunities for editing/publishing. If these are invited to activities, the user
+     * might wish to sign up.
+     * @param activityId The id to send along to the next view
+     */
     @Override
     public void navigateToActivityDisplay(int activityId) {
         if (listFilter.equals(Filter.InvitedToActivitiesByCategories)) {
@@ -195,8 +223,10 @@ public class TestHeadlineListActivity extends AppCompatActivity implements Activ
     }
 
 
-    //region testlist
-
+    /**
+     * Adapter class for the headline list.
+     * It can return the id associated with a selected string on the list.
+     */
     private class StableArrayAdapter extends ArrayAdapter<String> {
 
         HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
@@ -222,5 +252,4 @@ public class TestHeadlineListActivity extends AppCompatActivity implements Activ
 
     }
 
-    //endregion
 }

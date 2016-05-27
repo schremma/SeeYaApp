@@ -6,9 +6,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.group16.seeyaapp.R;
-import com.group16.seeyaapp.login.TestLoginActivity;
-import com.group16.seeyaapp.register.TestRegisterActivity;
+import com.group16.seeyaapp.login.LoginActivity;
+import com.group16.seeyaapp.register.RegisterActivity;
 
+/**
+ * Displays the main page of the application currently providing options for navigating to view
+ * for registering a new user in the application or for logging in an as existing user.
+ *
+ */
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -32,11 +37,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void signIn(View view) {
-        startActivity(new Intent(MainActivity.this, TestLoginActivity.class));
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
         finish();
     }
     public void signUp(View view){
-        Intent intent = new Intent(this, TestRegisterActivity.class);
+        Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
 

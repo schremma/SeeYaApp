@@ -15,7 +15,7 @@ import com.group16.seeyaapp.navigation.DemoPage;
 /**
  * Displays a view for the user to be able to log into the application.
  */
-public class TestLoginActivity extends AppCompatActivity implements LoginView, View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements LoginView, View.OnClickListener {
 
     private ProgressBar progressBar;
     private EditText username;

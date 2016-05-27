@@ -14,7 +14,7 @@ import com.group16.seeyaapp.main.MainActivity;
 /**
  *  Displays a view for the user to register in the application.
  */
-public class TestRegisterActivity extends AppCompatActivity implements RegisterView, View.OnClickListener  {
+public class RegisterActivity extends AppCompatActivity implements RegisterView, View.OnClickListener  {
     private RegisterPresenterImpl presenter;
     private EditText username;
     private EditText password;

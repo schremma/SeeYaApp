@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.group16.seeyaapp.R;
-import com.group16.seeyaapp.activity.list.mainlist.TestMainListActivity;
+import com.group16.seeyaapp.activity.list.mainlist.MainListActivity;
 import com.group16.seeyaapp.main.MainActivity;
 
 /**
@@ -74,22 +74,22 @@ public class DemoPage extends AppCompatActivity {
         } else if(id == R.id.toolbarinfo) {
 
         } else if(id == R.id.toolbaradd) {
-            Intent intent = new Intent(this, TestCreatePage.class);
+            Intent intent = new Intent(this, CreatePage.class);
             startActivity(intent);
         } else if(id == R.id.toolbarbrowse) {
-            Intent intent = new Intent(this, TestMainListActivity.class);
+            Intent intent = new Intent(this, MainListActivity.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void goToCreatePage() {
-        Intent intent = new Intent(this, TestCreatePage.class);
+        Intent intent = new Intent(this, CreatePage.class);
         startActivity(intent);
     }
 
     private void goToBrowseByCategoryPage() {
-        Intent intent = new Intent(this, TestMainListActivity.class);
+        Intent intent = new Intent(this, MainListActivity.class);
         startActivity(intent);
     }
 
